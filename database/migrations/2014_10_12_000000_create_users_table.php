@@ -44,9 +44,9 @@ class CreateUsersTable extends Migration
 
             // Permission and user group
             $table->string('permissions', 2056)->nullable()->default(null);
-            $table->string('usergroups', 2056)->nullable()->default(null); // Stores object/json
-            $table->string('usergroup_ids_csv', 256)->nullable()->default(null); // 1,2,3
-            $table->string('usergroup_titles_csv', 1024)->nullable()->default(null); // Super admin, Tenant admin
+            $table->string('groups', 2056)->nullable()->default(null); // Stores object/json
+            $table->string('group_ids_csv', 256)->nullable()->default(null); // 1,2,3
+            $table->string('group_titles_csv', 1024)->nullable()->default(null); // Super admin, Tenant admin
 
             /*********************************/
             $table->boolean('is_active')->default(true);

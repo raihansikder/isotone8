@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTenantsTable extends Migration
+class CreateGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateTenantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tenants', function (Blueprint $table) {
+        Schema::create('groups', function (Blueprint $table) {
             $table->increments('id');
             $table->string('uuid', 64)->nullable()->default(null);
             //$table->unsignedInteger('tenant_id')->nullable()->default(null);
             $table->string('name', 255)->nullable()->default(null);
-            $table->string('code', 32)->nullable()->default(null);
+            $table->string('title', 100)->nullable()->default(null);
             /******* Custom columns **********/
-            $table->unsignedInteger('user_id')->nullable()->default(null); // Tenant admin user id.
+            $table->text('permissions')->nullable()->default(null); // Tenant admin user id.
             /*********************************/
             $table->boolean('is_active')->default(true);
             $table->unsignedInteger('created_by')->nullable()->default(null);
@@ -28,7 +28,6 @@ class CreateTenantsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedInteger('deleted_by')->nullable()->default(null);
-
         });
     }
 
@@ -39,6 +38,6 @@ class CreateTenantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tenants');
+        Schema::dropIfExists('groups');
     }
 }
