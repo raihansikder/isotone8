@@ -10,6 +10,7 @@
 namespace PHPUnit\Util\TestDox;
 
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\Exporter\Exporter;
 
 /**
  * Prettifies class and method names for use in TestDox documentation.
@@ -84,7 +85,7 @@ final class NamePrettifier
         }
 
         if ($test->usesDataProvider() && !$annotationWithPlaceholders) {
-            $result .= ' data set "' . $test->dataDescription() . '"';
+            $result .= $test->getDataSetAsString(false);
         }
 
         return $result;
@@ -161,7 +162,27 @@ final class NamePrettifier
         $i                  = 0;
 
         foreach ($reflector->getParameters() as $parameter) {
-            $providedData['$' . $parameter->getName()] = $providedDataValues[$i++];
+            $value = $providedDataValues[$i++];
+
+            if (\is_object($value)) {
+                $reflector = new \ReflectionObject($value);
+
+                if ($reflector->hasMethod('__toString')) {
+                    $value = (string) $value;
+                }
+            }
+
+            if (!\is_scalar($value)) {
+                $value = \gettype($value);
+            }
+
+            if (\is_bool($value) || \is_numeric($value)) {
+                $exporter = new Exporter;
+
+                $value = $exporter->export($value);
+            }
+
+            $providedData['$' . $parameter->getName()] = $value;
         }
 
         return $providedData;

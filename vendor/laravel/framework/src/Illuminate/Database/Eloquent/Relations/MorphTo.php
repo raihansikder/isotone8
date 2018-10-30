@@ -224,21 +224,15 @@ class MorphTo extends BelongsTo
     }
 
     /**
-     * Remove all or passed registered global scopes.
+     * Touch all of the related models for the relationship.
      *
-     * @param  array|null  $scopes
-     * @return $this
+     * @return void
      */
-    public function withoutGlobalScopes(array $scopes = null)
+    public function touch()
     {
-        $this->getQuery()->withoutGlobalScopes($scopes);
-
-        $this->macroBuffer[] = [
-            'method' => __FUNCTION__,
-            'parameters' => [$scopes],
-        ];
-
-        return $this;
+        if (! is_null($this->ownerKey)) {
+            parent::touch();
+        }
     }
 
     /**
@@ -286,7 +280,13 @@ class MorphTo extends BelongsTo
     public function __call($method, $parameters)
     {
         try {
-            return parent::__call($method, $parameters);
+            $result = parent::__call($method, $parameters);
+
+            if (in_array($method, ['select', 'selectRaw', 'selectSub', 'addSelect', 'withoutGlobalScopes'])) {
+                $this->macroBuffer[] = compact('method', 'parameters');
+            }
+
+            return $result;
         }
 
         // If we tried to call a method that does not exist on the parent Builder instance,
