@@ -4,6 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Thread
+ *
+ * @property-read \App\Channel $channel
+ * @property-read \App\User $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Reply[] $replies
+ * @mixin \Eloquent
+ */
 class Thread extends Model
 {
     //
