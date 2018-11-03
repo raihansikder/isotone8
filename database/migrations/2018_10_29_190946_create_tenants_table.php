@@ -22,7 +22,7 @@ class CreateTenantsTable extends Migration
             /******* Custom columns **********/
             $table->unsignedInteger('user_id')->nullable()->default(null); // Tenant admin user id.
             /*********************************/
-            $table->boolean('is_active')->default(true);
+            $table->tinyInteger('is_active')->default(1);
             $table->unsignedInteger('created_by')->nullable()->default(null);
             $table->unsignedInteger('updated_by')->nullable()->default(null);
             $table->timestamps();

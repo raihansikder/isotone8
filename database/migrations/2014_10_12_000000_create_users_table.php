@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
 
             // Email confirmation fields
-            $table->boolean('email_confirmed')->default(false);
+            $table->tinyInteger('email_confirmed')->default(0);
             $table->dateTime('email_confirmed_at')->nullable()->default(null);
             $table->string('email_confirmation_code', 128)->nullable();
 
@@ -40,16 +40,16 @@ class CreateUsersTable extends Migration
             $table->dateTime('api_token_generated_at')->nullable()->default(null);
 
             // Can tenant edit a row?
-            $table->boolean('tenant_editable')->default(true);
+            $table->tinyInteger('tenant_editable')->default(1);
 
             // Permission and user group
             $table->string('permissions', 2056)->nullable()->default(null);
-            $table->string('  groups', 2056)->nullable()->default(null); // Stores object/json
+            $table->string('groups', 2056)->nullable()->default(null); // Stores object/json
             $table->string('group_ids_csv', 256)->nullable()->default(null); // 1,2,3
             $table->string('group_titles_csv', 1024)->nullable()->default(null); // Super admin, Tenant admin
 
             /*********************************/
-            $table->boolean('is_active')->default(true);
+            $table->tinyInteger('is_active')->default(1);
             $table->unsignedInteger('created_by')->nullable()->default(null);
             $table->unsignedInteger('updated_by')->nullable()->default(null);
             $table->timestamps();

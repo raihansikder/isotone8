@@ -72,10 +72,7 @@
                     <li><a href="{{route('shop.search')}}">Find art</a></li>
                     @if(user())
                         <li><a href="{{route('home')}}">Manage Account</a></li>
-                        @if(user()->isBuyer())
-                            <li><a href="{{route('shop.cart')}}"><i class="fa fa-shopping-cart"></i> Cart
-                                    ({{count(Shop::cartitems())}})</a></li>
-                        @endif
+
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="{{asset(user()->profilePic())}}"

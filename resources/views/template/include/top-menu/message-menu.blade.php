@@ -1,4 +1,4 @@
-@if(user())
+@auth()
     <li class="dropdown messages-menu">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-envelope-o"></i>
@@ -12,7 +12,7 @@
                     <li><!-- start message -->
                         <a href="#">
                             <div class="pull-left">
-                                <img src="{{asset(user()->profilePic())}}"
+                                <img src=""
                                      class="img-circle"
                                      alt="User Image">
                             </div>

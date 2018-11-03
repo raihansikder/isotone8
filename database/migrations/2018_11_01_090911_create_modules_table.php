@@ -31,7 +31,7 @@ class CreateModulesTable extends Migration
             $table->string('icon_css', 50)->nullable()->default(null);
             /*********************************/
 
-            $table->boolean('is_active')->default(true);
+            $table->tinyInteger('is_active')->default(1);
             $table->unsignedInteger('created_by')->nullable()->default(null);
             $table->unsignedInteger('updated_by')->nullable()->default(null);
             $table->timestamps();

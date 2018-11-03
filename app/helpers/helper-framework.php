@@ -365,10 +365,10 @@ function setting($name)
     //     $val = $setting->value;
     // } else
     //if ($setting = Gsetting::with('uploads')->whereName($name)->remember(cacheTime('long'))->first(['value', 'type'])) {
-    $setting = Gsetting::whereName($name)->remember(cacheTime('long'))->first();
-    if ($setting) {
-        $val = $setting->settingValue();
-    }
+    // $setting = Gsetting::whereName($name)->remember(cacheTime('long'))->first();
+    // if ($setting) {
+    //     $val = $setting->settingValue();
+    // }
     return $val;
 }
 

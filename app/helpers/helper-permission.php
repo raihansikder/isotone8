@@ -102,8 +102,8 @@ function user($user_id = false) {
     $user = false;
     if ($user_id) {
         $user = User::remember(cacheTime('short'))->find($user_id);
-    } else if (Sentry::check()) { // for logged in user
-        $user = Sentry::getUser();
+    } else if (Auth::check()) { // for logged in user
+        $user = Auth::user();
     }
     //    // for API requests find the user based on the param/header values
     //    if(!$user && Input::has('user_id')){ // No logged user. get from user_id in url param or request header
