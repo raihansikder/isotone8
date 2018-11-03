@@ -361,9 +361,9 @@ function array_find_deep($array, $search, $keys = []) {
  *
  * @return bool|string
  */
-function today() {
-    return date('Y-m-d');
-}
+// function today() {
+//     return date('Y-m-d');
+// }
 
 
 /**
@@ -380,9 +380,9 @@ function currentDateTime() {
  *
  * @return bool|string
  */
-function now() {
-    return date('Y-m-d H:i:s');
-}
+// function now() {
+//     return date('Y-m-d H:i:s');
+// }
 
 
 /**

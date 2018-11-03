@@ -27,3 +27,8 @@ Route:: get('threads/{channel_slug}/{thread}', 'ThreadsController@show')->name('
 // Route::resource('threads', 'ThreadsController');
 
 Route::post('threads/{channel_slug}/{thread}/replies', 'RepliesController@store')->name('replies.store');
+
+Route::get('test', function () {
+    $query = DB::table('modules');
+    return \Yajra\DataTables\DataTables::of($query)->toJson();
+});

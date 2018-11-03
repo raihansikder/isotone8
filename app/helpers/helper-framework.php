@@ -1,14 +1,14 @@
 <?php
 
 /**
- * ceate uuid
+ * create uuid
  *
  * @return string
  * @throws Exception
  */
 function uuid()
 {
-    $uuid = Webpatser\Uuid\Uuid::generate(4);
+    $uuid =Webpatser\Uuid\Uuid::generate(4);
     return (string)$uuid;
 }
 
@@ -27,7 +27,7 @@ function uuid()
 function oldInputValue($name = '', $value = null)
 {
     // first get anything old
-    $val = Input::old($name); // array/non-array both handled
+    $val = Request::old($name); // array/non-array both handled
     // override by explicit inputs
     if (Input::has($name)) {
         $val = Input::get($name);
@@ -284,7 +284,7 @@ function fillRet($ret)
  * @param $ret
  * @return mixed
  */
-function redirect($ret)
+function resolve_redirect($ret)
 {
     switch ($ret['status']) {
         case 'success':

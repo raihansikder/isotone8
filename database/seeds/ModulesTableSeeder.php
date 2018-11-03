@@ -15,7 +15,7 @@ class ModulesTableSeeder extends Seeder
         $module_names = ['modules', 'users', 'groups', 'tenants'];
 
         foreach ($module_names as $module_name) {
-            if (User::where('name', $module_name)->doesntExist()) {
+            if (DB::table('modules')->where('name', $module_name)->doesntExist()) {
                 DB::table('modules')->insert([
                     'uuid' => Webpatser\Uuid\Uuid::generate(4),
                     'name' => $module_name,
