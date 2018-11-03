@@ -162,9 +162,9 @@ class BaseModule extends Model
      * Get fields that are restricted for update.
      * @return array
      */
-    public function restrictedUpdates() {
-        return $this->restrict_updates;
-    }
+    // public function restrictedUpdates() {
+    //     return $this->restrict_updates;
+    // }
 
     ############################################################################################
     # Helper functions
@@ -187,44 +187,44 @@ class BaseModule extends Model
      * Register the model observer for a spyr module
      * @param $Model
      */
-    public static function registerObserver($Model) {
-        $Model = "\\" . $Model;
-        $ObserverClass = $Model . "Observer";
-        /** @var Basemodule $Model */
-        $Model::observe(new $ObserverClass); // register observer
-    }
+    // public static function registerObserver($Model) {
+    //     $Model = "\\" . $Model;
+    //     $ObserverClass = $Model . "Observer";
+    //     /** @var Basemodule $Model */
+    //     $Model::observe(new $ObserverClass); // register observer
+    // }
 
     /**
      * Returns array of user ids including creator and updater user ids.
      * This can be overridden in different modules as per business.
      * @return array
      */
-    public function relatedUsers() {
-        $user_ids = []; // Init array to store all user ids
-        if (isset($this->creator->id))
-            $user_ids[] = $this->creator->id; //get the creator
-        if (isset($this->updater->id) && isset($this->creator->id) && $this->creator->id !== $this->updater->id) //if the creator and updater is same no need to add the id twice
-            $user_ids[] = $this->updater->id; //get the updater
-        return $user_ids;
-    }
+    // public function relatedUsers() {
+    //     $user_ids = []; // Init array to store all user ids
+    //     if (isset($this->creator->id))
+    //         $user_ids[] = $this->creator->id; //get the creator
+    //     if (isset($this->updater->id) && isset($this->creator->id) && $this->creator->id !== $this->updater->id) //if the creator and updater is same no need to add the id twice
+    //         $user_ids[] = $this->updater->id; //get the updater
+    //     return $user_ids;
+    // }
 
     /**
      * Get the module object that an element belongs to. If the element is $tenant then the function
      * returns the row from modules table that has module name 'tenants'.
      * @return \Illuminate\Database\Eloquent\Model|null|static
      */
-    public function module() {
-        return Module::where('name', moduleName(get_class($this)))->remember(cacheTime('module-list'))->first();
-    }
+    // public function module() {
+    //     return Module::where('name', moduleName(get_class($this)))->remember(cacheTime('module-list'))->first();
+    // }
 
     /**
      * Get uploads of specific types
      * @param array $uploadtype_ids
      * @return mixed
      */
-    public function getUploads($uploadtype_ids = []) {
-        return $this->uploads()->whereIn('uploadtype_id', $uploadtype_ids)->orderBy('created_at', 'DESC');
-    }
+    // public function getUploads($uploadtype_ids = []) {
+    //     return $this->uploads()->whereIn('uploadtype_id', $uploadtype_ids)->orderBy('created_at', 'DESC');
+    // }
 
     ############################################################################################
     # Permission functions
@@ -248,9 +248,10 @@ class BaseModule extends Model
      * @return bool
      */
     public function isCreatable($user_id = null, $set_msg = false) {
-        if ($valid = spyrElementCreatable($this, $user_id, $set_msg)) {
-            // Write new validation logic for this operation in this block.
-        }
+        $valid = true;
+        // if ($valid = spyrElementCreatable($this, $user_id, $set_msg)) {
+        //     // Write new validation logic for this operation in this block.
+        // }
         return $valid;
     }
 
@@ -348,9 +349,9 @@ class BaseModule extends Model
      * @param bool $set_msg
      * @return bool
      */
-    public function isAssignable($user_id = null, $set_msg = false) {
-        return $this->isEditable($user_id, $set_msg);
-    }
+    // public function isAssignable($user_id = null, $set_msg = false) {
+    //     return $this->isEditable($user_id, $set_msg);
+    // }
 
     ############################################################################################
     # Query scopes
@@ -428,44 +429,44 @@ class BaseModule extends Model
      * Get a list of uploads under an element.
      * @return mixed
      */
-    public function uploads() {
-        return $this->hasMany('Upload', 'element_id')->where('module_id', $this->module()->id)->orderBy('order', 'ASC')->orderBy('created_at', 'DESC');
-    }
+    // public function uploads() {
+    //     return $this->hasMany('Upload', 'element_id')->where('module_id', $this->module()->id)->orderBy('order', 'ASC')->orderBy('created_at', 'DESC');
+    // }
 
     /**
      * Get a list of changes that happened to an element
      * @return mixed
      */
-    public function changes() {
-        return $this->hasMany('Change', 'element_id')->where('module_id', $this->module()->id)->orderBy('created_at', 'DESC');;
-    }
+    // public function changes() {
+    //     return $this->hasMany('Change', 'element_id')->where('module_id', $this->module()->id)->orderBy('created_at', 'DESC');;
+    // }
 
     /**
      * Some modules like uploads, messages etc have a parent element under which that upload was made.
      * We call this linked element
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function linkedElement() {
-        return $this->belongsTo(modelNameFromModuleId($this->module_id), 'module_entry_id');
-    }
+    // public function linkedElement() {
+    //     return $this->belongsTo(modelNameFromModuleId($this->module_id), 'module_entry_id');
+    // }
 
     /**
      * List of statusupdates
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function statusupdates() {
-        return $this->hasMany('Statusupdate', 'element_id')->where('module_id', $this->module()->id)->orderBy('created_at', 'DESC');
-    }
+    // public function statusupdates() {
+    //     return $this->hasMany('Statusupdate', 'element_id')->where('module_id', $this->module()->id)->orderBy('created_at', 'DESC');
+    // }
 
     /**
      * Get the last updated status
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function lastStatusupdate() {
-        return $this->hasOne('Statusupdate', 'element_id')->where('module_id', $this->module()->id)->orderBy('created_at', 'DESC');
-    }
+    // public function lastStatusupdate() {
+    //     return $this->hasOne('Statusupdate', 'element_id')->where('module_id', $this->module()->id)->orderBy('created_at', 'DESC');
+    // }
     ############################################################################################
     # Accessors & Mutators
     # ---------------------------------------------------------------------------------------- #

@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191); // Had to add this to resolve string length issue.
-        BaseModule::observe(BaseModuleObserver::class);
+        //BaseModule::observe(BaseModuleObserver::class);
     }
 
     /**

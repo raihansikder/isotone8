@@ -29,7 +29,10 @@
   "autoload": {
     "classmap": [
       "database/seeds",
-      "database/factories"
+      "database/factories",
+      "app",
+      "app/Http/Controllers",
+      "app/Http/Observers"
     ],
     "psr-4": {
       "App\\": "app/"
@@ -40,7 +43,8 @@
       "Tests\\": "tests/"
     },
     "files": [
-      "tests/utilities/functions.php"
+      "tests/utilities/functions.php",
+      "app/helpers/helpers.php"
     ]
   },
   "extra": {
