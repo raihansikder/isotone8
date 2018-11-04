@@ -120,8 +120,8 @@ function fillTenantId(Eloquent $model, $user_id = null)
  */
 function tenantInput()
 {
-    if (Input::has(tenantIdField())) {
-        return Input::get(tenantIdField());
+    if (Request::has(tenantIdField())) {
+        return Request::get(tenantIdField());
     }
     return false;
 }

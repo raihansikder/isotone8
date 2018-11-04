@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Watson\Rememberable\Rememberable;
 
 /**
  * App\User
@@ -66,6 +67,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use Rememberable;
 
     /**
      * The attributes that are mass assignable.

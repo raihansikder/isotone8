@@ -35,14 +35,6 @@ if (!function_exists('app')) {
     }
 }
 
-/**
- * Returns current route pate without slash *
- *
- * @return string
- */
-function routeWithoutSlash() {
-    return trim(Route::getCurrentRoute()->getPath(), '/');
-}
 
 /**
  * Caches a raw SQL query for given minutes.
@@ -78,7 +70,7 @@ function resultFirst($sql, $timeout = 0) {
  * @return bool
  */
 function inputIsArray($name) {
-    if (Input::has($name) && is_array(Input::get($name)) && count(Input::get($name))) return true;
+    if (Request::has($name) && is_array(Request::get($name)) && count(Request::get($name))) return true;
     return false;
 
 }

@@ -22,8 +22,8 @@
             </div>
             {{--Custom filter--}}
             <?php
-            $buyer_ids = ((Input::has('buyer_id'))) ? Input::get('buyer_id') : [];
-            $status = ((Input::has('status'))) ? Input::get('status') : [];
+            $buyer_ids = ((Request::has('buyer_id'))) ? Request::get('buyer_id') : [];
+            $status = ((Request::has('status'))) ? Request::get('status') : [];
             $sql_extension = (tenantUser()) ? " AND name !='superuser'" : '';
             ?>
             <div class="tab-pane" id="tab_custom">

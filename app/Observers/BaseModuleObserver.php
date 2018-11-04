@@ -2,17 +2,17 @@
 
 namespace App\Observers;
 
-use App\BaseModule;
+use App\Basemodule;
 
 class BaseModuleObserver
 {
     /**
      * Handle the base module "created" event.
      *
-     * @param  \App\BaseModule  $baseModule
+     * @param  \App\Basemodule  $baseModule
      * @return void
      */
-    public function created(BaseModule $baseModule)
+    public function created(Basemodule $baseModule)
     {
         //
     }
@@ -20,10 +20,10 @@ class BaseModuleObserver
     /**
      * Handle the base module "updated" event.
      *
-     * @param  \App\BaseModule  $baseModule
+     * @param  \App\Basemodule  $baseModule
      * @return void
      */
-    public function updated(BaseModule $baseModule)
+    public function updated(Basemodule $baseModule)
     {
         //
     }
@@ -31,10 +31,10 @@ class BaseModuleObserver
     /**
      * Handle the base module "deleted" event.
      *
-     * @param  \App\BaseModule  $baseModule
+     * @param  \App\Basemodule  $baseModule
      * @return void
      */
-    public function deleted(BaseModule $baseModule)
+    public function deleted(Basemodule $baseModule)
     {
         //
     }
@@ -42,10 +42,10 @@ class BaseModuleObserver
     /**
      * Handle the base module "restored" event.
      *
-     * @param  \App\BaseModule  $baseModule
+     * @param  \App\Basemodule  $baseModule
      * @return void
      */
-    public function restored(BaseModule $baseModule)
+    public function restored(Basemodule $baseModule)
     {
         //
     }
@@ -53,10 +53,10 @@ class BaseModuleObserver
     /**
      * Handle the base module "force deleted" event.
      *
-     * @param  \App\BaseModule  $baseModule
+     * @param  \App\Basemodule  $baseModule
      * @return void
      */
-    public function forceDeleted(BaseModule $baseModule)
+    public function forceDeleted(Basemodule $baseModule)
     {
         //
     }

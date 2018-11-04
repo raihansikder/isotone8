@@ -8,14 +8,14 @@
  */
 function uuid()
 {
-    $uuid =Webpatser\Uuid\Uuid::generate(4);
+    $uuid = Webpatser\Uuid\Uuid::generate(4);
     return (string)$uuid;
 }
 
 /**
  * function to check if an input field has a value predefined that needs to be
  * retained. This function is mostly used in blade view partials of form
- * elements. By default it tries to load the value using Input::old('input_name')
+ * elements. By default it tries to load the value using Request::old('input_name')
  * However this value is over-ridden if there an explicit GET or POST with
  * that parameter/input name. This value gets further overridden if a
  * value is passed as parameter to the view partial
@@ -29,8 +29,8 @@ function oldInputValue($name = '', $value = null)
     // first get anything old
     $val = Request::old($name); // array/non-array both handled
     // override by explicit inputs
-    if (Input::has($name)) {
-        $val = Input::get($name);
+    if (Request::has($name)) {
+        $val = Request::get($name);
     }
     // override by explicit parameter passed in function
     if (isset($value) && (is_array($value) || strlen(trim($value)))) {
@@ -45,7 +45,7 @@ function oldInputValue($name = '', $value = null)
  * with timestamp of that event.
  * This function is generally used in Model saving() event
  *
- * @param \Illuminate\Database\Eloquent\Model $element Eloquent model object
+ * @param \App\Basemodule $element                     Eloquent model object
  * @param array $except                                If any field should be ignored from auto filling then should be
  *                                                     defined in this array
  * @return mixed : Eloquent model object with filled and cleaned values
@@ -62,16 +62,16 @@ function fillModel($element, $except = [])
     // created_by & created_at
     $created_by = 1;
     $created_by = (isset($element->created_by)) ? $element->created_by : $created_by;
-    $created_by = (!isset($element->created_by) && Sentry::check()) ? Sentry::getUser()->id : $created_by;
-    $created_by = (!isset($element->created_by) && Input::has('created_by')) ? Input::get('created_by') : $created_by;
+    $created_by = (!isset($element->created_by) && user()) ? user()->id : $created_by;
+    $created_by = (!isset($element->created_by) && Request::has('created_by')) ? Request::get('created_by') : $created_by;
     $element->created_by = $created_by;
     $element->created_at = (!isset($element->created_at)) ? now() : $element->created_at;
 
     // updated_by & updated_at
     $updated_by = 1;
     $updated_by = (isset($element->updated_by)) ? $element->updated_by : $updated_by;
-    $updated_by = (!isset($element->updated_by) && Sentry::check()) ? Sentry::getUser()->id : $updated_by;
-    $updated_by = (!isset($element->created_by) && Input::has('updated_by')) ? Input::get('updated_by') : $updated_by;
+    $updated_by = (!isset($element->updated_by) && user()) ? user()->id : $updated_by;
+    $updated_by = (!isset($element->created_by) && Request::has('updated_by')) ? Request::get('updated_by') : $updated_by;
     $element->updated_by = $updated_by;
     $element->updated_at = now();
 
@@ -92,7 +92,7 @@ function fillModel($element, $except = [])
 /**
  * returns the table/module name(without prefix) from a model class name
  *
- * @param  Model $class Class name with first letter in uppercase. i.e. Foo
+ * @param  string $class Class name with first letter in uppercase. i.e. Foo
  * @return string
  */
 function moduleName($class)
@@ -109,7 +109,7 @@ function moduleName($class)
  */
 function model($module)
 {
-    return str_singular(ucfirst($module));
+    return "\\App\\" . str_singular(ucfirst($module));
 }
 
 /**
@@ -137,13 +137,13 @@ function controllerModule($controller_class)
 /**
  * Derive module name from an eloquent model element
  *
- * @param $element
+ * @param $element \App\Basemodule
  * @return string
  * @internal param $element_object
  */
 function elementModule($element)
 {
-    return moduleName(class_basename(get_class($element)));
+    return moduleName(class_basename($element));
 }
 
 /**
@@ -217,8 +217,8 @@ function ret($status = '', $msg = '', $merge = [])
     else setMessage($msg);
 
     $ret = [
-        'status'            => $status,
-        'message'           => $msg,
+        'status' => $status,
+        'message' => $msg,
         'validation_errors' => [],
     ];
 
@@ -227,6 +227,7 @@ function ret($status = '', $msg = '', $merge = [])
 
 /**
  * This function fills ajax return values with saved information from session and then cleans up the session.
+ *
  * @param $ret
  * @return mixed
  */
@@ -261,6 +262,7 @@ function fillFromSession($ret)
 /**
  * Fill the $ret variable with redirect and session information.
  * This function is used ModulebaseController to build the return JSON
+ *
  * @param $ret
  * @return mixed
  */
@@ -288,10 +290,10 @@ function resolve_redirect($ret)
 {
     switch ($ret['status']) {
         case 'success':
-            $ret['redirect'] = Input::has('redirect_success') ? Input::get('redirect_success') : null;
+            $ret['redirect'] = Request::has('redirect_success') ? Request::get('redirect_success') : null;
             break;
         case 'fail':
-            $ret['redirect'] = Input::has('redirect_fail') ? Input::get('redirect_fail') : null;
+            $ret['redirect'] = Request::has('redirect_fail') ? Request::get('redirect_fail') : null;
             break;
         default :
             $ret['redirect'] = null;
@@ -342,7 +344,7 @@ function conf($key = '')
  */
 function cacheTime($key)
 {
-    if (Input::has('no_cache') && Input::get('no_cache') == 'true') {
+    if (Request::has('no_cache') && Request::get('no_cache') == 'true') {
         return -1;
     }
     return Config::get('query-cache-times.' . $key);
@@ -444,10 +446,10 @@ function breadcrumb(Module $module = null)
         $items = $module->modulegroupTree();
         foreach ($items as $item) {
             $breadcrumbs[$item->name] = [
-                'name'  => $item->name,
+                'name' => $item->name,
                 'title' => $item->title,
                 'route' => "$item->name.index",
-                'url'   => route("$item->name.index"),
+                'url' => route("$item->name.index"),
             ];
         }
     }
@@ -490,6 +492,7 @@ function showPermissionErrorPage($body = '')
 
 /**
  * Show generic error page
+ *
  * @param string $body
  * @return $this
  */
@@ -527,6 +530,7 @@ function mlink($module_name = '', $id = null, $link_text = null)
 /**
  * Get an element from module_id and element_id, This function is helpful in modules where it relates
  * to multiple other modules. ie. uploads, messages etc.
+ *
  * @param $module_id
  * @param $element_id
  * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|static
@@ -540,6 +544,7 @@ function element($module_id, $element_id)
 
 /**
  * Get Model name From module id
+ *
  * @param $module_id
  * @return string
  */
@@ -550,6 +555,7 @@ function modelNameFromModuleId($module_id)
 
 /**
  * Returns module name from id.
+ *
  * @param $module_id
  * @return mixed|string
  */
@@ -560,6 +566,7 @@ function moduleNameFromId($module_id)
 
 /**
  * Generates report URL for the RUN button in reports module
+ *
  * @param type $id
  * @return string
  */
@@ -580,6 +587,7 @@ function getReportApiUrlFromId($id)
 
 /**
  * Creates an API url from browser inputs/url
+ *
  * @return mixed
  */
 function reportApiUrl()
@@ -593,6 +601,7 @@ function reportApiUrl()
  * Generate an API url based on the current complete url of a generic report.
  * This route is only accessible for based on X-Auth-Token based authentication.
  * General logged in users do not have access to this url.
+ *
  * @return string
  */
 function genericReportApiUrl()
@@ -606,6 +615,7 @@ function genericReportApiUrl()
 /**
  * Generates an URL that returns JSON response. Any logged in user can access this URL to
  * get a JSON output of filtered data from a module table.
+ *
  * @return string
  */
 function genericReportJsonUrl()

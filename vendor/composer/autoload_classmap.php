@@ -6,7 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'App\\BaseModule' => $baseDir . '/app/BaseModule.php',
+    'App\\Basemodule' => $baseDir . '/app/Basemodule.php',
     'App\\Channel' => $baseDir . '/app/Channel.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
@@ -16,6 +16,7 @@ return array(
     'App\\Http\\Controllers\\Auth\\ResetPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ResetPasswordController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
+    'App\\Http\\Controllers\\ModulebaseController' => $baseDir . '/app/Http/Controllers/ModulebaseController.php',
     'App\\Http\\Controllers\\RepliesController' => $baseDir . '/app/Http/Controllers/RepliesController.php',
     'App\\Http\\Controllers\\ThreadsController' => $baseDir . '/app/Http/Controllers/ThreadsController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
@@ -4341,6 +4342,8 @@ return array(
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Property\\Property' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Property/Property.php',
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
+    'Watson\\Rememberable\\Query\\Builder' => $vendorDir . '/watson/rememberable/src/Query/Builder.php',
+    'Watson\\Rememberable\\Rememberable' => $vendorDir . '/watson/rememberable/src/Rememberable.php',
     'Webmozart\\Assert\\Assert' => $vendorDir . '/webmozart/assert/src/Assert.php',
     'Webpatser\\Uuid\\Uuid' => $vendorDir . '/webpatser/laravel-uuid/src/Webpatser/Uuid/Uuid.php',
     'Webpatser\\Uuid\\UuidServiceProvider' => $vendorDir . '/webpatser/laravel-uuid/src/Webpatser/Uuid/UuidServiceProvider.php',

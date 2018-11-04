@@ -10,7 +10,7 @@
     {{-- ---------------------------------------\
     \ Show search result if submit=run
     \------------------------------------------}}
-    @if(Input::get('submit')=='Run' && isset($results))
+    @if(Request::get('submit')=='Run' && isset($results))
         Total {{count($results)}} items found.
         <div class="clearfix"></div>
         @if(count($results))
@@ -18,11 +18,11 @@
                 <thead>
                 <tr>
                     <th>S/L</th>
-                    @foreach (arrayFromCsv(Input::get('column_aliases_csv')) as $column_alias)
+                    @foreach (arrayFromCsv(Request::get('column_aliases_csv')) as $column_alias)
                         <th>{{$column_alias}}</th>
                     @endforeach
                     {{-- if SQL 'GROUP' is set then post stats (male, female, filled etc) are shown--}}
-                    @if (Input::has('group_by') && strlen(cleanCsv(Input::get('group_by'))))
+                    @if (Request::has('group_by') && strlen(cleanCsv(Request::get('group_by'))))
                         <th>Total</th>
                     @endif
                     {{-- end stat headings --}}
@@ -33,11 +33,11 @@
                 @foreach ($results as $result)
                     <tr>
                         <td>{{$i++}}</td>
-                        @foreach (arrayFromCsv(Input::get('columns_to_show_csv')) as $column)
+                        @foreach (arrayFromCsv(Request::get('columns_to_show_csv')) as $column)
                             <td>@if(isset($result->$column)){{transform($column,$result,$result->$column,$module_name)}}@endif</td>
                         @endforeach
                         {{-- if SQL 'GROUP' is set then post stats (male, female, filled etc) are shown --}}
-                        @if (Input::has('group_by') && strlen(Input::get('group_by')))
+                        @if (Request::has('group_by') && strlen(Request::get('group_by')))
                             <td>{{number_format($result->total)}}</td>
                         @endif
                         {{-- end stat ounts --}}
@@ -45,12 +45,12 @@
                 @endforeach
                 <tr>
 
-                     @if (Input::has('group_by') && strlen(cleanCsv(Input::get('group_by'))))
-                        @foreach (arrayFromCsv(Input::get('columns_to_show_csv')) as $column)
+                     @if (Request::has('group_by') && strlen(cleanCsv(Request::get('group_by'))))
+                        @foreach (arrayFromCsv(Request::get('columns_to_show_csv')) as $column)
                             <td></td>
                         @endforeach
                         {{-- if 'SQL GROUP is set then show additional row showing total counts in the last column '--}}
-                        @if (Input::has('group_by') && strlen(cleanCsv(Input::get('group_by'))))
+                        @if (Request::has('group_by') && strlen(cleanCsv(Request::get('group_by'))))
                                 <td></td>
                                 <td>Total : <b>{{number_format($total)}}</b></td>
                         @endif
@@ -59,7 +59,7 @@
                 </tbody>
             </table>
             {{--{{ $paginator->links() }}--}}
-            {{ $pagination->appends(Input::except('page'))->links() }}
+            {{ $pagination->appends(Request::except('page'))->links() }}
         @endif
 
     @endif

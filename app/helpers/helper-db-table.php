@@ -1,29 +1,47 @@
 <?php
 
 /**
+ * todo: no solution for posgre
  * Function to check whether a database view exists
+ *
  * @param $view
  * @return bool
  */
-function dbViewExists($view) {
-    $dbname = Config::get('database.connections.mysql.database');
-    $sql = "SELECT TABLE_NAME FROM information_schema.`TABLES` WHERE TABLE_TYPE = 'VIEW' AND TABLE_SCHEMA = '$dbname' AND TABLE_NAME = '$view';";
-    $results = result($sql, cacheTime('long'));
-    if (count($results)) return true;
+function dbViewExists($view)
+{
+    // $dbname = Config::get('database.connections.mysql.database');
+    // $sql = "SELECT TABLE_NAME FROM information_schema.`TABLES` WHERE TABLE_TYPE = 'VIEW' AND TABLE_SCHEMA = '$dbname' AND TABLE_NAME = '$view';";
+    // $results = result($sql, cacheTime('long'));
+    // if (count($results)) return true;
     return false;
 }
 
 /**
  * Function to check whether a database table exists
+ *
  * @param $table full table name with prefix
  * @return bool
  */
-function dbTableExists($table) {
-    $dbname = Config::get('database.connections.mysql.database');
-    $sql = "SELECT TABLE_NAME FROM information_schema.`TABLES` WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '$dbname' AND TABLE_NAME = '$table';";
-    $results = result($sql, cacheTime('long'));
-    if (count($results)) return true;
-    return false;
+function dbTableExists($table)
+{
+    // $dbname = Config::get('database.connections.mysql.database');
+    // $sql = "SELECT TABLE_NAME FROM information_schema.`TABLES` WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '$dbname' AND TABLE_NAME = '$table';";
+    // $results = result($sql, cacheTime('long'));
+    // if (count($results)) return true;
+    // return false;
+
+    return Schema::hasTable(prefixLess($table));
+}
+
+/**
+ * Strip prefix from table name
+ *
+ * @param $table
+ * @return mixed
+ */
+function prefixLess($table)
+{
+    return str_replace(DB::getTablePrefix(), '', $table);
 }
 
 /**
@@ -32,7 +50,8 @@ function dbTableExists($table) {
  * @param array|string $table : table name excluding prefix. i.e. 'users'
  * @return array
  */
-function columns($table) {
+function columns($table)
+{
 
     $columns = [];
     // Handle parameter as array/non array
@@ -43,33 +62,27 @@ function columns($table) {
         $tables = $table;
     }
 
-    /*
-    $database = Config::get('database.connections.mysql.database');
-    $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '$database' AND TABLE_NAME = '" . dbTable($table) . "'";
-    */
     foreach ($tables as $table) {
-        $sql = "SHOW COLUMNS FROM `" . dbTable($table) . "`";
-        $results = result($sql, cacheTime('long'));
-        foreach ($results as $result) {
-            array_push($columns, $result->Field);
-        }
+        $columns = array_merge($columns, Schema::getColumnListing(prefixLess($table)));
     }
     return $columns;
 }
 
 /**
  * Same as getTableFieldNamesFrmTable - implement SHOW COLUMN
- * @param $table_name [with prefix]
+ *
+ * @param $table table name without prefix
  * @return array
  */
-function columsOfTable($table_name) {
-    $fieldNames = [];
-    $sql = "SHOW COLUMNS FROM `$table_name`";
-    $results = result($sql, $timeout = cacheTime('long'));    //$results = DB::select(DB::raw($sql));
-    foreach ($results as $result) {
-        array_push($fieldNames, $result->Field);
-    }
-    return $fieldNames;
+function columsOfTable($table)
+{
+    // $fieldNames = [];
+    // $sql = "SHOW COLUMNS FROM `$table_name`";
+    // $results = result($sql, $timeout = cacheTime('long'));    //$results = DB::select(DB::raw($sql));
+    // foreach ($results as $result) {
+    //     array_push($fieldNames, $result->Field);
+    // }
+    return Schema::getColumnListing($table);
 }
 
 /**
@@ -80,7 +93,8 @@ function columsOfTable($table_name) {
  * @param $table : table name excluding prefix. i.e. 'users'
  * @return array
  */
-function fields($table) {
+function fields($table)
+{
     return columns($table);
 }
 
@@ -91,7 +105,8 @@ function fields($table) {
  * @param $table : table name without prefix
  * @return string Table name with prefix added
  */
-function dbTable($table) {
+function dbTable($table)
+{
 
     if (dbViewExists($table)) return $table;
     else if (dbTableExists($table)) return $table;
@@ -108,11 +123,13 @@ function dbTable($table) {
 
 /**
  * @param       $Model
- * @param array $except
+ * @param array $except // Todo : adding $except returns a different kind of array.
  * @return array
  * @internal param type $table i.e facilities without table prefix
  */
-function getModelFields($Model, $except = []) {
+function getModelFields($Model, $except = [])
+{
+    $except = [];
     return array_diff(columns(modelTable($Model)), $except);
 }
 
@@ -123,7 +140,8 @@ function getModelFields($Model, $except = []) {
  * @param string $column
  * @return bool
  */
-function tableHasColumn($table, $column) {
+function tableHasColumn($table, $column)
+{
     if (in_array($column, columns($table))) return true;
     return false;
 }
@@ -134,6 +152,7 @@ function tableHasColumn($table, $column) {
  * @param string $Model
  * @return string
  */
-function modelTable($Model) {
+function modelTable($Model)
+{
     return DB::getTablePrefix() . str_plural(lcfirst($Model));
 }

@@ -85,6 +85,7 @@ class ComposerStaticInit4a0ffa28ca816db1c476a6b12f5ade58
         array (
             'Whoops\\' => 7,
             'Webmozart\\Assert\\' => 17,
+            'Watson\\Rememberable\\' => 20,
         ),
         'T' => 
         array (
@@ -219,6 +220,10 @@ class ComposerStaticInit4a0ffa28ca816db1c476a6b12f5ade58
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'Watson\\Rememberable\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/watson/rememberable/src',
         ),
         'TijsVerkoyen\\CssToInlineStyles\\' => 
         array (
@@ -512,7 +517,7 @@ class ComposerStaticInit4a0ffa28ca816db1c476a6b12f5ade58
     );
 
     public static $classMap = array (
-        'App\\BaseModule' => __DIR__ . '/../..' . '/app/BaseModule.php',
+        'App\\Basemodule' => __DIR__ . '/../..' . '/app/Basemodule.php',
         'App\\Channel' => __DIR__ . '/../..' . '/app/Channel.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
@@ -522,6 +527,7 @@ class ComposerStaticInit4a0ffa28ca816db1c476a6b12f5ade58
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\ModulebaseController' => __DIR__ . '/../..' . '/app/Http/Controllers/ModulebaseController.php',
         'App\\Http\\Controllers\\RepliesController' => __DIR__ . '/../..' . '/app/Http/Controllers/RepliesController.php',
         'App\\Http\\Controllers\\ThreadsController' => __DIR__ . '/../..' . '/app/Http/Controllers/ThreadsController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
@@ -4847,6 +4853,8 @@ class ComposerStaticInit4a0ffa28ca816db1c476a6b12f5ade58
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Property\\Property' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Property/Property.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
+        'Watson\\Rememberable\\Query\\Builder' => __DIR__ . '/..' . '/watson/rememberable/src/Query/Builder.php',
+        'Watson\\Rememberable\\Rememberable' => __DIR__ . '/..' . '/watson/rememberable/src/Rememberable.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'Webpatser\\Uuid\\Uuid' => __DIR__ . '/..' . '/webpatser/laravel-uuid/src/Webpatser/Uuid/Uuid.php',
         'Webpatser\\Uuid\\UuidServiceProvider' => __DIR__ . '/..' . '/webpatser/laravel-uuid/src/Webpatser/Uuid/UuidServiceProvider.php',

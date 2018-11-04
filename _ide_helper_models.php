@@ -12,14 +12,17 @@
 
 namespace App{
 /**
- * Class BaseModule
+ * Class Basemodule
  *
  * @package App
+ * @property mixed $id
+ * @property mixed $uuid
+ * @property mixed $changes
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\BaseModule onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Basemodule onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Query\Builder|\App\BaseModule withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\BaseModule withoutTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Basemodule withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Basemodule withoutTrashed()
  */
 	class BaseModule extends \Eloquent {}
 }

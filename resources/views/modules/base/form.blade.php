@@ -42,10 +42,10 @@
             <a id="{{$module_name}}CancelBtn" class="btn btn-default" href="{{ URL::previous() }}">Cancel</a>
             @if(((isset($$element) && $spyr_element_editable)) || (!isset($$element) && hasModulePermission($module_name,'create')))
                 <input name="redirect_success" type="hidden"
-                       value="{{ Input::has('redirect_success')?Input::get('redirect_success'): route($module_name.".index") }}"/>
+                       value="{{ Request::has('redirect_success')?Request::get('redirect_success'): route($module_name.".index") }}"/>
                 <input name="redirect_fail" type="hidden"
-                       value="{{ Input::has('redirect_fail')?Input::get('redirect_fail'): URL::full() }}"/>
-                <input name="ret" type="hidden" value="{{Input::get('ret')}}"/>
+                       value="{{ Request::has('redirect_fail')?Request::get('redirect_fail'): URL::full() }}"/>
+                <input name="ret" type="hidden" value="{{Request::get('ret')}}"/>
                 <button id="{{$module_name}}SubmitBtn" type="submit" class="btn btn-success">Save</button>
             @endif
 

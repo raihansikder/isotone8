@@ -29,6 +29,9 @@ Route:: get('threads/{channel_slug}/{thread}', 'ThreadsController@show')->name('
 Route::post('threads/{channel_slug}/{thread}/replies', 'RepliesController@store')->name('replies.store');
 
 Route::get('test', function () {
-    $query = DB::table('modules');
-    return \Yajra\DataTables\DataTables::of($query)->toJson();
+
+    dd(routeWithoutSlash());
+    $user = \App\User::where('id',1)->first();
+    $module_name = moduleName(get_class($user));
+    dd($module_name);
 });

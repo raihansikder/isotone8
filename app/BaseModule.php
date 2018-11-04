@@ -4,21 +4,34 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Watson\Rememberable\Rememberable;
 
 /**
- * Class BaseModule
+ * Class Basemodule
  *
  * @package App
+ * @property int $id
+ * @property string|null $uuid
+ * @property int|null $tenant_id
+ * @property string|null $name
+ * @property bool $is_active
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property int|null $deleted_by
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\BaseModule onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Basemodule onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Query\Builder|\App\BaseModule withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\BaseModule withoutTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Basemodule withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Basemodule withoutTrashed()
  * @mixin \Eloquent
  */
-class BaseModule extends Model
+class Basemodule extends Model
 {
     use SoftDeletes;
+    use Rememberable;
 
     /**
      * Mass assignment fields (White-listed fields)
@@ -69,11 +82,13 @@ class BaseModule extends Model
     /**
      * Validation rules. For regular expression validation use array instead of pipe
      * Example: 'name' => ['required', 'Regex:/^[A-Za-z0-9\-! ,\'\"\/@\.:\(\)]+$/']
+     *
      * @param       $element
      * @param array $merge
      * @return array
      */
-    public static function rules($element, $merge = []) {
+    public static function rules($element, $merge = [])
+    {
         $rules = [
             // 'name'       => 'required|between:1,255|unique:superheros,name' . (isset($element->id) ? ",$element->id" : ''),
             // 'created_by' => 'integer|exists:users,id,is_active,1',
@@ -88,6 +103,7 @@ class BaseModule extends Model
 
     /**
      * Custom validation messages.
+     *
      * @var array
      */
     public static $custom_validation_messages = [
@@ -96,6 +112,7 @@ class BaseModule extends Model
 
     /**
      * Automatic eager load relation by default (can be expensive)
+     *
      * @var array
      */
     // protected $with = ['relation1', 'relation2'];
@@ -106,7 +123,8 @@ class BaseModule extends Model
     // Model events are handled in individual models that is extended from this base module.
     // So no model event instantiated in this class.
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot(); // This line is required as uncommented to boot SoftDeletingTrait
     }
 
@@ -132,9 +150,11 @@ class BaseModule extends Model
     /**
      * This function validates a model based on the validation rule.
      * Also checks if it isCreatable/isEditable
+     *
      * @return \Illuminate\Validation\Validator
      */
-    public function validateModel() {
+    public function validateModel()
+    {
         $validator = \Validator::make($this->attributes, static::rules($this), static::$custom_validation_messages);
         return $validator;
         /*if (!$validator->passes()) {
@@ -160,6 +180,7 @@ class BaseModule extends Model
 
     /**
      * Get fields that are restricted for update.
+     *
      * @return array
      */
     // public function restrictedUpdates() {
@@ -179,12 +200,14 @@ class BaseModule extends Model
     /**
      * Static functions needs to be called using Model::function($id)
      * Inside static function you may need to query and get the element
+     *
      * @internal param $id
      */
     // public static function someOtherAction($id) { }
 
     /**
      * Register the model observer for a spyr module
+     *
      * @param $Model
      */
     // public static function registerObserver($Model) {
@@ -197,6 +220,7 @@ class BaseModule extends Model
     /**
      * Returns array of user ids including creator and updater user ids.
      * This can be overridden in different modules as per business.
+     *
      * @return array
      */
     // public function relatedUsers() {
@@ -211,6 +235,7 @@ class BaseModule extends Model
     /**
      * Get the module object that an element belongs to. If the element is $tenant then the function
      * returns the row from modules table that has module name 'tenants'.
+     *
      * @return \Illuminate\Database\Eloquent\Model|null|static
      */
     // public function module() {
@@ -219,6 +244,7 @@ class BaseModule extends Model
 
     /**
      * Get uploads of specific types
+     *
      * @param array $uploadtype_ids
      * @return mixed
      */
@@ -247,7 +273,8 @@ class BaseModule extends Model
      * @param bool $set_msg
      * @return bool
      */
-    public function isCreatable($user_id = null, $set_msg = false) {
+    public function isCreatable($user_id = null, $set_msg = false)
+    {
         $valid = true;
         // if ($valid = spyrElementCreatable($this, $user_id, $set_msg)) {
         //     // Write new validation logic for this operation in this block.
@@ -260,11 +287,13 @@ class BaseModule extends Model
      * spyrElementViewable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
+     *
      * @param null $user_id
      * @param bool $set_msg
      * @return bool
      */
-    public function isViewable($user_id = null, $set_msg = false) {
+    public function isViewable($user_id = null, $set_msg = false)
+    {
         $valid = ture;
         // if ($valid = spyrElementViewable($this, $user_id, $set_msg)) {
         //     /*
@@ -282,11 +311,13 @@ class BaseModule extends Model
      * spyrElementEditable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
+     *
      * @param null $user_id
      * @param bool $set_msg
      * @return bool
      */
-    public function isEditable($user_id = null, $set_msg = false) {
+    public function isEditable($user_id = null, $set_msg = false)
+    {
         $valid = ture;
         // if ($valid = spyrElementEditable($this, $user_id, $set_msg)) {
         //     /*
@@ -304,11 +335,13 @@ class BaseModule extends Model
      * spyrElementDeletable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
+     *
      * @param null $user_id
      * @param bool $set_msg
      * @return bool
      */
-    public function isDeletable($user_id = null, $set_msg = false) {
+    public function isDeletable($user_id = null, $set_msg = false)
+    {
         $valid = ture;
         // if ($valid = spyrElementDeletable($this, $user_id, $set_msg)) {
         //     /*
@@ -326,11 +359,13 @@ class BaseModule extends Model
      * spyrElementRestorable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
+     *
      * @param null $user_id
      * @param bool $set_msg
      * @return bool
      */
-    public function isRestorable($user_id = null, $set_msg = false) {
+    public function isRestorable($user_id = null, $set_msg = false)
+    {
         $valid = ture;
         // if ($valid = spyrElementRestorable($this, $user_id, $set_msg)) {
         //     /*
@@ -345,6 +380,7 @@ class BaseModule extends Model
 
     /**
      * Function checks whether an element can be assigned to an user.
+     *
      * @param null $user_id
      * @param bool $set_msg
      * @return bool
@@ -394,6 +430,7 @@ class BaseModule extends Model
     /**
      * Function to return an appended attribute in a Model. The attribute name
      * should be added in $append array.
+     *
      * @return bool
      */
     /*public function getSomeNewFieldAttribute() {
@@ -411,22 +448,27 @@ class BaseModule extends Model
     ############################################################################################
     /**
      * Get the user who has created the element
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function creator() {
+    public function creator()
+    {
         return $this->belongsTo('User', 'created_by');
     }
 
     /**
      * Get the user who has last updated the element
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function updater() {
+    public function updater()
+    {
         return $this->belongsTo('User', 'updated_by');
     }
 
     /**
      * Get a list of uploads under an element.
+     *
      * @return mixed
      */
     // public function uploads() {
@@ -435,6 +477,7 @@ class BaseModule extends Model
 
     /**
      * Get a list of changes that happened to an element
+     *
      * @return mixed
      */
     // public function changes() {
@@ -444,6 +487,7 @@ class BaseModule extends Model
     /**
      * Some modules like uploads, messages etc have a parent element under which that upload was made.
      * We call this linked element
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     // public function linkedElement() {

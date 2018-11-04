@@ -106,11 +106,11 @@ function user($user_id = false) {
         $user = Auth::user();
     }
     //    // for API requests find the user based on the param/header values
-    //    if(!$user && Input::has('user_id')){ // No logged user. get from user_id in url param or request header
-    //        $user = User::find(Input::get('user_id'));
+    //    if(!$user && Request::has('user_id')){ // No logged user. get from user_id in url param or request header
+    //        $user = User::find(Request::get('user_id'));
     //    }
-    //    if(!$user && Input::has('client_id')){ // No logged user. get from user_id in url param or request header
-    //        $user = User::find(Input::get('client_id'));
+    //    if(!$user && Request::has('client_id')){ // No logged user. get from user_id in url param or request header
+    //        $user = User::find(Request::get('client_id'));
     //    }
 
     /**

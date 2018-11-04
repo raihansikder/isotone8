@@ -9,15 +9,15 @@
 <div style="width: 150px;float: right;">
     <input id="printpagebutton" type="button" value="Print this page" onclick="printpage()"/>
 </div>
-@if(Input::get('submit')=='Run' && count($results))
+@if(Request::get('submit')=='Run' && count($results))
     <table class="{{configuration('genericTableClass')}}" id="report-table">
         <thead>
         <tr>
             <th>S/L</th>
-            @foreach (arrayFromCsv(Input::get('column_aliases_csv')) as $column_alias)
+            @foreach (arrayFromCsv(Request::get('column_aliases_csv')) as $column_alias)
                 <th>{{$column_alias}}</th>
             @endforeach
-            @if (Input::has('group_by') && strlen(cleanCsv(Input::get('group_by'))))
+            @if (Request::has('group_by') && strlen(cleanCsv(Request::get('group_by'))))
                 <th>Total<br/> Facilities</th>
             @endif
         </tr>
@@ -27,24 +27,24 @@
         @foreach ($results as $result)
             <tr>
                 <td>{{$i++}}</td>
-                @foreach (arrayFromCsv(Input::get('columns_to_show_csv')) as $column)
+                @foreach (arrayFromCsv(Request::get('columns_to_show_csv')) as $column)
                     <td>@if(isset($result->$column)){{transform($column,$result,$result->$column,$module_sys_name)}}@endif</td>
                 @endforeach
-                @if (Input::has('group_by') && strlen(Input::get('group_by')))
+                @if (Request::has('group_by') && strlen(Request::get('group_by')))
                     <td>{{number_format($result->total)}}</td>
                 @endif
             </tr>
         @endforeach
         {{-- Add a row in the bottom to show the total--}}
         <tr>
-            @if (Input::has('group_by') && strlen(cleanCsv(Input::get('group_by'))))
+            @if (Request::has('group_by') && strlen(cleanCsv(Request::get('group_by'))))
                 <td></td>
-                @foreach (arrayFromCsv(Input::get('columns_to_show_csv')) as $column)
+                @foreach (arrayFromCsv(Request::get('columns_to_show_csv')) as $column)
                     <td></td>
                 @endforeach
                 <td></td>
                 {{-- if 'SQL GROUP is set then show additional row showing total counts in the last column '--}}
-                @if (Input::has('group_by') && strlen(cleanCsv(Input::get('group_by'))))
+                @if (Request::has('group_by') && strlen(cleanCsv(Request::get('group_by'))))
                     <td><b>Total {{number_format($total)}}</b></td>
                 @endif
             @endif
