@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
-use App\Basemodule;
+use App\Module;
 
-class BasemoduleObserver
+class ModuleObserver
 {
     /**
      * Handle the base module "created" event.

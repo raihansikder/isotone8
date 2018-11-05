@@ -215,6 +215,8 @@ class Basemodule extends Model
     //     $ObserverClass = $Model . "Observer";
     //     /** @var Basemodule $Model */
     //     $Model::observe(new $ObserverClass); // register observer
+    //
+    //     Basemodule::observe(BasemoduleObserver::class);
     // }
 
     /**

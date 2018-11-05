@@ -460,8 +460,7 @@ class ComposerStaticInit4a0ffa28ca816db1c476a6b12f5ade58
     );
 
     public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/../..' . '/app',
-        1 => __DIR__ . '/..' . '/nesbot/carbon/src',
+        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
     );
 
     public static $prefixesPsr0 = array (
@@ -539,7 +538,8 @@ class ComposerStaticInit4a0ffa28ca816db1c476a6b12f5ade58
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Module' => __DIR__ . '/../..' . '/app/Module.php',
-        'App\\Observers\\BaseModuleObserver' => __DIR__ . '/../..' . '/app/Observers/BaseModuleObserver.php',
+        'App\\Observers\\BasemoduleObserver' => __DIR__ . '/../..' . '/app/Observers/BasemoduleObserver.php',
+        'App\\Observers\\ModuleObserver' => __DIR__ . '/../..' . '/app/Observers/ModuleObserver.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
@@ -547,6 +547,7 @@ class ComposerStaticInit4a0ffa28ca816db1c476a6b12f5ade58
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Reply' => __DIR__ . '/../..' . '/app/Reply.php',
         'App\\Thread' => __DIR__ . '/../..' . '/app/Thread.php',
+        'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'Barryvdh\\Debugbar\\Console\\ClearCommand' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/Console/ClearCommand.php',
         'Barryvdh\\Debugbar\\Controllers\\AssetController' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/Controllers/AssetController.php',
         'Barryvdh\\Debugbar\\Controllers\\BaseController' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/Controllers/BaseController.php',
@@ -4854,7 +4855,6 @@ class ComposerStaticInit4a0ffa28ca816db1c476a6b12f5ade58
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Property\\Property' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Property/Property.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
-        'User' => __DIR__ . '/../..' . '/app/User.php',
         'Watson\\Rememberable\\Query\\Builder' => __DIR__ . '/..' . '/watson/rememberable/src/Query/Builder.php',
         'Watson\\Rememberable\\Rememberable' => __DIR__ . '/..' . '/watson/rememberable/src/Rememberable.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',

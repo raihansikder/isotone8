@@ -25,11 +25,22 @@ Route:: get('threads/{channel}', 'ThreadsController@index')->name('channels.show
 Route:: post('threads', 'ThreadsController@store')->name('threads.store');
 Route:: get('threads/{channel_slug}/{thread}', 'ThreadsController@show')->name('threads.show');
 // Route::resource('threads', 'ThreadsController');
-
 Route::post('threads/{channel_slug}/{thread}/replies', 'RepliesController@store')->name('replies.store');
 
-Route::get('test', function () {
+/*
+|--------------------------------------------------------------------------
+| Spyr Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register all of the routes for the spyr framework.
+*/
+//$modules = \App\Module::remember(2)->pluck('name'); // fetch all module names
 
-    return elementModule(User::find(1));
+Route::get('test', function () {
+    $module = \App\Module::find(1);
+    Session::forget(['some','saved','saving','updating','updated']);
+    $module->modulegroup_id = random_int(0,100);
+    $module->save();
+    return 'test';
 
 });

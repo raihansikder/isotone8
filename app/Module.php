@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Observers\ModuleObserver;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Watson\Rememberable\Rememberable;
 
@@ -29,80 +30,8 @@ use Watson\Rememberable\Rememberable;
  */
 class Module extends Basemodule
 {
-    use SoftDeletes;
-    use Rememberable;
-
-    /**
-     * Mass assignment fields (White-listed fields)
-     *
-     * @var array
-     */
-    protected $fillable = ['uuid', 'name', 'tenant_id', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
-
-    /**
-     * List of appended attribute. This attributes will be loaded in each Model
-     *
-     * @var array
-     */
-    // protected $appends = ['some_new_field'];
-
-    /**
-     * Disallow from mass assignment. (Black-listed fields)
-     *
-     * @var array
-     */
-    protected $guarded = [];
-
-    /** @var array Fields that should not be allowed to update */
-    protected $restrict_updates = [];
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-
-    /** @var array statuses */
-    public static $statuses = [
-        /*'Requested',
-        'Move in complete',
-        'Declined',
-        'Approved'*/
-    ];
-
-    /** @var array $status_transitions A map of allowed status changes from original status */
-    public static $status_transitions = [
-        /*'Requested' => ['Requested', 'Approved', 'Move in complete'],
-        'Move in complete' => ['Move in complete'],
-        'Declined' => ['Declined', 'Approved'],
-        'Approved' => ['Approved', 'Declined', 'Move in complete']*/
-    ];
-
-    /**
-     * Validation rules. For regular expression validation use array instead of pipe
-     * Example: 'name' => ['required', 'Regex:/^[A-Za-z0-9\-! ,\'\"\/@\.:\(\)]+$/']
-     *
-     * @param       $element
-     * @param array $merge
-     * @return array
-     */
-    public static function rules($element, $merge = [])
-    {
-        $rules = [
-            // 'name'       => 'required|between:1,255|unique:superheros,name' . (isset($element->id) ? ",$element->id" : ''),
-            // 'created_by' => 'integer|exists:users,id,is_active,1',
-            // 'updated_by' => 'integer|exists:users,id,is_active,1',
-            // 'is_active'  => 'required|in:0,1',
-            // 'tenant_id'  => 'required|tenants,id,is_active,1',
-            // 'status'     => 'in:' . implode(',', self::$statuses),
-        ];
-
-        return array_merge($rules, $merge);
-    }
-
     /**
      * Custom validation messages.
-     *
      * @var array
      */
     public static $custom_validation_messages = [
@@ -110,8 +39,43 @@ class Module extends Basemodule
     ];
 
     /**
+     * Disallow from mass assignment. (Black-listed fields)
+     * @var array
+     */
+    // protected $guarded = [];
+
+    /**
+     * Date fields
+     * @var array
+     */
+    // protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    /**
+     * Mass assignment fields (White-listed fields)
+     * @var array
+     */
+    protected $fillable = ['name', 'title', 'desc', 'parent_id', 'modulegroup_id', 'level', 'order', 'color_css', 'icon_css', 'route', 'has_uploads', 'has_messages', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
+
+    /**
+     * Validation rules. For regular expression validation use array instead of pipe
+     * Example: 'name' => ['required', 'Regex:/^[A-Za-z0-9\-! ,\'\"\/@\.:\(\)]+$/']
+     * @param       $element
+     * @param array $merge
+     * @return array
+     */
+    public static function rules($element, $merge = []) {
+        $rules = [
+            'name'         => 'required|between:1,255|unique:modules,name,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
+            'title'        => 'required|between:1,255|unique:modules,title,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
+            'created_by'   => 'exists:users,id,is_active,1',
+            'updated_by'   => 'exists:users,id,is_active,1',
+            'has_uploads'  => 'in:Yes,No',
+            'has_messages' => 'in:Yes,No',
+            'is_active'    => 'required|in:1,0',
+        ];
+        return array_merge($rules, $merge);
+    }
+    /**
      * Automatic eager load relation by default (can be expensive)
-     *
      * @var array
      */
     // protected $with = ['relation1', 'relation2'];
@@ -119,17 +83,90 @@ class Module extends Basemodule
     ############################################################################################
     # Model events
     ############################################################################################
-    // Model events are handled in individual models that is extended from this base module.
-    // So no model event instantiated in this class.
 
-    public static function boot()
-    {
-        parent::boot(); // This line is required as uncommented to boot SoftDeletingTrait
+    public static function boot() {
+        /**
+         * parent::boot() was previously used. However this invocation stops from the other classes
+         * of other spyr modules(Models) to override the boot() method. Need to check more.
+         * make the parent (Eloquent) boot method run.
+         */
+        parent::boot();
+        //Basemodule::registerObserver(get_class()); // register observer
+        Module::observe(ModuleObserver::class);
+
+        /************************************************************/
+        // Following code block executes - when an element is in process
+        // of creation for the first time but the creation has not
+        // completed yet.
+        /************************************************************/
+        // static::creating(function (Module $element) { });
+
+        /************************************************************/
+        // Following code block executes - after an element is created
+        // for the first time.
+        /************************************************************/
+        // static::created(function (Module $element) {});
+
+        /************************************************************/
+        // Following code block executes - when an already existing
+        // element is in process of being updated but the update is
+        // not yet complete.
+        /************************************************************/
+        // static::updating(function (Module $element) {});
+
+        /************************************************************/
+        // Following code block executes - after an element
+        // is successfully updated
+        /************************************************************/
+        //static::updated(function (Module $element) {});
+
+        /************************************************************/
+        // Execute codes during saving (both creating and updating)
+        /************************************************************/
+               static::saving(function (Module $element) {
+                   $valid = true;
+                   /************************************************************/
+                   // Your validation goes here
+                   // if($valid) $valid = $element->isSomethingDoable(true)
+                   /************************************************************/
+                   return $valid;
+               });
+
+        /************************************************************/
+        // Execute codes after model is successfully saved
+        /************************************************************/
+        // static::saved(function (Module $element) {});
+
+        /************************************************************/
+        // Following code block executes - when some element is in
+        // the process of being deleted. This is good place to
+        // put validations for eligibility of deletion.
+        /************************************************************/
+        // static::deleting(function (Module $element) {});
+
+        /************************************************************/
+        // Following code block executes - after an element is
+        // successfully deleted.
+        /************************************************************/
+        // static::deleted(function (Module $element) {});
+
+        /************************************************************/
+        // Following code block executes - when an already deleted element
+        // is in the process of being restored.
+        /************************************************************/
+        // static::restoring(function (Module $element) {});
+
+        /************************************************************/
+        // Following code block executes - after an element is
+        // successfully restored.
+        /************************************************************/
+        //static::restored(function (Module $element) {});
     }
 
     ############################################################################################
     # Validator functions
     ############################################################################################
+
     /**
      * @param bool|false $setMsgSession setting it false will not store the message in session
      * @return bool
@@ -146,46 +183,6 @@ class Module extends Basemodule
     //        return $valid;
     //    }
 
-    /**
-     * This function validates a model based on the validation rule.
-     * Also checks if it isCreatable/isEditable
-     *
-     * @return \Illuminate\Validation\Validator
-     */
-    public function validateModel()
-    {
-        $validator = \Validator::make($this->attributes, static::rules($this), static::$custom_validation_messages);
-        return $validator;
-        /*if (!$validator->passes()) {
-            $valid = setError("Validation failed " . $this->module()->title);
-            foreach ($validator->messages()->all() as $e) {
-                Session::push('error', $e);
-            }
-        }*/
-        /*
-        if (!isset($this->id)) {
-            if (!$this->isCreatable()) {
-                $valid = setError("Can not save new " . $this->module()->title . " Error: Module validate()");
-            }
-
-        } else {
-            if (!$this->isEditable()) {
-                $valid = setError("Can not update " . mlink($this->module()->name, $this->id) . " Error: Module isEditable()");
-            }
-        }
-        */
-        //return $valid;
-    }
-
-    /**
-     * Get fields that are restricted for update.
-     *
-     * @return array
-     */
-    // public function restrictedUpdates() {
-    //     return $this->restrict_updates;
-    // }
-
     ############################################################################################
     # Helper functions
     ############################################################################################
@@ -197,59 +194,82 @@ class Module extends Basemodule
     // public function someAction() { }
 
     /**
-     * Static functions needs to be called using Model::function($id)
+     * Static cuntions needs to be called using Model::function($id)
      * Inside static function you may need to query and get the element
-     *
-     * @internal param $id
+     * @param $id
      */
     // public static function someOtherAction($id) { }
 
     /**
-     * Register the model observer for a spyr module
-     *
-     * @param $Model
-     */
-    // public static function registerObserver($Model) {
-    //     $Model = "\\" . $Model;
-    //     $ObserverClass = $Model . "Observer";
-    //     /** @var Module $Model */
-    //     $Model::observe(new $ObserverClass); // register observer
-    // }
-
-    /**
-     * Returns array of user ids including creator and updater user ids.
-     * This can be overridden in different modules as per business.
-     *
+     * Get module names as one-dimentional array, by default get only the active ones
+     * @param bool|true $only_active
      * @return array
      */
-    // public function relatedUsers() {
-    //     $user_ids = []; // Init array to store all user ids
-    //     if (isset($this->creator->id))
-    //         $user_ids[] = $this->creator->id; //get the creator
-    //     if (isset($this->updater->id) && isset($this->creator->id) && $this->creator->id !== $this->updater->id) //if the creator and updater is same no need to add the id twice
-    //         $user_ids[] = $this->updater->id; //get the updater
-    //     return $user_ids;
-    // }
+    public static function names($only_active = true) {
+        $q = Module::select('name');
+        if ($only_active) {
+            $q = $q->where('is_active', 1);
+        }
+        $results = $q->remember(cacheTime('long'))->get()->toArray();
+        $modules = array_column($results, 'name');
+        return $modules;
+    }
 
     /**
-     * Get the module object that an element belongs to. If the element is $tenant then the function
-     * returns the row from modules table that has module name 'tenants'.
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null|static
+     * Checks if a module is a module with tenant context
+     * @param $module_name
+     * @return bool|mixed
      */
-    // public function module() {
-    //     return Module::where('name', moduleName(get_class($this)))->remember(cacheTime('module-list'))->first();
-    // }
+    public static function hasTenantContext($module_name) {
+        $tenant_idf = tenantIdField();
+        $fields = columns($module_name);
+
+        if (in_array($tenant_idf, $fields)) { // tenant id field found
+            return true;
+        }
+        return false;
+    }
 
     /**
-     * Get uploads of specific types
-     *
-     * @param array $uploadtype_ids
-     * @return mixed
+     * Function returns an array of predecessor module objects of a specific module.
+     * This function is helpful to generate breadcrumb or menu.
+     * @return array
      */
-    // public function getUploads($uploadtype_ids = []) {
-    //     return $this->uploads()->whereIn('uploadtype_id', $uploadtype_ids)->orderBy('created_at', 'DESC');
-    // }
+    public function moduletree() {
+
+        $stack = [$this];
+        for ($i = $this->parent_id; ;) {
+            if (!$i) break;
+
+            if ($predecessor = Module::find($i)) {
+                array_push($stack, $predecessor);
+                $i = $predecessor->parent_id;
+            }
+        }
+
+        $stack = array_reverse($stack);
+
+        return $stack;
+    }
+
+    /**
+     * Returns a multi dimentional array with hiararchically stored modulegroups and modules.
+     * Unlike previous moduletree() function, this one check the parent relationship with
+     * modulegroup instead of module.
+     * @return array
+     */
+    public function modulegroupTree() {
+        $stack = [$this];
+        for ($i = $this->modulegroup_id; ;) {
+            if (!$i) break;
+            if ($predecessor = Modulegroup::remember(60)->find($i)) {
+                array_push($stack, $predecessor);
+                $i = $predecessor->parent_id;
+            }
+        }
+        $stack = array_reverse($stack);
+        return $stack;
+    }
 
     ############################################################################################
     # Permission functions
@@ -263,130 +283,72 @@ class Module extends Basemodule
     ############################################################################################
 
     /**
-     * Checks if the $element is creatable by current or any user passed as parameter.
+     * Checks if the $module is viewable by current or any user passed as parameter.
      * spyrElementViewable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
-     *
      * @param null $user_id
-     * @param bool $set_msg
      * @return bool
      */
-    public function isCreatable($user_id = null, $set_msg = false)
-    {
-        $valid = true;
-        // if ($valid = spyrElementCreatable($this, $user_id, $set_msg)) {
-        //     // Write new validation logic for this operation in this block.
-        // }
-        return $valid;
-    }
+    //    public function isViewable($user_id = null)
+    //    {
+    //        $valid = false;
+    //        if ($valid = spyrElementViewable($this, $user_id)) {
+    //            //if ($valid && somethingElse()) $valid = false;
+    //        }
+    //        return $valid;
+    //    }
 
     /**
-     * Checks if the $element is viewable by current or any user passed as parameter.
-     * spyrElementViewable() is the primary default checker based on permission
-     * whether this should be allowed or not. The logic can be further
-     * extend to implement more conditions.
-     *
-     * @param null $user_id
-     * @param bool $set_msg
-     * @return bool
-     */
-    public function isViewable($user_id = null, $set_msg = false)
-    {
-        $valid = ture;
-        // if ($valid = spyrElementViewable($this, $user_id, $set_msg)) {
-        //     /*
-        //     if ($this->isCreatable($user_id, $set_msg)) {
-        //         // Write new validation logic for this operation in this block.
-        //     }
-        //     */
-        //     $valid = $this->isCreatable($user_id, $set_msg);
-        // }
-        return $valid;
-    }
-
-    /**
-     * Checks if the $element is editable by current or any user passed as parameter.
+     * Checks if the $module is editable by current or any user passed as parameter.
      * spyrElementEditable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
-     *
      * @param null $user_id
-     * @param bool $set_msg
      * @return bool
      */
-    public function isEditable($user_id = null, $set_msg = false)
-    {
-        $valid = ture;
-        // if ($valid = spyrElementEditable($this, $user_id, $set_msg)) {
-        //     /*
-        //     if ($this->isCreatable($user_id, $set_msg)) {
-        //         // Write new validation logic for this operation in this block.
-        //     }
-        //     */
-        //     $valid = $this->isCreatable($user_id, $set_msg);
-        // }
-        return $valid;
-    }
+    //    public function isEditable($user_id = null)
+    //    {
+    //        $valid = false;
+    //        if ($valid = spyrElementEditable($this, $user_id)) {
+    //            //if ($valid && somethingElse()) $valid = false;
+    //        }
+    //        return $valid;
+    //    }
 
     /**
-     * Checks if the $element is deletable by current or any user passed as parameter.
+     * Checks if the $module is deletable by current or any user passed as parameter.
      * spyrElementDeletable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
-     *
      * @param null $user_id
-     * @param bool $set_msg
      * @return bool
      */
-    public function isDeletable($user_id = null, $set_msg = false)
-    {
-        $valid = ture;
-        // if ($valid = spyrElementDeletable($this, $user_id, $set_msg)) {
-        //     /*
-        //     if ($this->isEditable($user_id, $set_msg)) {
-        //         // Write new validation logic for this operation in this block.
-        //     }
-        //     */
-        //     $valid = $this->isEditable($user_id, $set_msg);
-        // }
-        return $valid;
-    }
+    //    public function isDeletable($user_id = null)
+    //    {
+    //        $valid = false;
+    //        if ($valid = spyrElementDeletable($this, $user_id)) {
+    //            //if ($valid && somethingElse()) $valid = false;
+    //        }
+    //        return $valid;
+    //    }
 
     /**
-     * Checks if the $element is restorable by current or any user passed as parameter.
+     * Checks if the $module is restorable by current or any user passed as parameter.
      * spyrElementRestorable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
-     *
      * @param null $user_id
-     * @param bool $set_msg
      * @return bool
      */
-    public function isRestorable($user_id = null, $set_msg = false)
-    {
-        $valid = ture;
-        // if ($valid = spyrElementRestorable($this, $user_id, $set_msg)) {
-        //     /*
-        //     if ($this->isEditable($user_id, $set_msg)) {
-        //         // Write new validation logic for this operation in this block.
-        //     }
-        //     */
-        //     $valid = $this->isEditable($user_id, $set_msg);
-        // }
-        return $valid;
-    }
-
-    /**
-     * Function checks whether an element can be assigned to an user.
-     *
-     * @param null $user_id
-     * @param bool $set_msg
-     * @return bool
-     */
-    // public function isAssignable($user_id = null, $set_msg = false) {
-    //     return $this->isEditable($user_id, $set_msg);
-    // }
+    //    public function isRestorable($user_id = null)
+    //    {
+    //        $valid = false;
+    //        if ($valid = spyrElementRestorable($this, $user_id)) {
+    //            //if ($valid && somethingElse()) $valid = false;
+    //        }
+    //        return $valid;
+    //    }
 
     ############################################################################################
     # Query scopes
@@ -422,21 +384,6 @@ class Module extends Basemodule
     // Write new dynamic query scopes here.
 
     ############################################################################################
-    # Additional/Appended attributes
-    # ---------------------------------------------------------------------------------------- #
-    ############################################################################################
-
-    /**
-     * Function to return an appended attribute in a Model. The attribute name
-     * should be added in $append array.
-     *
-     * @return bool
-     */
-    /*public function getSomeNewFieldAttribute() {
-        return true;
-    }*/
-
-    ############################################################################################
     # Model relationships
     # ---------------------------------------------------------------------------------------- #
     /*
@@ -445,71 +392,13 @@ class Module extends Basemodule
      * already defined.
      */
     ############################################################################################
-    /**
-     * Get the user who has created the element
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function creator()
-    {
-        return $this->belongsTo('User', 'created_by');
-    }
 
-    /**
-     * Get the user who has last updated the element
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function updater()
-    {
-        return $this->belongsTo('User', 'updated_by');
-    }
+    # Default relationships already available in base Class 'Basemodule'
+    //public function updater() { return $this->belongsTo('User', 'updated_by'); }
+    //public function creator() { return $this->belongsTo('User', 'created_by'); }
 
-    /**
-     * Get a list of uploads under an element.
-     *
-     * @return mixed
-     */
-    // public function uploads() {
-    //     return $this->hasMany('Upload', 'element_id')->where('module_id', $this->module()->id)->orderBy('order', 'ASC')->orderBy('created_at', 'DESC');
-    // }
+    // Write new relationships below this line
 
-    /**
-     * Get a list of changes that happened to an element
-     *
-     * @return mixed
-     */
-    // public function changes() {
-    //     return $this->hasMany('Change', 'element_id')->where('module_id', $this->module()->id)->orderBy('created_at', 'DESC');;
-    // }
-
-    /**
-     * Some modules like uploads, messages etc have a parent element under which that upload was made.
-     * We call this linked element
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    // public function linkedElement() {
-    //     return $this->belongsTo(modelNameFromModuleId($this->module_id), 'module_entry_id');
-    // }
-
-    /**
-     * List of statusupdates
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    // public function statusupdates() {
-    //     return $this->hasMany('Statusupdate', 'element_id')->where('module_id', $this->module()->id)->orderBy('created_at', 'DESC');
-    // }
-
-    /**
-     * Get the last updated status
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    // public function lastStatusupdate() {
-    //     return $this->hasOne('Statusupdate', 'element_id')->where('module_id', $this->module()->id)->orderBy('created_at', 'DESC');
-    // }
     ############################################################################################
     # Accessors & Mutators
     # ---------------------------------------------------------------------------------------- #
@@ -524,4 +413,5 @@ class Module extends Basemodule
     ############################################################################################
 
     // Write accessors and mutators here.
+
 }
