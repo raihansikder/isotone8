@@ -30,8 +30,6 @@ Route::post('threads/{channel_slug}/{thread}/replies', 'RepliesController@store'
 
 Route::get('test', function () {
 
-    dd(routeWithoutSlash());
-    $user = \App\User::where('id',1)->first();
-    $module_name = moduleName(get_class($user));
-    dd($module_name);
+    return elementModule(User::find(1));
+
 });

@@ -15,7 +15,8 @@ if (!function_exists('asset')) {
      * @param  bool $secure
      * @return string
      */
-    function asset($path, $secure = null) {
+    function asset($path, $secure = null)
+    {
         return app('url')->asset($path, $secure);
     }
 }
@@ -26,7 +27,8 @@ if (!function_exists('app')) {
      * @param  string $make
      * @return mixed
      */
-    function app($make = null) {
+    function app($make = null)
+    {
         if (!is_null($make)) {
             return app()->make($make);
         }
@@ -35,15 +37,15 @@ if (!function_exists('app')) {
     }
 }
 
-
 /**
  * Caches a raw SQL query for given minutes.
  *
- * @param string $sql Raw SQL statement
+ * @param string $sql  Raw SQL statement
  * @param int $timeout Minutes to cache
  * @return array|mixed Array of objects as query result
  */
-function result($sql, $timeout = 0) {
+function result($sql, $timeout = 0)
+{
     if ($timeout <= 0) {
         return DB::select(DB::raw($sql));
     } else {
@@ -55,11 +57,13 @@ function result($sql, $timeout = 0) {
 
 /**
  * Get the first row from a SQL query.
+ *
  * @param     $sql
  * @param int $timeout
  * @return mixed
  */
-function resultFirst($sql, $timeout = 0) {
+function resultFirst($sql, $timeout = 0)
+{
     return result($sql, $timeout)[0];
 }
 
@@ -69,7 +73,8 @@ function resultFirst($sql, $timeout = 0) {
  * @param $name : field name
  * @return bool
  */
-function inputIsArray($name) {
+function inputIsArray($name)
+{
     if (Request::has($name) && is_array(Request::get($name)) && count(Request::get($name))) return true;
     return false;
 
@@ -82,7 +87,8 @@ function inputIsArray($name) {
  * @param array $array
  * @return array
  */
-function kv($array = []) {
+function kv($array = [])
+{
     $temp = [];
     if (count($array)) {
         foreach ($array as $a) {
@@ -98,20 +104,23 @@ function kv($array = []) {
  *
  * @param        $table
  * @param        $column
- * @param string $sql_extension
+ * @param string $sql_extension todo: need to fix how to add query extension
  * @return array
  */
-function tableColumnVals($table, $column, $sql_extension = '') {
-    $sql = "SELECT $column FROM " . dbTable($table) . " WHERE deleted_at IS NULL AND is_active=1";
-    if (strlen($sql_extension)) $sql .= " " . $sql_extension;
-    $rows = result($sql);
-    $temp = [];
-    if (count($rows)) {
-        foreach ($rows as $row) {
-            array_push($temp, $row->$column);
-        }
-    }
-    return $temp;
+function tableColumnVals($table, $column, $sql_extension = '')
+{
+    return DB::table($table)->whereNull('deleted_at')->pluck($column)->toArray();
+    //
+    // $sql = "SELECT $column FROM " . dbTable($table) . " WHERE deleted_at IS NULL AND is_active=1";
+    // if (strlen($sql_extension)) $sql .= " " . $sql_extension;
+    // $rows = result($sql);
+    // $temp = [];
+    // if (count($rows)) {
+    //     foreach ($rows as $row) {
+    //         array_push($temp, $row->$column);
+    //     }
+    // }
+    // return $temp;
 }
 
 /**
@@ -122,13 +131,10 @@ function tableColumnVals($table, $column, $sql_extension = '') {
  * @param string $sql_extension
  * @return string
  */
-function tableColumnValsToCsv($table, $column, $sql_extension = '') {
-    $str = '';
-    $vals = tableColumnVals($table, $column, $sql_extension);
-    if (count($vals)) foreach ($vals as $val) $str .= $val . ', ';
-    return trim($str, ', ');
+function tableColumnValsToCsv($table, $column, $sql_extension = '')
+{
+    return arrayToCsv(tableColumnVals($table, $column, $sql_extension));
 }
-
 
 /**
  * returns extension from path
@@ -136,7 +142,8 @@ function tableColumnValsToCsv($table, $column, $sql_extension = '') {
  * @param $path
  * @return mixed
  */
-function extFrmPath($path) {
+function extFrmPath($path)
+{
     $path_parts = pathinfo($path);
     return $path_parts['extension'];
 }
@@ -146,7 +153,8 @@ function extFrmPath($path) {
  *
  * @param $string
  */
-function echoBr($string) {
+function echoBr($string)
+{
     echo $string . "<br/>";
 }
 
@@ -156,7 +164,8 @@ function echoBr($string) {
  * @param $array
  * @return bool
  */
-function keyAsArray($array = []) {
+function keyAsArray($array = [])
+{
     list($keys, $values) = array_divide($array);
     if (is_array($keys)) {
         return $keys;
@@ -171,7 +180,8 @@ function keyAsArray($array = []) {
  * @param array $my_array
  * @return string $my_array
  */
-function myprint_r($my_array) {
+function myprint_r($my_array)
+{
     if (is_array($my_array)) {
         echo "<table border=1 cellspacing=0 cellpadding=3 width=100%>";
         echo '<tr><td colspan=2 style="background-color:#333333;"><strong><span style="color: white; ">ARRAY</span></strong></td></tr>';
@@ -194,7 +204,8 @@ function myprint_r($my_array) {
  * @param $array
  * @return object
  */
-function array_to_object($array) {
+function array_to_object($array)
+{
     return (object)$array;
 }
 
@@ -204,7 +215,8 @@ function array_to_object($array) {
  * @param int $length
  * @return string
  */
-function randomString($length = 8) {
+function randomString($length = 8)
+{
     $str = '';
     //$characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '9'));
     $characters = array_merge(range('A', 'Z'), range('0', '9'));
@@ -222,40 +234,11 @@ function randomString($length = 8) {
  *
  * @return string
  */
-function generateCode() {
+function generateCode()
+{
     return randomString(8);
 }
 
-/**
- * Function return a url to the image generated for QR code.
- * by default it uses qrserver.com service to generate QRcode
- *
- * @param string $data
- * @param string $size
- * @return string
- */
-function getQrCodeScrOld($data = '', $size = '70x70') {
-    return "https://api.qrserver.com/v1/create-qr-code/?size=$size&amp;data=$data";
-}
-
-/**
- * Function return a url to the image generated for QR code.
- * by default it uses qrserver.com service to generate QRcode
- *
- * @param string|type $data
- * @param string|type $size in pixel
- * @return string
- */
-
-function getQrCodeScr($data = '', $size = '100') {
-    //QrCode::format('png')->size('100')->generate($data.'.png', public_path("files/qrcode$id.png"));
-    $url = QrCode::encoding('UTF-8')->format('png')->size($size)->generate($data);
-    $url = base64_encode($url);
-    //return  "<img src=".asset("files/qrcode$id.png").">";
-    //return  "<img src=".$url.">";
-    return "<img src='data:image/png;base64," . $url . "'>";
-
-}
 /**
  * function to check if json is valid
  * http://stackoverflow.com/questions/6041741/fastest-way-to-check-if-a-string-is-json-in-php
@@ -263,7 +246,8 @@ function getQrCodeScr($data = '', $size = '100') {
  * @param $string
  * @return mixed
  */
-function json_validate($string) {
+function json_validate($string)
+{
     // decode the JSON data
     echo (string)$string;
     $result = json_decode((string)$string);
@@ -319,7 +303,8 @@ function json_validate($string) {
  * @param $text
  * @return mixed
  */
-function remove_utf8_bom($text) {
+function remove_utf8_bom($text)
+{
     $bom = pack('H*', 'EFBBBF');
     return preg_replace("/^$bom/", '', $text);
 }
@@ -333,7 +318,8 @@ function remove_utf8_bom($text) {
  * @param array $keys
  * @return array
  */
-function array_find_deep($array, $search, $keys = []) {
+function array_find_deep($array, $search, $keys = [])
+{
     foreach ($array as $key => $value) {
         if (is_array($value)) {
             $sub = array_find_deep($value, $search, array_merge($keys, [$key]));
@@ -357,13 +343,13 @@ function array_find_deep($array, $search, $keys = []) {
 //     return date('Y-m-d');
 // }
 
-
 /**
  * gets current date time of server
  *
  * @return bool|string
  */
-function currentDateTime() {
+function currentDateTime()
+{
     return now();
 }
 
@@ -376,7 +362,6 @@ function currentDateTime() {
 //     return date('Y-m-d H:i:s');
 // }
 
-
 /**
  * gets total number of days between two dates
  *
@@ -386,7 +371,8 @@ function currentDateTime() {
  * @internal param $d1
  * @internal param $d2
  */
-function dateDiff($date1, $date2) {
+function dateDiff($date1, $date2)
+{
     return abs(floor((strtotime($date1) - strtotime($date2)) / (60 * 60 * 24)));
 }
 
@@ -394,25 +380,12 @@ function dateDiff($date1, $date2) {
  * @param $start_date
  * @param $end_date
  */
-function printDateDiff($start_date, $end_date) {
+function printDateDiff($start_date, $end_date)
+{
     $diff = dateDiff($start_date, $end_date);
     //myprint_r($diff);
     echo $diff['total_days'];
 }
-
-/**
- * Converts english digits to bengali character
- *
- * @param $input
- * @return mixed
- */
-function convertEnglishDigitToBengali($input = '') {
-    $bn_digits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    $output = str_replace(range(0, 9), $bn_digits, $input);
-
-    return $output;
-}
-
 
 /**
  * returns a number format with X decimal places
@@ -422,10 +395,10 @@ function convertEnglishDigitToBengali($input = '') {
  * @return string
  * @internal param $places
  */
-function decimal($number, $decimalPlaces = 2) {
+function decimal($number, $decimalPlaces = 2)
+{
     return number_format((float)$number, $decimalPlaces, '.', '');
 }
-
 
 /**
  * @param        $str
@@ -433,7 +406,8 @@ function decimal($number, $decimalPlaces = 2) {
  * @param string $char
  * @return string
  */
-function pad($str, $count = 6, $char = '0') {
+function pad($str, $count = 6, $char = '0')
+{
     return str_pad($str, $count, $char, STR_PAD_LEFT);
 }
 
@@ -443,7 +417,8 @@ function pad($str, $count = 6, $char = '0') {
  * @param $str
  * @return string
  */
-function cleanCsv($str) {
+function cleanCsv($str)
+{
     // $clearChars = array("\n", " ", "\r");
     $clearChars = ["\n", "\r"];
     return str_replace($clearChars, '', trim($str, ', '));
@@ -455,8 +430,22 @@ function cleanCsv($str) {
  * @param $csv
  * @return array
  */
-function arrayFromCsv($csv) {
-    return explode(',', cleanCsv($csv));
+function arrayFromCsv($csv)
+{
+    return explode(',', $csv);
+}
+
+/**
+ * Converts an One-dimentional array into CSV.
+ *
+ * @param $items
+ * @return string
+ */
+function arrayToCsv($items)
+{
+    $csv = '';
+    if (count($items)) foreach ($items as $item) $csv .= $item . ', ';
+    return trim($csv, ', ');
 }
 
 /**
@@ -465,7 +454,8 @@ function arrayFromCsv($csv) {
  * @param $array
  * @return string
  */
-function csvFromArray($array) {
+function csvFromArray($array)
+{
     return cleanCsv(implode(',', $array));
 }
 
@@ -476,7 +466,8 @@ function csvFromArray($array) {
  * @param $str
  * @return mixed
  */
-function cleanStrNTS($str) {
+function cleanStrNTS($str)
+{
     return preg_replace('/\s+/S', ' ', $str);
 }
 
@@ -488,7 +479,8 @@ function cleanStrNTS($str) {
  * @return string
  * @internal param $string
  */
-function commaWrap($str) {
+function commaWrap($str)
+{
     $ret = null;
     if (strlen($str)) $ret = ',' . trim(cleanCsv(cleanStrNTS($str)), ', ') . ',';
 
@@ -502,7 +494,8 @@ function commaWrap($str) {
  * @return string human readable file size (2,87 ??)
  * @author Mogilev Arseny
  */
-function FileSizeConvert($bytes) {
+function FileSizeConvert($bytes)
+{
     $result = 'undefined';
     $bytes = floatval($bytes);
     $arBytes = [
@@ -544,7 +537,8 @@ function FileSizeConvert($bytes) {
  * @param string $ext
  * @return bool
  */
-function imageExtension($ext = '') {
+function isImageExtension($ext = '')
+{
     if (in_array(strtolower($ext), ['jpg', 'png', 'gif', 'jpeg'])) {
         return true;
     }
@@ -560,7 +554,8 @@ function imageExtension($ext = '') {
  * @param array $haystack
  * @return bool
  */
-function all_in_array(array $needles, array $haystack) {
+function all_in_array(array $needles, array $haystack)
+{
     if (count($needles) && count($haystack)) {
         foreach ($needles as $needle) {
             if (!in_array($needle, $haystack)) {
@@ -579,7 +574,8 @@ function all_in_array(array $needles, array $haystack) {
  * @param array $haystack
  * @return bool
  */
-function one_in_array(array $needles, array $haystack) {
+function one_in_array(array $needles, array $haystack)
+{
     if (count($needles) && count($haystack)) {
         foreach ($needles as $needle) {
             if (in_array($needle, $haystack)) {
@@ -597,17 +593,20 @@ function one_in_array(array $needles, array $haystack) {
  * @param array $haystack
  * @return bool
  */
-function none_in_array(array $needles, array $haystack) {
+function none_in_array(array $needles, array $haystack)
+{
     return !one_in_array($needles, $haystack);
 }
 
 /**
  * Function to do multiple find replaces in a string.
+ *
  * @param string $str
- * @param array  $replaces
+ * @param array $replaces
  * @return mixed|string
  */
-function multipleStrReplace($str = '', $replaces = []) {
+function multipleStrReplace($str = '', $replaces = [])
+{
     foreach ($replaces as $k => $v) {
         $str = str_replace($k, $v, $str);
     }
@@ -616,10 +615,12 @@ function multipleStrReplace($str = '', $replaces = []) {
 
 /**
  * Remove empty values and arrays values from an array.
+ *
  * @param array $array
  * @return array
  */
-function removeEmptyVals($array = []) {
+function removeEmptyVals($array = [])
+{
     $temp = [];
     if (is_array($array) && count($array)) {                    // handle if input is an array1
         foreach ($array as $a) {
