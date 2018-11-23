@@ -419,6 +419,8 @@ class ModulebaseController extends Controller
         /** @var \Illuminate\Database\Eloquent\Model $q */
         $q = $Model::where('is_active', 1);
         $q = self::filterQueryConstructor($q);
+
+
         $total = $q->count();
 
         # set offset

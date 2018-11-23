@@ -99,13 +99,13 @@ class Module extends Basemodule
         // of creation for the first time but the creation has not
         // completed yet.
         /************************************************************/
-        // static::creating(function (Module $element) { });
+        static::creating(function (Module $element) { });
 
         /************************************************************/
         // Following code block executes - after an element is created
         // for the first time.
         /************************************************************/
-        // static::created(function (Module $element) {});
+        static::created(function (Module $element) {});
 
         /************************************************************/
         // Following code block executes - when an already existing
