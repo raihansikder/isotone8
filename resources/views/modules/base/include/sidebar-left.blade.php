@@ -29,7 +29,7 @@
                 $current_module_name = $mod->name;
                 $breadcrumbs = breadcrumb($mod);
             }
-            renderMenuTree(Modulegroup::tree(), $current_module_name, $breadcrumbs);
+            renderMenuTree(\App\Modulegroup::tree(), $current_module_name, $breadcrumbs);
             ?>
 
             {{--<li class="header">LABELS</li>--}}

@@ -80,7 +80,7 @@ if ((isset($element) && isset($$element))) {
             initUploader("{{$var['upload_container_id']}}", "{{ route('uploads.store')}}"); // init initially
         </script>
     @endif
-@stop
+@endsection
 
 <?php
 unset($var);

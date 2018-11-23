@@ -32,7 +32,7 @@
     @include('modules.base.include.uploads',['var'=>['uploadtype_id'=>6,'limit'=>10]])
     <h4>3D files</h4>
     @include('modules.base.include.uploads',['var'=>['uploadtype_id'=>4,'limit'=>99]])
-@stop
+@endsection
 
 {{-- JS starts: javascript codes go here.--}}
 @section('js')
@@ -95,5 +95,5 @@
             $('input[name=name]').addClass('validate[required]');
         }
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

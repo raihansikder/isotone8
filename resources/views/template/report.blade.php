@@ -9,7 +9,7 @@
             padding: 0;
         }
     </style>
-@stop
+@endsection
 
 @section('title')
     @if(Request::has('submit') && hasPermission('reports.create'))
@@ -46,7 +46,7 @@
     @else
         <h4>{{Route::getCurrentRoute()->getParameter('code')}}</h4>
     @endif
-@stop
+@endsection
 
 
 
@@ -56,4 +56,4 @@
         $('#right-side').addClass('stretch');
         $('#left-side').addClass('collapse-left');
     </script>
-@stop
+@endsection

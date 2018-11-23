@@ -79,5 +79,5 @@
             $('input[name=name]').addClass('validate[required]');
         }
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

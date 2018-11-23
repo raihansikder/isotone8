@@ -35,7 +35,7 @@
         <small>Upload one or more files</small>
         @include('modules.base.include.uploads',['var'=>['limit'=>99]])
     </div>
-@stop
+@endsection
 
 {{-- JS starts: javascript codes go here.--}}
 @section('js')
@@ -97,5 +97,5 @@
             $('input[name=name]').addClass('validate[required]');
         }
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

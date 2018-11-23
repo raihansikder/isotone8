@@ -88,4 +88,17 @@ class User extends Authenticatable
     ];
 
 
+    /**
+     * Checks if the user is a super user - has
+     * access to everything regardless of permissions.
+     *
+     * @return bool
+     */
+    public function isSuperUser()
+    {
+        return true;
+        //return $this->hasPermission('superuser');
+    }
+
+
 }

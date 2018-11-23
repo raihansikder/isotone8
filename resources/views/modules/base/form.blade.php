@@ -19,7 +19,7 @@
 
     <a class="btn btn-xs" href="{{route("$module_name.index")}}" data-toggle="tooltip"
        title="View list of {{lcfirst(str_plural($mod->title))}}"><i class="fa fa-list"></i></a>
-@stop
+@endsection
 
 @section('content')
     <div class="col-md-12 no-padding">
@@ -62,14 +62,14 @@
         </div>
         {{ Form::close() }}
     </div>
-@stop
+@endsection
 
 @section('content-bottom')
     @parent
     {{--@if($mod->has_uploads == 'Yes')--}}
     {{--@include('modules.base.include.uploads')--}}
     {{--@endif--}}
-@stop
+@endsection
 
 @section('js')
     @parent
@@ -86,4 +86,4 @@
         $('form[name={{$module_name}}] input[name=redirect_success]').val('{{$redirect_success}}');
         $('form[name={{$module_name}}] input[name=redirect_fail]').val('{{$redirect_fail}}');
     </script>
-@stop
+@endsection

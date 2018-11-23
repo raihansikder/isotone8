@@ -10,8 +10,8 @@
 ?>
 
 @section('sidebar-left')
-    @include('modules.base.include.sidebar-left')
-@stop
+    {{--@include('modules.base.include.sidebar-left')--}}
+@endsection
 
 @section('title')
     {{$mod->title}}
@@ -21,8 +21,8 @@
     @endif
     <a class="btn btn-xs" href="{{route($module_name . '.report')}}?submit=Run&type=Module%20Generic%20Report&fields_csv=id%2Cname%2Ccreated_by%2Ccreated_at%2Cupdated_by%2Cupdated_at%2Cis_active&columns_to_show_csv=id%2Cname%2Ccreated_by%2Ccreated_at%2Cupdated_by%2Cupdated_at%2Cis_active&column_aliases_csv=Id%2CName%2CCreated+by%2CCreated+at%2CUpdated+by%2CUpdated+at%2CActive%3F&rows_per_page=100">View
         report</a>
-@stop
+@endsection
 
 @section('content')
     @include('modules.base.include.datatable')
-@stop
+@endsection

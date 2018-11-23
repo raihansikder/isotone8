@@ -108,5 +108,5 @@
         initEditor('html', editor_config_basic);
         enableValidation('{{$module_name}}'); // Instantiate validation function
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

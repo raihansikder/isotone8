@@ -36,4 +36,4 @@
     <script>
         enableValidation('deleteForm');
     </script>
-@stop
+@endsection

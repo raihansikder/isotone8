@@ -28,4 +28,4 @@
             "aaSorting": [[0, "desc"]],
         }).fnSetFilteringDelay(3000);
     </script>
-@stop
+@endsection

@@ -43,7 +43,7 @@
             @include('modules.uploads.update_uploads',['var'=>['id'=>$upload->id]])
         </div>
     @endif
-@stop
+@endsection
 {{-- JS starts: javascript codes go here.--}}
 @section('js')
     @parent
@@ -105,5 +105,5 @@
             $('input[name=name]').addClass('validate[required]');
         }
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

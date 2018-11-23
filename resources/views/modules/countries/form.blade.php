@@ -121,5 +121,5 @@
         addValidationRulesForSaving(); // Assign validation classes/rules
         enableValidation('{{$module_name}}'); // Instantiate validation function
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

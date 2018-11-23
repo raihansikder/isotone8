@@ -12,11 +12,11 @@
 ?>
 @section('sidebar-left')
     @include('modules.base.include.sidebar-left')
-@stop
+@endsection
 
 @section('title')
     Change log
-@stop
+@endsection
 
 @section('content')
     <table class="table table-bordered table-mailbox table-condensed table-hover" id="changelist" >
@@ -48,7 +48,7 @@
             @endforeach
         </tbody>
     </table>
-@stop
+@endsection
 @section('js')
     @parent
     <script>
@@ -57,5 +57,5 @@
             "bPaginate": false
         } );
     </script>
-@stop
+@endsection
 

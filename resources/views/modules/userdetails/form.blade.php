@@ -183,5 +183,5 @@
         enableValidation('{{$module_name}}'); // Instantiate validation function
         copyBillingAddress() //copy billing address to shipping address
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

@@ -115,5 +115,5 @@
         $('option:not(:selected)').attr('disabled', true).remove(); // remove all options that are not selected
         $('input').attr('readonly', 'readonly'); // make everything readonly
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

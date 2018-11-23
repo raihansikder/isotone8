@@ -2,13 +2,13 @@
 
 @section('sidebar-left')
     @include('modules.base.include.sidebar-left')
-@stop
+@endsection
 
 @section('title')
     @if(isset($title)){{$title}}@endif
-@stop
+@endsection
 
 @section('content')
     @if(isset($body)){{$body}}@endif
-@stop
+@endsection
 

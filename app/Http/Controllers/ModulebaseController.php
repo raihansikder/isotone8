@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\Module;
 use DB;
 use Redirect;
 use Request;
@@ -36,13 +37,13 @@ class ModulebaseController extends Controller
         # load default grid query
         if (!isset($this->grid_query)) {
             $this->grid_query = DB::table($this->module_name)
-                ->leftJoin('users as updater', DB::raw($this->db_table . '.updated_by'), ' = ', DB::raw('updater.id'))
+                ->leftJoin('users as updater', $this->module_name.'.updated_by', 'updater.id')
                 ->select(
-                    DB::raw($this->db_table . '.id as id'),
-                    DB::raw($this->db_table . '.name as name'),
-                    DB::raw('updater.name as user_name'),
-                    DB::raw($this->db_table . '.updated_at as updated_at'),
-                    DB::raw($this->db_table . '.is_active as is_active')
+                    $this->db_table . '.id as id',
+                    $this->db_table . '.name as name',
+                    'updater.name as user_name',
+                    $this->db_table . '.updated_at as updated_at',
+                    $this->db_table . '.is_active as is_active'
                 );
         }
         # Inject tenant context in grid query
@@ -72,15 +73,18 @@ class ModulebaseController extends Controller
      */
     public function index()
     {
+
         if (hasModulePermission($this->module_name, 'view-list')) {
             if (Request::get('ret') == 'json') {
                 return self::getJson();
             }
             $view = 'modules.base.grid';
+
             if (View::exists('modules.' . $this->module_name . '.grid')) {
                 $view = 'modules.' . $this->module_name . '.grid';
             }
-            return View::make($view)->with('grid_columns', $this->grid_columns);
+
+            return view($view)->with('grid_columns', $this->grid_columns);
         } else {
             return View::make('template.blank')
                 ->with('title', 'Permission denied!')
@@ -96,16 +100,18 @@ class ModulebaseController extends Controller
     public function grid()
     {
         // Grid query builder
-        //$q = $this->grid_query->whereNull($this->module_name . '.deleted_at');
+        $q = $this->grid_query->whereNull($this->module_name . '.deleted_at');
         // Make datatable
         /** @var Datatables $dt */
+
+        $dt = datatables($q)->toJson();
         // $dt = Spyrdatatable::of($q); // $dt refers to data table.
         // $dt = $dt->edit_column('name', '<a href="{{ route(\'' . $this->module_name . '.edit\', $id) }}">{{$name}}</a>');
         // $dt = $dt->edit_column('id', '<a href="{{ route(\'' . $this->module_name . '.edit\', $id) }}">{{$id}}</a>');
         // $dt = $dt->edit_column('is_active', '@if($is_active) Yes @else No @endif');
         //
         // return $dt->make();
-        return;
+        return $dt;
     }
 
     /**

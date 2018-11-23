@@ -5,7 +5,7 @@
             width: 100%;
         }
     </style>
-@stop
+@endsection
 
 {{--@include('form.textarea', array('name'=>'fields_csv','label'=>"Select columns",'class'=>'tags'))--}}
 @include('form.textarea',['var'=>['name'=>'fields_csv','label'=>'Select columns', ['params'=>['class'=>'tag']],'container_class'=>'col-md-2']])

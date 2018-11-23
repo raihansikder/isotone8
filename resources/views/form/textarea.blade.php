@@ -45,7 +45,7 @@ $var['params']['id'] = (isset($var['params']['id'])) ? $var['params']['id'] : $v
             initEditor('{{$var['params']['id']}}', editor_config_basic);
         </script>
     @endif
-@stop
+@endsection
 
 {{-- Unset the local variable used in this view. --}}
 <?php unset($var) ?>

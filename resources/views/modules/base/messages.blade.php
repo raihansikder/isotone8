@@ -184,4 +184,4 @@ $related_user_email = array_filter($related_user_email);
 
         /*******************************************************************/
     </script>
-@stop
+@endsection

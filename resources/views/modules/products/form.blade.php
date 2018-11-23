@@ -72,7 +72,7 @@
     {{--<div class="col-md-6 no-padding-l">--}}
         {{--@include('modules.base.messages')--}}
     {{--</div>--}}
-@stop
+@endsection
 
 {{-- JS starts: javascript codes go here.--}}
 @section('js')
@@ -148,5 +148,5 @@
         enableValidation('{{$module_name}}'); // Instantiate validation function
 
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

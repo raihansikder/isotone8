@@ -54,7 +54,7 @@ if ((isset($element) && isset($$element))) {
 @section('head')
     @parent
     <link href="{{ asset('assets/croppic/assets/css/croppic.css')}}" rel="stylesheet"/>
-@stop
+@endsection
 
 @section('js')
     @parent
@@ -125,6 +125,6 @@ if ((isset($element) && isset($$element))) {
         $('#' + '{{$var['img_container_id']}}').addClass('img_placeholder') // add a gray area to show a place holder
 
     </script>
-@stop
+@endsection
 
 <?php unset($var); ?>

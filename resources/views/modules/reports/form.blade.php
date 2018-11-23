@@ -8,7 +8,7 @@
                target="_blank"><i class="fa fa-eye"></i> View Report </a>
         @endif
     @endif
-@stop
+@endsection
 <?php
 /**
  * For documentation and global variables on how form.blade views please refer to
@@ -128,5 +128,5 @@
         }
 
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

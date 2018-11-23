@@ -155,5 +155,5 @@
         });
         enableValidation('{{$module_name}}'); // Instantiate validation function
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

@@ -45,4 +45,4 @@
 @section('js')
     @parent
     {{-- write your JS here --}}
-@stop
+@endsection

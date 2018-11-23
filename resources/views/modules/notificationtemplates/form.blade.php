@@ -139,5 +139,5 @@
 
 
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

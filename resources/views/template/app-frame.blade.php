@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,7 +15,7 @@
 <div id="root" class="wrapper">
     <header class="main-header">
         <!-- Logo -->
-        <a href="{{route('shop.home')}}" class="logo">
+        <a href="{{route('home')}}" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <img style="height: 60%" src="{{asset("assets/images/logo-hr.png")}}" alt="{{setting('app-name')}}"
                  title="{{setting('app-name')}}"/>
@@ -37,27 +37,26 @@
                     {{--@include('template.include.top-menu.message-menu')--}}
                     {{--@include('template.include.top-menu.message-menu')--}}
                     {{--@include('template.include.top-menu.task-menu')--}}
-                    <li><a href="{{route('shop.search')}}">Find art</a></li>
                     @if(user())
                         <li><a href="{{route('home')}}">Manage Account</a></li>
 
-                        <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="{{asset(user()->profilePic())}}"
-                                     class="user-image" alt="User Image">
-                                <span class="hidden-xs">{{user()->name}}</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="user-header">
-                                    <img src="{{asset(user()->profilePic())}}"
-                                         class="img-circle" alt="User Image">
-                                    <p>
-                                        {{user()->name}}
-                                        <small>{{cleanCsv(user()->groups_title_csv)}}</small>
-                                    </p>
-                                </li>
+                        {{--<li class="dropdown user user-menu">--}}
+                            {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}}
+                                {{--<img src="{{asset(user()->profilePic())}}"--}}
+                                     {{--class="user-image" alt="User Image">--}}
+                                {{--<span class="hidden-xs">{{user()->name}}</span>--}}
+                            {{--</a>--}}
+                            {{--<ul class="dropdown-menu">--}}
+                                {{--<li class="user-header">--}}
+                                    {{--<img src="{{asset(user()->profilePic())}}"--}}
+                                         {{--class="img-circle" alt="User Image">--}}
+                                    {{--<p>--}}
+                                        {{--{{user()->name}}--}}
+                                        {{--<small>{{cleanCsv(user()->groups_title_csv)}}</small>--}}
+                                    {{--</p>--}}
+                                {{--</li>--}}
                                 {{--<!-- Menu Body -->--}}
-                                <li class="user-body">
+                                {{--<li class="user-body">--}}
                                     {{--<div class="row">--}}
                                     {{--<div class="col-xs-4 text-center">--}}
                                     {{--<a href="#">Followers</a>--}}
@@ -70,18 +69,18 @@
                                     {{--</div>--}}
                                     {{--</div>--}}
                                     {{--<!-- /.row -->--}}
-                                </li>
+                                {{--</li>--}}
                                 {{--<!-- Menu Footer-->--}}
-                                <li class="user-footer">
+                                {{--<li class="user-footer">--}}
                                     {{--<div class="pull-left">--}}
                                     {{--<a href="#" class="btn btn-default btn-flat">Profile</a>--}}
                                     {{--</div>--}}
-                                    <div class="pull-right">
-                                        <a href="{{route('signout')}}" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
+                                    {{--<div class="pull-right">--}}
+                                        {{--<a href="{{route('signout')}}" class="btn btn-default btn-flat">Sign out</a>--}}
+                                    {{--</div>--}}
+                                {{--</li>--}}
+                            {{--</ul>--}}
+                        {{--</li>--}}
                     @else
                         <li>
                             <a href="{{route('get.signin')}}">Sign in</a>
@@ -97,8 +96,8 @@
             @if(user())
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="{{asset(user()->profilePic())}}" class="img-circle"
-                             alt="User Image">
+                        {{--<img src="{{asset(user()->profilePic())}}" class="img-circle"--}}
+                             {{--alt="User Image">--}}
                     </div>
                     <div class="pull-left info">
                         <p>{{ user()->name}}</p>
@@ -107,7 +106,7 @@
                 </div>
             @endif
             @section('sidebar-left')
-                @include('modules.base.include.sidebar-left')
+                {{--@include('modules.base.include.sidebar-left')--}}
             @show
         </section>
     </aside>
@@ -123,7 +122,7 @@
             </h4>
             @section('breadcrumb')
                 {{-- breadcrumb section  --}}
-                @include('template.include.breadcrumb')
+                {{--@include('template.include.breadcrumb')--}}
             @show
         </section>
 

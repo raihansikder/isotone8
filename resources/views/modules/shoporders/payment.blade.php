@@ -44,4 +44,4 @@ $payable_statuses = ['Payment pending'];
             }
         </script>
     @endif
-@stop
+@endsection

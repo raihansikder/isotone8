@@ -63,10 +63,10 @@
         @endif
 
     @endif
-@stop
+@endsection
 
 @section('js')
     @parent
     @include('modules.base.report.js')
     {{-- if you have any specific JS for this report write it here --}}
-@stop
+@endsection

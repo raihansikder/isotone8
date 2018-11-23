@@ -12,7 +12,7 @@
         ">
         }
     </style>
-@stop
+@endsection
 
 @section('content')
     <div class="card-body">
@@ -26,16 +26,16 @@
                 <input name="email" type="text" class="form-control" placeholder="Username">
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 @if ($errors->has('email'))
-                    <span class='help-block'>
-                    {{ $errors->first('email') }}
-                    </span>
+                    <span class='help-block'>{{ $errors->first('email') }}</span>
                 @endif
             </div>
 
             <div class="form-group has-feedback {{ $errors->first('password', 'has-error') }}">
                 <input name="password" type="password" class="form-control" placeholder="Password">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                {{ $errors->first('password', '<span class="help-block">:message</span>') }}
+                @if ($errors->has('password'))
+                    <span class='help-block'>{{ $errors->first('password') }}</span>
+                @endif
             </div>
 
 
@@ -86,8 +86,9 @@
                     <button type="submit" class="btn btn-primary">
                         {{ __('Login') }}
                     </button>
-
-                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                    <a href="{{ route('login') }}">{{ __('Login') }}</a>
+                    <a href="{{ route('register') }}">{{ __('Register') }}</a>
+                    <a href="{{ route('password.request') }}">
                         {{ __('Forgot Your Password?') }}
                     </a>
                 </div>

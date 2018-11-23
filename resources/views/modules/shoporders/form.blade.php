@@ -164,7 +164,7 @@ if (isset($shoporder->id)) {
             @include('modules.base.messages')
         </div>
     @endif
-@stop
+@endsection
 {{--@include('form.is_active')--}}
 {{-- Form ends --}}
 
@@ -261,5 +261,5 @@ if (isset($shoporder->id)) {
         enableValidation('{{$module_name}}'); // Instantiate validation function
         copyBillingAddress();//copy billing address to shipping address
     </script>
-@stop
+@endsection
 {{-- JS ends --}}

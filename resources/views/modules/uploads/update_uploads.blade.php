@@ -32,7 +32,7 @@ $var['upload_container_id'] = "img_container_" . $rand;
             initUploader("{{$var['upload_container_id']}}", "{{ route('uploads.update_last_upload')}}"); // init initially
         </script>
     @endif
-@stop
+@endsection
 <?php unset($var); ?>
 
 
