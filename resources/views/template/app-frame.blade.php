@@ -4,43 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{setting('app-name')}}</title>
-    {{--<!-- Tell the browser to be responsive to screen width -->--}}
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    {{--<!-- Font Awesome -->--}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-    {{--<!-- Ionicons -->--}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    {{-- Text fonts --}}
-    <link href="https://fonts.googleapis.com/css?family=Roboto|Ubuntu|Comfortaa" rel="stylesheet">
-
-    {{--font awesome--}}
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
-          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-
-    {{-- combined css --}}
-    <link rel="stylesheet" href="{{asset('assets/templates/admin-lte/bootstrap/css/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/templates/admin-lte/plugins/iCheck/all.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/templates/admin-lte/css/combined.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/templates/admin-lte/css/project.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/templates/admin-lte/plugins/datepicker/datepicker3.css')}}">
-    {{--<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->--}}
-    {{--<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->--}}
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-
-    <script src="{{asset('assets/templates/admin-lte/js/vue.js')}}" type="text/javascript"></script>
-    <script src="{{asset('assets/templates/admin-lte/js/axios.min.js')}}" type="text/javascript"></script>
-
-    <script src="{{ asset('assets/templates/admin-lte/plugins/datepicker/bootstrap-datepicker.js')}}"
-            type="text/javascript"></script>
-
-    <![endif]-->
     @section('head')
-        {{-- ++++++++++++ --}}
         {{-- head section --}}
-        {{-- ++++++++++++ --}}
     @show
+    @include('template.css')
 </head>
 <body class="hold-transition skin-black-light sidebar-mini fixed">
 <!-- Site wrapper -->
@@ -124,12 +92,8 @@
             </div>
         </nav>
     </header>
-    <!-- =============================================== -->
-    <!-- Left side column. contains the sidebar -->
     <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
-            <!-- Sidebar user panel -->
             @if(user())
                 <div class="user-panel">
                     <div class="pull-left image">
@@ -146,27 +110,19 @@
                 @include('modules.base.include.sidebar-left')
             @show
         </section>
-        <!-- /.sidebar -->
     </aside>
 
-    <!-- =============================================== -->
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
             <h4>
                 @section('title')
-                    {{-- +++++++++++++++++++ --}}
                     {{-- title section       --}}
-                    {{-- +++++++++++++++++++ --}}
                     Blank page
                     <small>it all starts here</small>
                 @show
             </h4>
             @section('breadcrumb')
-                {{-- +++++++++++++++++++ --}}
                 {{-- breadcrumb section  --}}
-                {{-- +++++++++++++++++++ --}}
                 @include('template.include.breadcrumb')
             @show
         </section>
@@ -176,14 +132,10 @@
             <div class="col-md-12 no-padding">
                 @include('template.include.messages-top')
                 @section('content-top')
-                    {{-- +++++++++++++++++++ --}}
                     {{-- content-top section --}}
-                    {{-- +++++++++++++++++++ --}}
                 @show
                 @section('content')
-                    {{-- +++++++++++++++ --}}
                     {{-- content section --}}
-                    {{-- +++++++++++++++ --}}
                     <div class="box">
                         <div class="box-header with-border">
                             <h3 class="box-title">Title</h3>
@@ -202,47 +154,34 @@
                         <div class="box-body">
                             Start creating your amazing application!
                         </div>
-                        <!-- /.box-body -->
                         <div class="box-footer">
                             Footer
                         </div>
-                        <!-- /.box-footer-->
                     </div>
-                    <!-- /.box -->
                 @show
                 <div class="clearfix"></div>
                 @section('content-bottom')
-                    {{-- ++++++++++++++++++++++ --}}
                     {{-- content-bottom section --}}
-                    {{-- ++++++++++++++++++++++ --}}
                 @show
             </div>
         </section>
-        <!-- /.content -->
     </div>
-    <!-- /.content-wrapper -->
 
-    <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
-        <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
             <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
 
             <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
         </ul>
-        <!-- Tab panes -->
         <div class="tab-content">
-            <!-- Home tab content -->
             <div class="tab-pane" id="control-sidebar-home-tab">
                 <h3 class="control-sidebar-heading">Recent Activity</h3>
                 <ul class="control-sidebar-menu">
                     <li>
                         <a href="javascript:void(0)">
                             <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-
                             <div class="menu-info">
                                 <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
                                 <p>Will be 23 on April 24th</p>
                             </div>
                         </a>
@@ -253,7 +192,6 @@
 
                             <div class="menu-info">
                                 <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
-
                                 <p>New phone +1(800)555-1234</p>
                             </div>
                         </a>
@@ -261,27 +199,21 @@
                     <li>
                         <a href="javascript:void(0)">
                             <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
-
                             <div class="menu-info">
                                 <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
-
-
                             </div>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0)">
                             <i class="menu-icon fa fa-file-code-o bg-green"></i>
-
                             <div class="menu-info">
                                 <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
-
                                 <p>Execution time 5 seconds</p>
                             </div>
                         </a>
                     </li>
                 </ul>
-                <!-- /.control-sidebar-menu -->
 
                 <h3 class="control-sidebar-heading">Tasks Progress</h3>
                 <ul class="control-sidebar-menu">
@@ -334,14 +266,9 @@
                         </a>
                     </li>
                 </ul>
-                <!-- /.control-sidebar-menu -->
 
             </div>
-            <!-- /.tab-pane -->
-            <!-- Stats tab content -->
             <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-            <!-- /.tab-pane -->
-            <!-- Settings tab content -->
             <div class="tab-pane" id="control-sidebar-settings-tab">
                 <form method="post">
                     <h3 class="control-sidebar-heading">General Settings</h3>
@@ -356,7 +283,6 @@
                             Some information about this general settings option
                         </p>
                     </div>
-                    <!-- /.form-group -->
 
                     <div class="form-group">
                         <label class="control-sidebar-subheading">
@@ -368,7 +294,6 @@
                             Other sets of options are available
                         </p>
                     </div>
-                    <!-- /.form-group -->
 
                     <div class="form-group">
                         <label class="control-sidebar-subheading">
@@ -380,7 +305,6 @@
                             Allow the user to show his name in blog posts
                         </p>
                     </div>
-                    <!-- /.form-group -->
 
                     <h3 class="control-sidebar-heading">Chat Settings</h3>
 
@@ -390,7 +314,6 @@
                             <input type="checkbox" class="pull-right" checked>
                         </label>
                     </div>
-                    <!-- /.form-group -->
 
                     <div class="form-group">
                         <label class="control-sidebar-subheading">
@@ -398,7 +321,6 @@
                             <input type="checkbox" class="pull-right">
                         </label>
                     </div>
-                    <!-- /.form-group -->
 
                     <div class="form-group">
                         <label class="control-sidebar-subheading">
@@ -406,32 +328,18 @@
                             <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
                         </label>
                     </div>
-                    <!-- /.form-group -->
                 </form>
             </div>
-            <!-- /.tab-pane -->
         </div>
     </aside>
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-         immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
     @include('template.include.modal-messages')
     @include('template.include.modal-delete')
 </div>
-<!-- ./wrapper -->
 
-<script src="{{asset('assets/templates/admin-lte/plugins/ckeditor/ckeditor.js')}}"></script>
-<script src="{{asset('assets/templates/admin-lte/js/combined.js')}}"></script>
-<script src="{{ asset('assets/templates/js/jquery-ui-1.10.3.min.js')}}" type="text/javascript"></script>
-<script src="{{ asset('assets/templates/js/plugins/datatables.1.9.4/jquery.dataTables.js')}}"
-        type="text/javascript"></script>
-<script src="{{ asset('assets/templates/js/plugins/datatables.1.9.4/dataTables.bootstrap.js')}}"
-        type="text/javascript"></script>
+@include('template.js')
 @section('js')
-    {{-- ++++++++++++ --}}
     {{-- js section   --}}
-    {{-- ++++++++++++ --}}
 @show
 </body>
 </html>
