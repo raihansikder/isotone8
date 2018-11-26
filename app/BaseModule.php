@@ -296,7 +296,7 @@ class Basemodule extends Model
      */
     public function isViewable($user_id = null, $set_msg = false)
     {
-        $valid = ture;
+        $valid = true;
         // if ($valid = spyrElementViewable($this, $user_id, $set_msg)) {
         //     /*
         //     if ($this->isCreatable($user_id, $set_msg)) {
@@ -320,7 +320,7 @@ class Basemodule extends Model
      */
     public function isEditable($user_id = null, $set_msg = false)
     {
-        $valid = ture;
+        $valid = true;
         // if ($valid = spyrElementEditable($this, $user_id, $set_msg)) {
         //     /*
         //     if ($this->isCreatable($user_id, $set_msg)) {
@@ -344,7 +344,7 @@ class Basemodule extends Model
      */
     public function isDeletable($user_id = null, $set_msg = false)
     {
-        $valid = ture;
+        $valid = true;
         // if ($valid = spyrElementDeletable($this, $user_id, $set_msg)) {
         //     /*
         //     if ($this->isEditable($user_id, $set_msg)) {
@@ -368,7 +368,7 @@ class Basemodule extends Model
      */
     public function isRestorable($user_id = null, $set_msg = false)
     {
-        $valid = ture;
+        $valid = true;
         // if ($valid = spyrElementRestorable($this, $user_id, $set_msg)) {
         //     /*
         //     if ($this->isEditable($user_id, $set_msg)) {

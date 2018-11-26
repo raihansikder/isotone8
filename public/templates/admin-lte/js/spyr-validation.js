@@ -15,7 +15,6 @@ function enableValidation(form_name, handler = false) {
 
     // 4. Run validation on submit button click. If all frontend validations are ok then only ajax validation will execute
     $(form_selector + ' button[id=' + btnId + ']').click(function () {
-
         /********************************************************************************/
         // Show all fields when CTA/Save button is clicked. And show the 'Working..' text.
         /********************************************************************************/

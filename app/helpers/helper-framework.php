@@ -268,7 +268,7 @@ function fillFromSession($ret)
  */
 function fillRet($ret)
 {
-    $ret = redirect($ret);
+    $ret = resolve_redirect($ret);
     $ret = fillFromSession($ret);
 
     foreach ($ret as $k => $v) {

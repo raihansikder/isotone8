@@ -4,14 +4,17 @@
  * parent template \app\views\spyr\modules\groups\form.blade.php
  *
  * Variables used in this view file.
- * @var $module_name string 'modules'
- * @var $mod Module
- * @var $module Module Object that is being edited
- * @var $element string 'module'
+ * @var $module_name           string 'modules'
+ * @var $mod                   Module
+ * @var $module                Module Object that is being edited
+ * @var $element               string 'module'
  * @var $spyr_element_editable boolean
- * @var $uuid string '1709c091-8114-4ba4-8fd8-91f0ba0b63e8'
+ * @var $uuid                  string '1709c091-8114-4ba4-8fd8-91f0ba0b63e8'
  */
 ?>
+
+<input type="hidden" name="ret" value="json"/>
+<input type="hidden" name="ret2" value="json"/>
 
 {{-- Form fields are placed here. These will be added inside the spyrframe default form container in
  app/views/spyr/modules/base/form.blade.php --}}
@@ -23,10 +26,8 @@
 @include('form.input-text',['var'=>['name'=>'order','label'=>'Order', 'container_class'=>'col-sm-3']])
 @include('form.input-text',['var'=>['name'=>'color_css','label'=>'Color CSS class', 'container_class'=>'col-sm-6']])
 @include('form.input-text',['var'=>['name'=>'icon_css','label'=>'Icon CSS class', 'container_class'=>'col-sm-6']])
-@include('form.textarea',['var'=>['name'=>'desc','params'=>['class'=>'ckeditor'],'label'=>'Description', 'container_class'=>'col-sm-6']])
-@include('form.input-text',['var'=>['name'=>'route','label'=>'Default route name', 'container_class'=>'col-sm-6']])
-@include('form.select-array',['var'=>['name'=>'has_uploads','label'=>'Enable file uploads', 'options'=>kv(['Yes','No']),'container_class'=>'col-sm-3']])
-@include('form.select-array',['var'=>['name'=>'has_messages','label'=>'Enable messaging', 'options'=>kv(['Yes','No']),'container_class'=>'col-sm-3']])
+@include('form.textarea',['var'=>['name'=>'description','params'=>['class'=>'ckeditor'],'label'=>'Description', 'container_class'=>'col-sm-6']])
+@include('form.input-text',['var'=>['name'=>'default_route','label'=>'Default route name', 'container_class'=>'col-sm-6']])
 @include('form.is_active')
 {{-- Form ends --}}
 

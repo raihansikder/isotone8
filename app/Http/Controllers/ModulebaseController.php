@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Module;
 use DB;
 use Redirect;
@@ -37,7 +39,7 @@ class ModulebaseController extends Controller
         # load default grid query
         if (!isset($this->grid_query)) {
             $this->grid_query = DB::table($this->module_name)
-                ->leftJoin('users as updater', $this->module_name.'.updated_by', 'updater.id')
+                ->leftJoin('users as updater', $this->module_name . '.updated_by', 'updater.id')
                 ->select(
                     $this->db_table . '.id as id',
                     $this->db_table . '.name as name',
@@ -95,6 +97,7 @@ class ModulebaseController extends Controller
     /**
      * Returns datatable json for the module index page
      * A route is automatically created for all modules to access this controller function
+     *
      * @return mixed
      */
     public function grid()
@@ -102,20 +105,24 @@ class ModulebaseController extends Controller
         // Grid query builder
         $q = $this->grid_query->whereNull($this->module_name . '.deleted_at');
         // Make datatable
-        /** @var Datatables $dt */
+        /** @var \Yajra\DataTables\DataTables $dt */
 
-        $dt = datatables($q)->toJson();
+        $dt = datatables($q);
+        $dt = $dt->editColumn('name', '<a href="{{ route(\'' . $this->module_name . '.edit\', $id) }}">{{$name}}</a>');
+
+        $dt = $dt->rawColumns(['name']);
         // $dt = Spyrdatatable::of($q); // $dt refers to data table.
         // $dt = $dt->edit_column('name', '<a href="{{ route(\'' . $this->module_name . '.edit\', $id) }}">{{$name}}</a>');
         // $dt = $dt->edit_column('id', '<a href="{{ route(\'' . $this->module_name . '.edit\', $id) }}">{{$id}}</a>');
         // $dt = $dt->edit_column('is_active', '@if($is_active) Yes @else No @endif');
         //
         // return $dt->make();
-        return $dt;
+        return $dt->toJson();
     }
 
     /**
      * Shows an element create form.
+     *
      * @return view
      */
     public function create()
@@ -133,6 +140,7 @@ class ModulebaseController extends Controller
     /**
      * Store an spyr element. Returns json response if ret=json is sent as url parameter. Otherwise redirects
      * based on the url set in redirect_success|redirect_fail
+     *
      * @return $this|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function store()
@@ -212,6 +220,7 @@ class ModulebaseController extends Controller
     /**
      * Shows an spyr element. Store an spyr element. Returns json response if ret=json is sent as url parameter.
      * Otherwise redirects to edit page where details is visible as filled up edit form.
+     *
      * @param $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
@@ -252,6 +261,7 @@ class ModulebaseController extends Controller
 
     /**
      * Show spyr element edit form
+     *
      * @param $id
      * @return $this|\Illuminate\Http\RedirectResponse
      */
@@ -288,11 +298,13 @@ class ModulebaseController extends Controller
 
     /**
      * Update handler for spyr element.
+     *
      * @param $id
      * @return $this|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function update($id)
     {
+
         /** @var \App\Basemodule $Model */
         /** @var \App\Basemodule $element */
         // init local variables
@@ -326,6 +338,7 @@ class ModulebaseController extends Controller
         # --------------------------------------------------------
         # Process return/redirect
         # --------------------------------------------------------
+
         if (Request::get('ret') == 'json') {
             return Response::json(fillRet($ret));
         } else {
@@ -348,6 +361,7 @@ class ModulebaseController extends Controller
 
     /**
      * Delete spyr element.
+     *
      * @param $id
      * @return $this|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
@@ -402,6 +416,7 @@ class ModulebaseController extends Controller
 
     /**
      * Restore a soft-deleted.
+     *
      * @param null $id
      * @return $this
      */
@@ -415,6 +430,7 @@ class ModulebaseController extends Controller
 
     /**
      * Returns a collection of objects as Json
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getJson()
@@ -425,7 +441,6 @@ class ModulebaseController extends Controller
         /** @var \Illuminate\Database\Eloquent\Model $q */
         $q = $Model::where('is_active', 1);
         $q = self::filterQueryConstructor($q);
-
 
         $total = $q->count();
 
@@ -531,6 +546,7 @@ class ModulebaseController extends Controller
 
     /**
      * Show all the changes/change logs of an item
+     *
      * @param $id
      * @return \Illuminate\Http\JsonResponse|ModulebaseController
      */

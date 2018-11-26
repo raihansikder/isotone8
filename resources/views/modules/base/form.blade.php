@@ -3,11 +3,11 @@
 <?php
 /**
  * Variables used in this view file.
- * @var $module_name string 'superheroes'
- * @var $mod Module
- * @var $element string 'superhero'
+ * @var $module_name           string 'superheroes'
+ * @var $mod                   Module
+ * @var $element               string 'superhero'
  * @var $spyr_element_editable boolean
- * @var $uuid string '1709c091-8114-4ba4-8fd8-91f0ba0b63e8'
+ * @var $uuid                  string '1709c091-8114-4ba4-8fd8-91f0ba0b63e8'
  */
 ?>
 
@@ -24,7 +24,7 @@
 @section('content')
     <div class="col-md-12 no-padding">
         @if(isset($$element))
-            {{ Form::model($$element, ['files'=> true,'route'=>[$module_name . '.update', $$element->id],'name'=>$module_name, 'method'=>'patch','id'=>$module_name . 'Form', 'class'=>$module_name . "-form module-base-form edit-form" ]) }}
+            {!! Form::model($$element, ['files'=> true,'route'=>[$module_name . '.update', $$element->id],'name'=>$module_name, 'method'=>'patch','id'=>$module_name . 'Form', 'class'=>$module_name . "-form module-base-form edit-form" ]) !!}
         @elseif(hasModulePermission($module_name,'create'))
             {{ Form::open(['route' => $module_name.'.store','class'=>$module_name . "-form module-base-form create-form",'name'=>$module_name, 'files'=>true]) }}
             <input name="uuid" type="hidden" value="{{$uuid}}"/>
@@ -52,7 +52,7 @@
             {{-- Delete modal --}}
             @if(isset($$element) && $$element->isDeletable())
                 <div class="pull-right delete-cta no-padding">
-                    {{deleteBtn(route($module_name.".destroy",$$element->id),route($module_name.".index"))}}
+                    {!! deleteBtn(route($module_name.".destroy",$$element->id),route($module_name.".index")) !!}
                 </div>
             @endif
             @if(isset($$element))

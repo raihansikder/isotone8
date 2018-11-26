@@ -7,14 +7,6 @@
         @endforeach
     </tr>
     </thead>
-    <tbody>
-    <tr>
-        {{-- print empty rows to match the number of headers/columns --}}
-        @foreach($grid_columns as $c)
-            <td></td>
-        @endforeach
-    </tr>
-    </tbody>
 </table>
 
 {{-- js --}}
@@ -22,10 +14,17 @@
     @parent
     <script type="text/javascript">
         var table = $('.module-grid').dataTable({
-            "bProcessing": true,
-            "bServerSide": true,
-            "sAjaxSource": "{{ route($module_name . '.grid')}}?{{parse_url(URL::full(), PHP_URL_QUERY)}}",
-            "aaSorting": [[0, "desc"]],
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route($module_name . '.grid')}}?{{parse_url(URL::full(), PHP_URL_QUERY)}}",
+            columns: [
+                { data: 'id' },
+                { data: 'name'},
+                { data: 'user_name' },
+                { data: 'updated_at' },
+                { data: 'is_active' }
+            ],
+            "order": [[ 0, 'asc' ]]
         }).fnSetFilteringDelay(3000);
     </script>
 @endsection

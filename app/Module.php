@@ -32,6 +32,7 @@ class Module extends Basemodule
 {
     /**
      * Custom validation messages.
+     *
      * @var array
      */
     public static $custom_validation_messages = [
@@ -40,42 +41,46 @@ class Module extends Basemodule
 
     /**
      * Disallow from mass assignment. (Black-listed fields)
+     *
      * @var array
      */
     // protected $guarded = [];
 
     /**
      * Date fields
+     *
      * @var array
      */
     // protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     /**
      * Mass assignment fields (White-listed fields)
+     *
      * @var array
      */
-    protected $fillable = ['name', 'title', 'desc', 'parent_id', 'modulegroup_id', 'level', 'order', 'color_css', 'icon_css', 'route', 'has_uploads', 'has_messages', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
+    protected $fillable = ['name', 'title', 'description', 'parent_id', 'modulegroup_id', 'level', 'order', 'color_css', 'icon_css', 'default_route', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
 
     /**
      * Validation rules. For regular expression validation use array instead of pipe
      * Example: 'name' => ['required', 'Regex:/^[A-Za-z0-9\-! ,\'\"\/@\.:\(\)]+$/']
+     *
      * @param       $element
      * @param array $merge
      * @return array
      */
-    public static function rules($element, $merge = []) {
+    public static function rules($element, $merge = [])
+    {
         $rules = [
-            'name'         => 'required|between:1,255|unique:modules,name,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
-            'title'        => 'required|between:1,255|unique:modules,title,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
-            'created_by'   => 'exists:users,id,is_active,1',
-            'updated_by'   => 'exists:users,id,is_active,1',
-            'has_uploads'  => 'in:Yes,No',
-            'has_messages' => 'in:Yes,No',
-            'is_active'    => 'required|in:1,0',
+            'name' => 'required|between:1,255|unique:modules,name,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
+            'title' => 'required|between:1,255|unique:modules,title,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
+            'created_by' => 'exists:users,id,is_active,1',
+            'updated_by' => 'exists:users,id,is_active,1',
+            'is_active' => 'required|in:1,0',
         ];
         return array_merge($rules, $merge);
     }
     /**
      * Automatic eager load relation by default (can be expensive)
+     *
      * @var array
      */
     // protected $with = ['relation1', 'relation2'];
@@ -84,7 +89,8 @@ class Module extends Basemodule
     # Model events
     ############################################################################################
 
-    public static function boot() {
+    public static function boot()
+    {
         /**
          * parent::boot() was previously used. However this invocation stops from the other classes
          * of other spyr modules(Models) to override the boot() method. Need to check more.
@@ -105,7 +111,7 @@ class Module extends Basemodule
         // Following code block executes - after an element is created
         // for the first time.
         /************************************************************/
-        static::created(function (Module $element) {});
+        static::created(function (Module $element) { });
 
         /************************************************************/
         // Following code block executes - when an already existing
@@ -123,14 +129,14 @@ class Module extends Basemodule
         /************************************************************/
         // Execute codes during saving (both creating and updating)
         /************************************************************/
-               static::saving(function (Module $element) {
-                   $valid = true;
-                   /************************************************************/
-                   // Your validation goes here
-                   // if($valid) $valid = $element->isSomethingDoable(true)
-                   /************************************************************/
-                   return $valid;
-               });
+        static::saving(function (Module $element) {
+            $valid = true;
+            /************************************************************/
+            // Your validation goes here
+            // if($valid) $valid = $element->isSomethingDoable(true)
+            /************************************************************/
+            return $valid;
+        });
 
         /************************************************************/
         // Execute codes after model is successfully saved
@@ -196,16 +202,19 @@ class Module extends Basemodule
     /**
      * Static cuntions needs to be called using Model::function($id)
      * Inside static function you may need to query and get the element
+     *
      * @param $id
      */
     // public static function someOtherAction($id) { }
 
     /**
      * Get module names as one-dimentional array, by default get only the active ones
+     *
      * @param bool|true $only_active
      * @return array
      */
-    public static function names($only_active = true) {
+    public static function names($only_active = true)
+    {
         $q = Module::select('name');
         if ($only_active) {
             $q = $q->where('is_active', 1);
@@ -217,10 +226,12 @@ class Module extends Basemodule
 
     /**
      * Checks if a module is a module with tenant context
+     *
      * @param $module_name
      * @return bool|mixed
      */
-    public static function hasTenantContext($module_name) {
+    public static function hasTenantContext($module_name)
+    {
         $tenant_idf = tenantIdField();
         $fields = columns($module_name);
 
@@ -233,9 +244,11 @@ class Module extends Basemodule
     /**
      * Function returns an array of predecessor module objects of a specific module.
      * This function is helpful to generate breadcrumb or menu.
+     *
      * @return array
      */
-    public function moduletree() {
+    public function moduletree()
+    {
 
         $stack = [$this];
         for ($i = $this->parent_id; ;) {
@@ -256,9 +269,11 @@ class Module extends Basemodule
      * Returns a multi dimentional array with hiararchically stored modulegroups and modules.
      * Unlike previous moduletree() function, this one check the parent relationship with
      * modulegroup instead of module.
+     *
      * @return array
      */
-    public function modulegroupTree() {
+    public function modulegroupTree()
+    {
         $stack = [$this];
         for ($i = $this->modulegroup_id; ;) {
             if (!$i) break;
@@ -287,6 +302,7 @@ class Module extends Basemodule
      * spyrElementViewable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
+     *
      * @param null $user_id
      * @return bool
      */
@@ -304,6 +320,7 @@ class Module extends Basemodule
      * spyrElementEditable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
+     *
      * @param null $user_id
      * @return bool
      */
@@ -321,6 +338,7 @@ class Module extends Basemodule
      * spyrElementDeletable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
+     *
      * @param null $user_id
      * @return bool
      */
@@ -338,6 +356,7 @@ class Module extends Basemodule
      * spyrElementRestorable() is the primary default checker based on permission
      * whether this should be allowed or not. The logic can be further
      * extend to implement more conditions.
+     *
      * @param null $user_id
      * @return bool
      */

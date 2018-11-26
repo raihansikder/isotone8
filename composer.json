@@ -18,7 +18,8 @@
     "phpoffice/phpspreadsheet": "^1.5",
     "watson/rememberable": "^2.0",
     "webpatser/laravel-uuid": "^3.0",
-    "yajra/laravel-datatables-oracle": "~8.0"
+    "yajra/laravel-datatables-oracle": "~8.0",
+    "laravelcollective/html": "~5.0"
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.2",
