@@ -18,7 +18,6 @@ class ModulebaseController extends Controller
     protected $module_name;         // Stores module name with lowercase and plural i.e. 'superheros'.
     protected $grid_query;          // Stores default DB query to create the grid. Used in grid() function.
     protected $grid_columns;        // Columns to show, this array is set form modules individual controller.
-    protected $db_table;            // database table name with prefix
     protected $report_data_source = null;  // loads the model name
 
     /**
@@ -34,35 +33,28 @@ class ModulebaseController extends Controller
     public function __construct($module_name)
     {
         $this->module_name = $module_name;
-        $this->db_table = dbTable($module_name);
 
-        # load default grid query
-        if (!isset($this->grid_query)) {
-            $this->grid_query = DB::table($this->module_name)
-                ->leftJoin('users as updater', $this->module_name . '.updated_by', 'updater.id')
-                ->select(
-                    $this->db_table . '.id as id',
-                    $this->db_table . '.name as name',
-                    'updater.name as user_name',
-                    $this->db_table . '.updated_at as updated_at',
-                    $this->db_table . '.is_active as is_active'
-                );
+        // Default grid SQL select and column titles.
+        if (!isset($this->grid_columns)) {
+            $this->grid_columns = [
+                //['table.id', 'id', 'ID'], // translates to => table.id as id and the last one ID is grid colum header
+                [$this->module_name . '.id', 'id', 'ID'],
+                [$this->module_name . '.name', 'name', 'Name'],
+                ['updater.name', 'user_name', 'Updater'],
+                [$this->module_name . '.updated_at', 'updated_at', 'Updated at'],
+                [$this->module_name . '.is_active', 'is_active', 'Active']
+            ];
         }
         # Inject tenant context in grid query
         if ($tenant_id = inTenantContext($module_name)) {
-            $this->grid_query = injectTenantIdInModelQuery($module_name, $this->grid_query);
-
-            Request::merge([tenantIdField() => $tenant_id]); // Set tenant_id in request header
+            Input::merge([tenantIdField() => $tenant_id]); // Set tenant_id in request header
         }
 
-        # Load default grid columns
-        if (!isset($this->grid_columns)) {
-            $this->grid_columns = ['Id', 'Name', 'Updater', 'Update time', 'Active'];
-        }
+
         // Share the variables across all views accessed by this controller
         View::share([
             'module_name' => $this->module_name,
-            'mod' => Module::whereName($this->module_name)->remember(cacheTime('module-list'))->first()
+            'mod' => Module::whereName($this->module_name)->remember(cacheTime('long'))->first()
         ]);
     }
 
@@ -75,17 +67,14 @@ class ModulebaseController extends Controller
      */
     public function index()
     {
-
         if (hasModulePermission($this->module_name, 'view-list')) {
             if (Request::get('ret') == 'json') {
                 return self::getJson();
             }
             $view = 'modules.base.grid';
-
             if (View::exists('modules.' . $this->module_name . '.grid')) {
                 $view = 'modules.' . $this->module_name . '.grid';
             }
-
             return view($view)->with('grid_columns', $this->grid_columns);
         } else {
             return View::make('template.blank')
@@ -102,21 +91,34 @@ class ModulebaseController extends Controller
      */
     public function grid()
     {
+        // Prepare colum selection for grid.
+        $select_cols = [];
+        foreach ($this->grid_columns as $col)
+            $select_cols[] = $col[0] . ' as ' . $col[1];
+
+        # load default grid query
+        if (!isset($this->grid_query)) {
+            $this->grid_query = DB::table($this->module_name)
+                ->leftJoin('users as updater', $this->module_name . '.updated_by', 'updater.id')
+                ->select($select_cols);
+        }
+        # Inject tenant context in grid query
+        if ($tenant_id = inTenantContext($this->module_name)) {
+            $this->grid_query = injectTenantIdInModelQuery($this->module_name, $this->grid_query);
+        }
+
         // Grid query builder
-        $q = $this->grid_query->whereNull($this->module_name . '.deleted_at');
+        $this->grid_query = $this->grid_query->whereNull($this->module_name . '.deleted_at'); // Skip deleted rows
+
         // Make datatable
         /** @var \Yajra\DataTables\DataTables $dt */
-
-        $dt = datatables($q);
+        $dt = datatables($this->grid_query);
         $dt = $dt->editColumn('name', '<a href="{{ route(\'' . $this->module_name . '.edit\', $id) }}">{{$name}}</a>');
+        $dt = $dt->editColumn('is_active', '@if($is_active)  Yes @else <span class="text-red">No</span> @endif');
 
-        $dt = $dt->rawColumns(['name']);
-        // $dt = Spyrdatatable::of($q); // $dt refers to data table.
-        // $dt = $dt->edit_column('name', '<a href="{{ route(\'' . $this->module_name . '.edit\', $id) }}">{{$name}}</a>');
-        // $dt = $dt->edit_column('id', '<a href="{{ route(\'' . $this->module_name . '.edit\', $id) }}">{{$id}}</a>');
-        // $dt = $dt->edit_column('is_active', '@if($is_active) Yes @else No @endif');
-        //
-        // return $dt->make();
+        // Columns for  HTML rendering
+        $dt = $dt->rawColumns(['name', 'is_active']); // HTML can be printed for raw columns
+
         return $dt->toJson();
     }
 
@@ -171,7 +173,7 @@ class ModulebaseController extends Controller
                     if ($element->save()) {
                         //$ret = ret('success', "$Model " . $element->id . " has been created", ['data' => $Model::find($element->id)]);
                         $ret = ret('success', "$Model has been added", ['data' => $Model::find($element->id)]);
-                        Upload::linkTemporaryUploads($element->id, $element->uuid);
+                        //Upload::linkTemporaryUploads($element->id, $element->uuid);
                     } else {
                         $ret = ret('fail', "$Model create failed.");
                     }

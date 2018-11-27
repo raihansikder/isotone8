@@ -1,6 +1,6 @@
 /* Global font type and size*/
-.h1, .h2, .h3, .h4, .h5, .h6, body, h1, h2, h3, h4, h5, h6 {
-    font-family:  'Ubuntu', sans-serif;
+.h1, .h2, .h3, .h4, .h5, .h6, body, h1, h2, h3, h4, h5, h6,.cke_editable {
+    font-family: 'Roboto', 'Ubuntu', sans-serif;
 !important;
 }
 
@@ -11,7 +11,7 @@
 !important;
 }
 
-.lb-font{
+.lb-font {
     font-family: 'Baumans', cursive;
 }
 
@@ -20,8 +20,7 @@ body, html,
     font-size: 12px
 }
 
-
-    /* Make login box black background and blue text*/
+/* Make login box black background and blue text*/
 .login-box-body, .register-box-body {
     background: none;
     padding: 20px;
@@ -62,7 +61,25 @@ body, html,
     background-color: transparent;
 }
 
-
 .lb-bg {
     background-image: linear-gradient(to right, rgb(126, 87, 223) 0%, rgb(41, 162, 217) 100%);
+}
+
+/* remove borders from input, remove padding and also remove padding from select 2*/
+
+.form-control {
+    border: 0;
+    border-bottom: 1px #cce3f6 solid;
+    padding-left: 0;
+}
+
+.select2-container .select2-choice{
+    padding-left: 0;
+}
+
+/* make lable bol*/
+
+.module-base-form label {
+    font-weight: bold;
+    margin-bottom: 0;
 }

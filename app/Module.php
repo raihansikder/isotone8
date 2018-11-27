@@ -3,8 +3,6 @@
 namespace App;
 
 use App\Observers\ModuleObserver;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Watson\Rememberable\Rememberable;
 
 /**
  * Class Module
@@ -72,8 +70,8 @@ class Module extends Basemodule
         $rules = [
             'name' => 'required|between:1,255|unique:modules,name,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
             'title' => 'required|between:1,255|unique:modules,title,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
-            'created_by' => 'exists:users,id,is_active,1',
-            'updated_by' => 'exists:users,id,is_active,1',
+            // 'created_by' => 'exists:users,id,is_active,1',
+            // 'updated_by' => 'exists:users,id,is_active,1',
             'is_active' => 'required|in:1,0',
         ];
         return array_merge($rules, $merge);
@@ -105,13 +103,13 @@ class Module extends Basemodule
         // of creation for the first time but the creation has not
         // completed yet.
         /************************************************************/
-        static::creating(function (Module $element) { });
+        // static::creating(function (Module $element) { });
 
         /************************************************************/
         // Following code block executes - after an element is created
         // for the first time.
         /************************************************************/
-        static::created(function (Module $element) { });
+        // static::created(function (Module $element) { });
 
         /************************************************************/
         // Following code block executes - when an already existing
@@ -131,10 +129,20 @@ class Module extends Basemodule
         /************************************************************/
         static::saving(function (Module $element) {
             $valid = true;
+
             /************************************************************/
             // Your validation goes here
             // if($valid) $valid = $element->isSomethingDoable(true)
             /************************************************************/
+
+            if ($valid) {
+                // Fill default values
+                $element->parent_id = (!$element->parent_id) ? 0 : $element->parent_id;
+                $element->modulegroup_id = (!$element->modulegroup_id) ? 0 : $element->modulegroup_id;
+                $element->level = (!$element->level) ? 0 : $element->level;
+                $element->order = (!$element->order) ? 0 : $element->order;
+            }
+
             return $valid;
         });
 

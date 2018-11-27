@@ -19,7 +19,7 @@ function dbViewExists($view)
 /**
  * Function to check whether a database table exists
  *
- * @param $table full table name with prefix
+ * @param array|string $table full table name with prefix
  * @return bool
  */
 function dbTableExists($table)
@@ -30,7 +30,10 @@ function dbTableExists($table)
     // if (count($results)) return true;
     // return false;
 
-    return Schema::hasTable(prefixLess($table));
+    return Cache::remember($table . ".hasTable", cacheTime('short'), function () use ($table) {
+        return Schema::hasTable(prefixLess($table));
+    });
+
 }
 
 /**
@@ -63,7 +66,11 @@ function columns($table)
     }
 
     foreach ($tables as $table) {
-        $columns = array_merge($columns, Schema::getColumnListing(prefixLess($table)));
+        $table_columns = Cache::remember($table . ".getColumnListing", cacheTime('short'), function () use ($table) {
+            return Schema::getColumnListing(prefixLess($table));
+        });
+
+        $columns = array_merge($columns, $table_columns);
     }
     return $columns;
 }

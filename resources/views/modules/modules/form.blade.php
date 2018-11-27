@@ -18,16 +18,18 @@
 
 {{-- Form fields are placed here. These will be added inside the spyrframe default form container in
  app/views/spyr/modules/base/form.blade.php --}}
-@include('form.input-text',['var'=>['name'=>'name','label'=>'Name (table name)', 'container_class'=>'col-sm-6']])
-@include('form.input-text',['var'=>['name'=>'title','label'=>'Title', 'container_class'=>'col-sm-6']])
-@include('form.select-model',['var'=>['name'=>'parent_id','label'=>'Parent module', 'table'=>'modules', 'container_class'=>'col-sm-6']])
-@include('form.select-model',['var'=>['name'=>'modulegroup_id','label'=>'Module group', 'table'=>'modulegroups', 'container_class'=>'col-sm-6']])
+@include('form.input-text',['var'=>['name'=>'name','label'=>'Name (table name)', 'container_class'=>'col-sm-3']])
+@include('form.input-text',['var'=>['name'=>'title','label'=>'Title', 'container_class'=>'col-sm-3']])
+@include('form.select-model',['var'=>['name'=>'parent_id','label'=>'Parent module', 'table'=>'modules', 'container_class'=>'col-sm-3']])
+@include('form.select-model',['var'=>['name'=>'modulegroup_id','label'=>'Module group', 'table'=>'modulegroups', 'container_class'=>'col-sm-3']])
 @include('form.input-text',['var'=>['name'=>'level','label'=>'Level', 'container_class'=>'col-sm-3']])
 @include('form.input-text',['var'=>['name'=>'order','label'=>'Order', 'container_class'=>'col-sm-3']])
-@include('form.input-text',['var'=>['name'=>'color_css','label'=>'Color CSS class', 'container_class'=>'col-sm-6']])
-@include('form.input-text',['var'=>['name'=>'icon_css','label'=>'Icon CSS class', 'container_class'=>'col-sm-6']])
-@include('form.textarea',['var'=>['name'=>'description','params'=>['class'=>'ckeditor'],'label'=>'Description', 'container_class'=>'col-sm-6']])
-@include('form.input-text',['var'=>['name'=>'default_route','label'=>'Default route name', 'container_class'=>'col-sm-6']])
+@include('form.input-text',['var'=>['name'=>'color_css','label'=>'Color CSS class', 'container_class'=>'col-sm-3']])
+@include('form.input-text',['var'=>['name'=>'icon_css','label'=>'Icon CSS class', 'container_class'=>'col-sm-3']])
+@include('form.input-text',['var'=>['name'=>'default_route','label'=>'Default route name', 'container_class'=>'col-sm-3']])
+<div class="clearfix"></div>
+@include('form.textarea',['var'=>['name'=>'description','params'=>['class'=>''],'label'=>'Description', 'container_class'=>'col-sm-6']])
+<div class="clearfix"></div>
 @include('form.is_active')
 {{-- Form ends --}}
 

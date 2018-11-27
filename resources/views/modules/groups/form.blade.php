@@ -29,7 +29,7 @@
                     <b>Super user</b>
                 </label>
             </li>
-            <li>{{renderModulePermissionTree(\App\Modulegroup::tree()) }}</li>
+            <li>{{renderModulePermissionTree(Modulegroup::tree()) }}</li>
             @include('modules.groups.permission-blocks')
         </ul>
     </div>
@@ -153,5 +153,5 @@
             return v;
         }
     </script>
-@endsection
+@stop
 {{-- JS ends --}}

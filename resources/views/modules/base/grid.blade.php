@@ -10,7 +10,7 @@
 ?>
 
 @section('sidebar-left')
-    {{--@include('modules.base.include.sidebar-left')--}}
+    @include('modules.base.include.sidebar-left')
 @endsection
 
 @section('title')

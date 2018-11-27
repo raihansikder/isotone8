@@ -205,19 +205,7 @@ class Basemodule extends Model
      */
     // public static function someOtherAction($id) { }
 
-    /**
-     * Register the model observer for a spyr module
-     *
-     * @param $Model
-     */
-    // public static function registerObserver($Model) {
-    //     $Model = "\\" . $Model;
-    //     $ObserverClass = $Model . "Observer";
-    //     /** @var Basemodule $Model */
-    //     $Model::observe(new $ObserverClass); // register observer
-    //
-    //     Basemodule::observe(BasemoduleObserver::class);
-    // }
+
 
     /**
      * Returns array of user ids including creator and updater user ids.

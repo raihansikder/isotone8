@@ -11,14 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes();
 
-Route::get('home', 'HomeController@index')->name('home');
-
+Route::get('/', 'HomeController@index')->name('home');
 Route:: get('threads', 'ThreadsController@index')->name('threads.index');
 Route:: get('threads/create', 'ThreadsController@create')->name('threads.create');
 Route:: get('threads/{channel}', 'ThreadsController@index')->name('channels.show');
@@ -80,6 +76,11 @@ Route::middleware(['auth'])->group(function () use ($modules, $modulegroups) {
      */
     Route::get('download/{uuid}', 'UploadsController@download')->name('get.download');
 
+});
+
+Route::get('test', function(){
+    echo dbTableExists('modules');
+    return 'test';
 });
 
 

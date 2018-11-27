@@ -3,6 +3,7 @@
 return [
 
     'app-name' => 'LetsBab',
+    'tenant_field_identifier' => 'tenant_id',
 
     /*
    |--------------------------------------------------------------------------

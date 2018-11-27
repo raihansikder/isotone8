@@ -363,8 +363,8 @@ function setting($name)
 {
     $val = $name;
 
-    if(config('var.'.$name,null)){ // Check if setting value exists in config.var
-        $val = config('var.'.$name);
+    if (config('var.' . $name, null)) { // Check if setting value exists in config.var
+        $val = config('var.' . $name);
     }
 
     // if ($setting = Tsetting::whereName($name)->remember(cacheTime('long'))->first(['value', 'type'])) {
@@ -645,4 +645,17 @@ function tagsForView($view)
     $tags = "[" . trim($tags, ", ") . "]";
 
     return $tags;
+}
+
+/**
+ * @param $query
+ * @param $minutes
+ * @return mixed
+ */
+function cachedResult($query, $minutes)
+{
+    $key = md5($query->toSql() . json_encode($query->getBindings()));
+    return Cache::remember($key, $minutes, function () use ($query) {
+        return $query->get();
+    });
 }

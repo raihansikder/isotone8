@@ -8,7 +8,7 @@
  */
 function tenantIdField()
 {
-    return conf('framework.tenant_field_identifier');
+    return conf('var.tenant_field_identifier');
 }
 
 /**

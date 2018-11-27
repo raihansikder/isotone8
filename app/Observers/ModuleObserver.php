@@ -2,9 +2,8 @@
 
 namespace App\Observers;
 
-use App\Module;
+class ModuleObserver extends BasemoduleObserver
 
-class ModuleObserver
 {
 
 }

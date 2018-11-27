@@ -3,7 +3,7 @@
     <tr>
         {{-- print the headers/columns --}}
         @foreach($grid_columns as $c)
-            <th>{{$c}}</th>
+            <th>{{$c[2]}}</th>
         @endforeach
     </tr>
     </thead>
@@ -18,11 +18,11 @@
             serverSide: true,
             ajax: "{{ route($module_name . '.grid')}}?{{parse_url(URL::full(), PHP_URL_QUERY)}}",
             columns: [
-                { data: 'id' },
-                { data: 'name'},
-                { data: 'user_name' },
-                { data: 'updated_at' },
-                { data: 'is_active' }
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name'},
+                { data: 'user_name', name: 'updater.name' },
+                { data: 'updated_at', name: 'updated_at' },
+                { data: 'is_active', name: 'updated_at' }
             ],
             "order": [[ 0, 'asc' ]]
         }).fnSetFilteringDelay(3000);

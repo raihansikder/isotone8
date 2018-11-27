@@ -28,18 +28,14 @@ $var['name_field'] = (isset($var['name_field'])) ? $var['name_field'] : 'name'; 
 $var['value_field'] = (isset($var['value_field'])) ? $var['value_field'] : 'id'; // value_field: Column of the table that will be used for the value that will be actually posted. Usually this field is an id field. Default is 'id'.
 $var['sql_extension'] = (isset($var['sql_extension'])) ? $var['sql_extension'] : ''; // sql_extension: Sometimes a filtered list of name-value is required to be presented as option. SQL additional filter clause can be added through this variable. (i.e. 'AND deleted_at IS NULL')
 
-/** Construct SQL query and options */
-// $sql = "SELECT " . $var['name_field'] . "," . $var['value_field'] . " FROM " . dbTable($var['table'])
-//     . " WHERE deleted_at IS NULL AND is_active=1 " . $var['sql_extension'];
-//
-// if (userTenantId() && tableHasColumn($var['table'], 'tenant_id')) {
-//     $sql .= " AND (tenant_id=" . userTenantId() . ") OR tenant_id IS NULL";
-// }
-// // Get option-value pairs
-// $pairs = result($sql, cacheTime($var['cache_time']));
+$query = DB::table(dbTable($var['table']))->select([$var['name_field'], $var['value_field']])
+    ->whereNull('deleted_at')->where('is_active', 1);
 
+if (userTenantId() && tableHasColumn($var['table'], tenantIdField())) {
+    $query = $query->where(tenantIdField(), userTenantId());
+}
 
-$pairs = DB::table(dbTable($var['table']))->select([$var['name_field'],$var['value_field'] ])->whereNull('deleted_at')->where('is_active',1)->get();
+$pairs = cachedResult($query, cacheTime('short'));
 
 /** Prepare options */
 $options = ['' => $var['blank_select']];

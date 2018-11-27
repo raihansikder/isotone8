@@ -2,12 +2,8 @@
 
 namespace App;
 
-use App\Observers\ModulegroupObserver;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Watson\Rememberable\Rememberable;
-
 /**
- * Class Modulegroup
+ * Class Superhero
  *
  * @package App
  * @property int $id
@@ -22,22 +18,20 @@ use Watson\Rememberable\Rememberable;
  * @property string|null $deleted_at
  * @property int|null $deleted_by
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Modulegroup onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Superhero onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Query\Builder|\App\Modulegroup withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Modulegroup withoutTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Superhero withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Superhero withoutTrashed()
  * @mixin \Eloquent
  */
-class Modulegroup extends Basemodule
+class Superhero extends Basemodule
 {
     /**
-     * Custom validation messages.
+     * Mass assignment fields (White-listed fields)
      *
      * @var array
      */
-    public static $custom_validation_messages = [
-        //'name.required' => 'Custom message.',
-    ];
+    protected $fillable = ['uuid', 'name', 'tenant_id', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
 
     /**
      * Disallow from mass assignment. (Black-listed fields)
@@ -52,12 +46,6 @@ class Modulegroup extends Basemodule
      * @var array
      */
     // protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-    /**
-     * Mass assignment fields (White-listed fields)
-     *
-     * @var array
-     */
-    protected $fillable = ['name', 'title', 'desc', 'parent_id', 'modulegroup_id', 'level', 'order', 'color_css', 'icon_css', 'route', 'has_uploads', 'has_messages', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
 
     /**
      * Validation rules. For regular expression validation use array instead of pipe
@@ -70,15 +58,25 @@ class Modulegroup extends Basemodule
     public static function rules($element, $merge = [])
     {
         $rules = [
-            'name' => ['required', 'between:1,255', 'unique:modulegroups,name,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL', 'Regex:/^[a-z\-]+$/'],
-            'title' => 'required|between:1,255|unique:modulegroups,title,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
-            //'parent_id' => 'integer|between:1,255|unique:modulegroups,parent' . (isset($element->id) ? ",$element->id" : ''),
-            // 'created_by' => 'integer|exists:users,id,is_active,1',
-            // 'updated_by' => 'integer|exists:users,id,is_active,1',
-            'is_active' => 'required|in:0,1',
+            'name' => 'required|between:1,255|unique:heroes,name,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
+            'is_active' => 'required|in:1,0',
+            // 'tenant_id'  => 'required|tenants,id,is_active,1',
+            // 'created_by' => 'exists:users,id,is_active,1', // Optimistic validation for created_by,updated_by
+            // 'updated_by' => 'exists:users,id,is_active,1',
+
         ];
         return array_merge($rules, $merge);
     }
+
+    /**
+     * Custom validation messages.
+     *
+     * @var array
+     */
+    public static $custom_validation_messages = [
+        //'name.required' => 'Custom message.',
+    ];
+
     /**
      * Automatic eager load relation by default (can be expensive)
      *
@@ -92,86 +90,76 @@ class Modulegroup extends Basemodule
 
     public static function boot()
     {
-        /**
-         * parent::boot() was previously used. However this invocation stops from the other classes
-         * of other spyr modules(Models) to override the boot() method. Need to check more.
-         * make the parent (Eloquent) boot method run.
-         */
         parent::boot();
-        //Basemodule::registerObserver(get_class()); // register observer
-        Modulegroup::observe(ModulegroupObserver::class);
+        Superhero::observe(SuperheroObserver::class);
 
         /************************************************************/
         // Following code block executes - when an element is in process
         // of creation for the first time but the creation has not
         // completed yet.
         /************************************************************/
-        // static::creating(function (Modulegroup $element) { });
+        // static::creating(function (Superhero $element) { });
 
         /************************************************************/
         // Following code block executes - after an element is created
         // for the first time.
         /************************************************************/
-        // static::created(function (Modulegroup $element) { });
+        // static::created(function (Superhero $element) { });
 
         /************************************************************/
         // Following code block executes - when an already existing
         // element is in process of being updated but the update is
         // not yet complete.
         /************************************************************/
-        // static::updating(function (Modulegroup $element) {});
+        // static::updating(function (Superhero $element) {});
 
         /************************************************************/
         // Following code block executes - after an element
         // is successfully updated
         /************************************************************/
-        //static::updated(function (Modulegroup $element) {});
+        //static::updated(function (Superhero $element) {});
 
         /************************************************************/
         // Execute codes during saving (both creating and updating)
         /************************************************************/
-        static::saving(function (Modulegroup $element) {
-            $valid = true;
-            /************************************************************/
-            // Your validation goes here
-            // if($valid) $valid = $element->isSomethingDoable(true)
-            /************************************************************/
-            // zero fill some fields by default if no integer value is given.
-            if (!isset($element->parent_id)) $element->parent_id = 0;
-            if (!isset($element->level)) $element->level = 0;
-            if (!isset($element->order)) $element->order = 0;
-            return $valid;
-        });
+        // static::saving(function (Superhero $element) {
+        //     $valid = true;
+        //     /************************************************************/
+        //     // Your validation goes here
+        //     // if($valid) $valid = $element->isSomethingDoable(true)
+        //     /************************************************************/
+        //     return $valid;
+        // });
 
         /************************************************************/
         // Execute codes after model is successfully saved
         /************************************************************/
-        // static::saved(function (Modulegroup $element) {});
+        // static::saved(function (Superhero $element) {});
 
         /************************************************************/
         // Following code block executes - when some element is in
         // the process of being deleted. This is good place to
         // put validations for eligibility of deletion.
         /************************************************************/
-        // static::deleting(function (Modulegroup $element) {});
+        // static::deleting(function (Superhero $element) {});
 
         /************************************************************/
         // Following code block executes - after an element is
         // successfully deleted.
         /************************************************************/
-        // static::deleted(function (Modulegroup $element) {});
+        // static::deleted(function (Superhero $element) {});
 
         /************************************************************/
         // Following code block executes - when an already deleted element
         // is in the process of being restored.
         /************************************************************/
-        // static::restoring(function (Modulegroup $element) {});
+        // static::restoring(function (Superhero $element) {});
 
         /************************************************************/
         // Following code block executes - after an element is
         // successfully restored.
         /************************************************************/
-        //static::restored(function (Modulegroup $element) {});
+        //static::restored(function (Superhero $element) {});
     }
 
     ############################################################################################
@@ -211,98 +199,6 @@ class Modulegroup extends Basemodule
      * @param $id
      */
     // public static function someOtherAction($id) { }
-
-    /**
-     * An array of menu
-     *
-     * @return array
-     */
-    public static function tree()
-    {
-        $modulegroups = Modulegroup::whereIsActive(1)->whereParentId(0)->orderBy('order')->remember(cacheTime('long'))->get();
-        $list = [];
-        foreach ($modulegroups as $modulegroup) {
-            if (count($modulegroup->children()))
-                array_push($list, ['type' => 'modulegroup', 'item' => $modulegroup, 'children' => $modulegroup->children()]);
-            else
-                array_push($list, ['type' => 'modulegroup', 'item' => $modulegroup, 'children' => []]);
-        }
-        $modules = Module::whereModulegroupId(0)->whereIsActive(1)->orderBy('order')->remember(cacheTime('long'))->get();
-        if (count($modules)) {
-            foreach ($modules as $module) {
-                array_push($list, ['type' => 'module', 'item' => $module]);
-            }
-        }
-        return $list;
-    }
-
-    /**
-     * Get children modules and modulegroups
-     *
-     * @return array
-     */
-    public function children()
-    {
-        $list = [];
-
-        $modulegroups = Modulegroup::whereParentId($this->id)->whereIsActive(1)->orderBy('order')->remember(cacheTime('long'))->get();
-        if (count($modulegroups)) {
-            foreach ($modulegroups as $modulegroup) {
-
-                if (count($modulegroup->children()))
-                    array_push($list, ['type' => 'modulegroup', 'item' => $modulegroup, 'children' => $modulegroup->children()]);
-                else
-                    array_push($list, ['type' => 'modulegroup', 'item' => $modulegroup, 'children' => []]);
-            }
-        }
-        $modules = Module::whereModulegroupId($this->id)->whereIsActive(1)->orderBy('order')->remember(cacheTime('long'))->get();
-        if (count($modules)) {
-            foreach ($modules as $module) {
-                array_push($list, ['type' => 'module', 'item' => $module]);
-            }
-        }
-        return $list;
-    }
-
-    /**
-     * Get modulegroup names as one-dimentional array
-     *
-     * @param bool|true $only_active
-     * @return array
-     */
-    public static function names($only_active = true)
-    {
-        $q = Modulegroup::select('name');
-        if ($only_active) {
-            $q = $q->remember(cacheTime('module-list'))->where('is_active', 1);
-        }
-        $results = $q->get()->toArray();
-        $modules = array_column($results, 'name');
-        return $modules;
-    }
-
-    /**
-     * get first level children of a module group
-     *
-     * @return array
-     */
-    public function firstLevelChildren()
-    {
-        $list = [];
-        $modulegroups = Modulegroup::whereParentId($this->id)->whereIsActive(1)->orderBy('order')->remember(cacheTime('long'))->get();
-        if (count($modulegroups)) {
-            foreach ($modulegroups as $modulegroup) {
-                array_push($list, ['type' => 'modulegroup', 'item' => $modulegroup]);
-            }
-        }
-        $modules = Module::whereModulegroupId($this->id)->whereIsActive(1)->orderBy('order')->remember(cacheTime('long'))->get();
-        if (count($modules)) {
-            foreach ($modules as $module) {
-                array_push($list, ['type' => 'module', 'item' => $module]);
-            }
-        }
-        return $list;
-    }
 
     ############################################################################################
     # Permission functions

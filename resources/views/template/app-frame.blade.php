@@ -104,20 +104,8 @@
     </header>
     <aside class="main-sidebar">
         <section class="sidebar">
-            @if(user())
-                <div class="user-panel">
-                    <div class="pull-left image">
-                        {{--<img src="{{asset(user()->profilePic())}}" class="img-circle"--}}
-                        {{--alt="User Image">--}}
-                    </div>
-                    <div class="pull-left info">
-                        <p>{{ user()->name}}</p>
-                        <a href="#"><i class="fa fa-circle text-success"></i> {{trim(user()->group_titles_csv,',')}}</a>
-                    </div>
-                </div>
-            @endif
             @section('sidebar-left')
-                {{--@include('modules.base.include.sidebar-left')--}}
+                @include('modules.base.include.sidebar-left')
             @show
         </section>
     </aside>
