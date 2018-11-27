@@ -363,6 +363,10 @@ function setting($name)
 {
     $val = $name;
 
+    if(config('var.'.$name,null)){ // Check if setting value exists in config.var
+        $val = config('var.'.$name);
+    }
+
     // if ($setting = Tsetting::whereName($name)->remember(cacheTime('long'))->first(['value', 'type'])) {
     //     $val = $setting->value;
     // } else

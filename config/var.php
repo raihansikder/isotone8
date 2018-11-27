@@ -2,6 +2,8 @@
 
 return [
 
+    'app-name' => 'LetsBab',
+
     /*
    |--------------------------------------------------------------------------
    | File root
@@ -9,7 +11,7 @@ return [
    | Example : /files/your-project-name/
    |
    */
-    'file-upload-root'          => '/files/liveroom-cloud/',
+    'file-upload-root' => '/files/liveroom-cloud/',
     /*
     |--------------------------------------------------------------------------
     | system tenant admin default email
@@ -32,12 +34,12 @@ return [
    |
    |
    */
-    'tenant-admin'              => [
-        'group-id'    => '2',
+    'tenant-admin' => [
+        'group-id' => '2',
         'group-title' => 'Seller'
     ],
 
     // Defines what is user for login/
-    'login-attribute'           => 'name',
+    'login-attribute' => 'name',
 
 ];

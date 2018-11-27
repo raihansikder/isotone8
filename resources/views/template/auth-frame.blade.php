@@ -12,15 +12,12 @@
     @show
     @include('template.css')
 </head>
-<body class="hold-transition login-page">
-<div class="login-box" style="background-color: black; opacity: .9">
+<body class="hold-transition login-page lb-bg">
+<div class="login-box shadow">
     <div class="login-logo">
-        {{--<img style="width: 150px; padding-top: 30px;" src="{{asset("images/logo.png")}}"--}}
-             {{--alt="{{setting('app-name')}}" title="{{setting('app-name')}}"/>--}}
-        Isotone
-        {{--<a href="../../index2.html">{{setting('app.name')}}</a>--}}
+        <img style="width: 100px; padding-top: 20px;" src="{{asset("letsbab/images/logo.png")}}"
+             alt="{{setting('app-name')}}" title="{{setting('app-name')}}"/>
     </div>
-    <!-- /.login-logo -->
     <div class="login-box-body">
         @include('template.include.messages-top')
         @section('content-top')
@@ -51,11 +48,9 @@
                             </label>
                         </div>
                     </div>
-                    <!-- /.col -->
                     <div class="col-xs-4">
                         <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                     </div>
-                    <!-- /.col -->
                 </div>
             </form>
 
@@ -79,7 +74,6 @@
             {{-- ++++++++++++++++++++++ --}}
         @show
     </div>
-    <!-- /.login-box-body -->
 </div>
 
 @include('template.js')

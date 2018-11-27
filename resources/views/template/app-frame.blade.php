@@ -10,18 +10,21 @@
     @show
     @include('template.css')
 </head>
-<body class="hold-transition skin-black-light sidebar-mini fixed">
+<body class="hold-transition skin-blue-light sidebar-mini fixed">
 <!-- Site wrapper -->
 <div id="root" class="wrapper">
-    <header class="main-header">
+    <header class="main-header lb-bg">
         <!-- Logo -->
         <a href="{{route('home')}}" class="logo">
-            <!-- mini logo for sidebar mini 50x50 pixels -->
-            <img style="height: 60%" src="{{asset("assets/images/logo-hr.png")}}" alt="{{setting('app-name')}}"
-                 title="{{setting('app-name')}}"/>
-            <span class="logo-mini">{{setting('app-name')}}</span>
-            <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg">{{setting('app-name')}}</span>
+            <span class="lb-font">{{setting('app-name')}}</span>
+
+
+            {{--<!-- mini logo for sidebar mini 50x50 pixels -->--}}
+            {{--<img style="height: 60%" src="{{asset("letsbab/images/logo.png")}}" alt="{{setting('app-name')}}"--}}
+            {{--title="{{setting('app-name')}}"/>--}}
+            {{--<span class="logo-mini">{{setting('app-name')}}</span>--}}
+            {{--<!-- logo for regular state and mobile devices -->--}}
+            {{--<span class="logo-lg">{{setting('app-name')}}</span>--}}
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -40,47 +43,55 @@
                     @if(user())
                         <li><a href="{{route('home')}}">Manage Account</a></li>
 
-                        {{--<li class="dropdown user user-menu">--}}
-                            {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}}
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 {{--<img src="{{asset(user()->profilePic())}}"--}}
-                                     {{--class="user-image" alt="User Image">--}}
-                                {{--<span class="hidden-xs">{{user()->name}}</span>--}}
-                            {{--</a>--}}
-                            {{--<ul class="dropdown-menu">--}}
-                                {{--<li class="user-header">--}}
-                                    {{--<img src="{{asset(user()->profilePic())}}"--}}
-                                         {{--class="img-circle" alt="User Image">--}}
-                                    {{--<p>--}}
-                                        {{--{{user()->name}}--}}
-                                        {{--<small>{{cleanCsv(user()->groups_title_csv)}}</small>--}}
-                                    {{--</p>--}}
-                                {{--</li>--}}
-                                {{--<!-- Menu Body -->--}}
-                                {{--<li class="user-body">--}}
-                                    {{--<div class="row">--}}
-                                    {{--<div class="col-xs-4 text-center">--}}
-                                    {{--<a href="#">Followers</a>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-xs-4 text-center">--}}
-                                    {{--<a href="#">Sales</a>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-xs-4 text-center">--}}
-                                    {{--<a href="#">Friends</a>--}}
-                                    {{--</div>--}}
-                                    {{--</div>--}}
-                                    {{--<!-- /.row -->--}}
-                                {{--</li>--}}
-                                {{--<!-- Menu Footer-->--}}
-                                {{--<li class="user-footer">--}}
-                                    {{--<div class="pull-left">--}}
-                                    {{--<a href="#" class="btn btn-default btn-flat">Profile</a>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="pull-right">--}}
-                                        {{--<a href="{{route('signout')}}" class="btn btn-default btn-flat">Sign out</a>--}}
-                                    {{--</div>--}}
-                                {{--</li>--}}
-                            {{--</ul>--}}
-                        {{--</li>--}}
+                                {{--class="user-image" alt="User Image">--}}
+                                <span class="hidden-xs">{{user()->name}}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                            {{--<li class="user-header">--}}
+                            {{--<img src="{{asset(user()->profilePic())}}"--}}
+                            {{--class="img-circle" alt="User Image">--}}
+                            {{--<p>--}}
+                            {{--{{user()->name}}--}}
+                            {{--<small>{{cleanCsv(user()->groups_title_csv)}}</small>--}}
+                            {{--</p>--}}
+                            {{--</li>--}}
+                            {{--<!-- Menu Body -->--}}
+                            {{--<li class="user-body">--}}
+                            {{--<div class="row">--}}
+                            {{--<div class="col-xs-4 text-center">--}}
+                            {{--<a href="#">Followers</a>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-xs-4 text-center">--}}
+                            {{--<a href="#">Sales</a>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-xs-4 text-center">--}}
+                            {{--<a href="#">Friends</a>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<!-- /.row -->--}}
+                            {{--</li>--}}
+                            <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
+                                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                              style="display: none;">
+                                            @csrf
+                                        </form>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
                     @else
                         <li>
                             <a href="{{route('get.signin')}}">Sign in</a>
@@ -97,7 +108,7 @@
                 <div class="user-panel">
                     <div class="pull-left image">
                         {{--<img src="{{asset(user()->profilePic())}}" class="img-circle"--}}
-                             {{--alt="User Image">--}}
+                        {{--alt="User Image">--}}
                     </div>
                     <div class="pull-left info">
                         <p>{{ user()->name}}</p>

@@ -113,7 +113,7 @@ function dbTable($table)
 
     $table_prefix = DB::getTablePrefix();
     // Checks if table name already has prefix.
-    if (strpos($table, $table_prefix) !== false) {
+    if (strlen($table_prefix) && strpos($table, $table_prefix) !== false) {
         return $table;
     }
 

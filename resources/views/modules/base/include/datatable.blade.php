@@ -1,4 +1,4 @@
-<table id="{{$module_name}}Grid" class="table table-bordered table-striped module-grid" width="100%">
+<table id="{{$module_name}}Grid" class="table module-grid" width="100%">
     <thead>
     <tr>
         {{-- print the headers/columns --}}

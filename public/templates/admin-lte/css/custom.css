@@ -15,7 +15,8 @@
 
 body, html,
 .sidebar-menu .treeview-menu > li > a {
-    font-size: 12px
+    font-size: 12px;
+    color: #666;
 }
 
 .form-control,
@@ -24,9 +25,18 @@ table, tr, th, td, thead, tbody {
     font-size: inherit
 }
 
-/* Make all borders square (0 radius)*/
-* {
-    border-radius: 0 !important;
+/* remove some borders from the top menu*/
+.skin-black-light .main-header .navbar > .sidebar-toggle {
+    border-right: 0px;
+}
+
+.skin-black-light .main-header > .logo {
+    border-right: 0px;
+}
+
+.skin-black-light .main-header .navbar .navbar-custom-menu .navbar-nav > li > a, .skin-black-light .main-header .navbar .navbar-right > li > a {
+    border-right: 0;
+    border-left: 0;
 }
 
 /* Fix CTA position for all module base form */
@@ -268,7 +278,26 @@ div.form-group span.readonly {
     width: 100%;
 }
 
-.logo{
-    background-color: #fff !important;
+.logo, .skin-blue-light .main-header .navbar, navbar > a, navbar a:hover {
+    background-color: transparent !important;
+    color: white !important;
 }
 
+/* remove border between left and right section*/
+.skin-blue-light .content-wrapper, .skin-blue-light .main-footer {
+    border-left: 0;
+}
+
+.login-box {
+    background-color: white;
+}
+
+
+.select2-drop, .select2-drop.select2-drop-above,
+.select2-container.select2-drop-above .select2-choice,
+.select2-container .select2-choice .select2-arrow,
+.select2-container-multi .select2-choices .select2-search-choice,
+.select2-container .select2-choice,
+.form-control {
+    border-radius: 0px;
+}
