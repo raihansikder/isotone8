@@ -4,27 +4,30 @@
  * parent template \app\views\spyr\modules\groups\form.blade.php
  *
  * Variables used in this view file.
- * @var $module_name string 'modulegroups'
- * @var $mod Module
- * @var $modulegroup Modulegroup Object that is being edited
- * @var $element string 'modulegroup'
+ * @var $module_name           string 'modulegroups'
+ * @var $mod                   Module
+ * @var $modulegroup           Modulegroup Object that is being edited
+ * @var $element               string 'modulegroup'
  * @var $spyr_element_editable boolean
- * @var $uuid string '1709c091-8114-4ba4-8fd8-91f0ba0b63e8'
+ * @var $uuid                  string '1709c091-8114-4ba4-8fd8-91f0ba0b63e8'
  */
 ?>
 
 {{-- Form fields are placed here. These will be added inside the spyrframe default form container in
  app/views/spyr/modules/base/form.blade.php --}}
-@include('form.input-text',['var'=>['name'=>'name','label'=>'Name', 'container_class'=>'col-sm-6']])
-@include('form.input-text',['var'=>['name'=>'title','label'=>'Title', 'container_class'=>'col-sm-6']])
-@include('form.select-model',['var'=>['name'=>'parent_id','label'=>'Parent module group', 'table'=>'modulegroups', 'container_class'=>'col-sm-6']])
-@include('form.input-text',['var'=>['name'=>'level','label'=>'Level', 'container_class'=>'col-sm-2']])
-@include('form.input-text',['var'=>['name'=>'order','label'=>'Order', 'container_class'=>'col-sm-2']])
-@include('form.input-text',['var'=>['name'=>'color_css','label'=>'Color class', 'container_class'=>'col-sm-2']])
-@include('form.input-text',['var'=>['name'=>'icon_css','label'=>'Icon class', 'container_class'=>'col-sm-2']])
-@include('form.textarea',['var'=>['name'=>'desc','label'=>'Description', 'container_class'=>'col-sm-6']])
-@include('form.input-text',['var'=>['name'=>'route','label'=>'Default route name', 'container_class'=>'col-sm-6']])
+@include('form.input-text',['var'=>['name'=>'name','label'=>'Name (table name)', 'container_class'=>'col-sm-3']])
+@include('form.input-text',['var'=>['name'=>'title','label'=>'Title', 'container_class'=>'col-sm-3']])
+@include('form.select-model',['var'=>['name'=>'parent_id','label'=>'Parent module', 'table'=>'modules', 'container_class'=>'col-sm-3']])
+@include('form.input-text',['var'=>['name'=>'level','label'=>'Level', 'container_class'=>'col-sm-3']])
+@include('form.input-text',['var'=>['name'=>'order','label'=>'Order', 'container_class'=>'col-sm-3']])
+@include('form.input-text',['var'=>['name'=>'color_css','label'=>'Color CSS class', 'container_class'=>'col-sm-3']])
+@include('form.input-text',['var'=>['name'=>'icon_css','label'=>'Icon CSS class', 'container_class'=>'col-sm-3']])
+@include('form.input-text',['var'=>['name'=>'default_route','label'=>'Default route name', 'container_class'=>'col-sm-3']])
+<div class="clearfix"></div>
+@include('form.textarea',['var'=>['name'=>'description','params'=>['class'=>''],'label'=>'Description', 'container_class'=>'col-sm-6']])
+<div class="clearfix"></div>
 @include('form.is_active')
+
 {{-- Form ends --}}
 
 {{-- JS starts: javascript codes go here.--}}

@@ -24,7 +24,7 @@ class CreateSuperheroesTable extends Migration
             //$table->text('somecolumnsname')->nullable()->default(null);
             /*********************************/
 
-            $table->tinyInteger('is_active')->default(1);
+            $table->tinyInteger('is_active')->nullable()->default(1);
             $table->unsignedInteger('created_by')->nullable()->default(null);
             $table->unsignedInteger('updated_by')->nullable()->default(null);
             $table->timestamps();

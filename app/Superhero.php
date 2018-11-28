@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Traits\IsoModule;
+use App\Observers\SuperheroObserver;
+
 /**
  * Class Superhero
  *
@@ -26,6 +29,7 @@ namespace App;
  */
 class Superhero extends Basemodule
 {
+    use IsoModule;
     /**
      * Mass assignment fields (White-listed fields)
      *

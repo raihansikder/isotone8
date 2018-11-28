@@ -11,17 +11,9 @@
 |
 */
 
-
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
-Route:: get('threads', 'ThreadsController@index')->name('threads.index');
-Route:: get('threads/create', 'ThreadsController@create')->name('threads.create');
-Route:: get('threads/{channel}', 'ThreadsController@index')->name('channels.show');
-Route:: post('threads', 'ThreadsController@store')->name('threads.store');
-Route:: get('threads/{channel_slug}/{thread}', 'ThreadsController@show')->name('threads.show');
-// Route::resource('threads', 'ThreadsController');
-Route::post('threads/{channel_slug}/{thread}/replies', 'RepliesController@store')->name('replies.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +22,8 @@ Route::post('threads/{channel_slug}/{thread}/replies', 'RepliesController@store'
 |
 | Here is where you can register all of the routes for the spyr framework.
 */
-//$modules = \App\Module::remember(2)->pluck('name'); // fetch all module names
-$modules = \App\Module::names(); // fetch all module names
-$modulegroups = \App\Modulegroup::names();
+$modules = dbTableExists('modules') ? \App\Module::names() : [];
+$modulegroups = dbTableExists('modulegroups') ? \App\Modulegroup::names() : [];
 
 /*
  *
@@ -49,15 +40,14 @@ $modulegroups = \App\Modulegroup::names();
  *****************************************************************************/
 
 Route::middleware(['auth'])->group(function () use ($modules, $modulegroups) {
-
     # default routes for all modules
     foreach ($modules as $module) {
         $Controller = ucfirst($module) . "Controller";
-        Route:: get($module . "/{".str_singular($module)."}/restore", $Controller . "@restore")->name($module . '.restore');
+        Route:: get($module . "/{" . str_singular($module) . "}/restore", $Controller . "@restore")->name($module . '.restore');
         Route:: get($module . "/grid", $Controller . "@grid")->name($module . '.grid');
         Route:: get($module . "/getJson", $Controller . "@getJson")->name($module . '.getJson');
         Route:: get($module . "/report", $Controller . "@report")->name($module . '.report');
-        Route:: get($module . "/{".str_singular($module)."}/changes", $Controller . "@changes")->name($module . '.changes');
+        Route:: get($module . "/{" . str_singular($module) . "}/changes", $Controller . "@changes")->name($module . '.changes');
         Route::resource($module, $Controller);
     }
 
@@ -75,10 +65,11 @@ Route::middleware(['auth'])->group(function () use ($modules, $modulegroups) {
      * request that initiates download of the file matching the uuid.
      */
     Route::get('download/{uuid}', 'UploadsController@download')->name('get.download');
+    Route::get('/change-password','UsersController@showChangePasswordForm');
 
 });
 
-Route::get('test', function(){
+Route::get('test', function () {
     echo dbTableExists('modules');
     return 'test';
 });

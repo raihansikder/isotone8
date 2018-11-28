@@ -49,7 +49,7 @@
         @include('form.select-array',['var'=>['name'=>'is_editable_by_tenant','label'=>'Is editable?', 'options'=>[0=>'No',1=>'Yes'],'container_class'=>'col-sm-3']])
     @endif
 
-    <div class="col-md-12">
+    <div class="col-md-12 no-padding">
         @if(isset($user) && $user->api_token != null)
             <b>Current API token :</b> <code class="">{{$user->api_token}}</code>
         @endif
@@ -58,21 +58,12 @@
                 <div class="form-group">
                     <input class="pull-left" type="checkbox" name="api_token_generate" id="api_token_generate"
                            value="yes"/>
-                    <b>Generate new API token</b>
+                    &nbsp;&nbsp;<b>Generate new API token</b>
                 </div>
             </div>
         </div>
     </div>
 @endif
-
-{{-- uploadtype_id = 7 Profile picture --}}
-@if(isset($$element))
-    <div class="clearfix"></div>
-    <h4>Profile picture</h4>
-    <?php $img_src = (count($$element->uploadProfilePic)) ? asset($$element->uploadProfilePic->path) : null; ?>
-    @include('repository.addons.cropper.cropper',['var'=>['uploadtype_id'=>7,'img_src'=>$img_src]])
-@endif
-{{-- Form ends --}}
 
 {{-- JS starts: javascript codes go here.--}}
 @section('js')
@@ -123,22 +114,8 @@
         /*******************************************************************/
         // frontend and Ajax hybrid validation
         /*******************************************************************/
-        $('form[name={{$module_name}}] input[name=redirect_success]').val('');
-
-         hideSeller();
-
-        $('select#groups').change(function () {
-            hideSeller()
-        });
-        function hideSeller(){
-            $('#tenant').hide();
-            var group_id = $('select#groups').val();
-            if(group_id == 2) $('#tenant').show();
-        }
-
-
         addValidationRulesForSaving(); // Assign validation classes/rules
-        enableValidation('{{$module_name}}'); // Instantiate validation function
+        // enableValidation('{{$module_name}}'); // Instantiate validation function
 
         /*******************************************************************/
         // List of functions
@@ -146,7 +123,7 @@
 
         // Assigns validation rules during saving (both creating and updating)
         function addValidationRulesForSaving() {
-            $('input[name=name]').addClass('validate[required]');
+            // $('input[name=name]').addClass('validate[required]');
         }
     </script>
 @endsection

@@ -1,94 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Traits;
 
-use App\Traits\IsoModule;
-use Illuminate\Database\Eloquent\Model;
+use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Watson\Rememberable\Rememberable;
 
-/**
- * Class Basemodule
- *
- * @package App
- * @property int $id
- * @property string|null $uuid
- * @property int|null $tenant_id
- * @property string|null $name
- * @property bool $is_active
- * @property int|null $created_by
- * @property int|null $updated_by
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
- * @property int|null $deleted_by
- * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Basemodule onlyTrashed()
- * @method static bool|null restore()
- * @method static \Illuminate\Database\Query\Builder|\App\Basemodule withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Basemodule withoutTrashed()
- * @mixin \Eloquent
- */
-class Basemodule extends Model
+trait IsoModule
 {
-    // use SoftDeletes;
-    // use Rememberable;
-    use IsoModule;
+    use SoftDeletes;
+    use Rememberable;
 
-    /**
-     * Mass assignment fields (White-listed fields)
-     *
-     * @var array
-     */
-    protected $fillable = ['uuid', 'name', 'tenant_id', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
 
-    /**
-     * List of appended attribute. This attributes will be loaded in each Model
-     *
-     * @var array
-     */
-    // protected $appends = ['some_new_field'];
-
-    /**
-     * Disallow from mass assignment. (Black-listed fields)
-     *
-     * @var array
-     */
-    protected $guarded = [];
-
-    /** @var array Fields that should not be allowed to update */
-    protected $restrict_updates = [];
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-
-    /** @var array statuses */
-    public static $statuses = [
-        /*'Requested',
-        'Move in complete',
-        'Declined',
-        'Approved'*/
-    ];
-
-    /** @var array $status_transitions A map of allowed status changes from original status */
-    public static $status_transitions = [
-        /*'Requested' => ['Requested', 'Approved', 'Move in complete'],
-        'Move in complete' => ['Move in complete'],
-        'Declined' => ['Declined', 'Approved'],
-        'Approved' => ['Approved', 'Declined', 'Move in complete']*/
-    ];
-
-    /**
-     * Validation rules. For regular expression validation use array instead of pipe
-     * Example: 'name' => ['required', 'Regex:/^[A-Za-z0-9\-! ,\'\"\/@\.:\(\)]+$/']
-     *
-     * @param       $element
-     * @param array $merge
-     * @return array
-     */
     public static function rules($element, $merge = [])
     {
         $rules = [
@@ -103,21 +26,7 @@ class Basemodule extends Model
         return array_merge($rules, $merge);
     }
 
-    /**
-     * Custom validation messages.
-     *
-     * @var array
-     */
-    public static $custom_validation_messages = [
-        //'name.required' => 'Custom message.',
-    ];
 
-    /**
-     * Automatic eager load relation by default (can be expensive)
-     *
-     * @var array
-     */
-    // protected $with = ['relation1', 'relation2'];
 
     ############################################################################################
     # Model events
@@ -125,10 +34,10 @@ class Basemodule extends Model
     // Model events are handled in individual models that is extended from this base module.
     // So no model event instantiated in this class.
 
-    public static function boot()
-    {
-        parent::boot(); // This line is required as uncommented to boot SoftDeletingTrait
-    }
+    // public static function boot()
+    // {
+    //     parent::boot(); // This line is required as uncommented to boot SoftDeletingTrait
+    // }
 
     ############################################################################################
     # Validator functions
@@ -443,7 +352,7 @@ class Basemodule extends Model
      */
     public function creator()
     {
-        return $this->belongsTo('User', 'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**
@@ -453,7 +362,7 @@ class Basemodule extends Model
      */
     public function updater()
     {
-        return $this->belongsTo('User', 'updated_by');
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     /**

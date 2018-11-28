@@ -57,7 +57,7 @@ if (count($pairs)) {
     @if($var['editable'])
         <?php $var['select_name'] = ($var['multiple']) ? $var['name'] . "[]" : $var['name']; ?>
         {{ Form::select($var['select_name'], $options, $var['old_input'], $var['params']) }}
-        {{ $errors->first($var['name'], '<span class="help-block">:message</span>') }}
+        {!! $errors->first($var['name'], '<span class="help-block">:message</span>')  !!}
     @else
         <span class="{{$var['params']['class']}} readonly">
             @if($var['multiple'])

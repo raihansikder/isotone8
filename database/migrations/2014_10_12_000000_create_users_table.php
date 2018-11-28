@@ -49,7 +49,7 @@ class CreateUsersTable extends Migration
             $table->string('group_titles_csv', 1024)->nullable()->default(null); // Super admin, Tenant admin
 
             /*********************************/
-            $table->tinyInteger('is_active')->default(1);
+            $table->tinyInteger('is_active')->nullable()->default(1);
             $table->unsignedInteger('created_by')->nullable()->default(null);
             $table->unsignedInteger('updated_by')->nullable()->default(null);
             $table->timestamps();

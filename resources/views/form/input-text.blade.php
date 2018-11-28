@@ -2,7 +2,7 @@
 /**
  * @var array $var A temporary variable, that is set only to render the view partial. Usually this view
  *                 file is included inside a form.
- * @var $errors \Illuminate\Support\MessageBag
+ * @var $errors    \Illuminate\Support\MessageBag
  */
 
 /** Common view parameters for form elements */
@@ -40,7 +40,7 @@ $var['type'] = isset($var['type']) ? $var['type'] : 'text';       // type: Defin
     @else
         <span class="{{$var['params']['class']}} readonly">{{$$element->$var['name']}} &nbsp;</span>
     @endif
-    {{ $errors->first($var['name'], '<span class="help-block">:message</span>') }}
+    {!! $errors->first($var['name'], '<span class="help-block">:message</span>') !!}
 </div>
 
 {{-- Unset the local variable used in this view. --}}

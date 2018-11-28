@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ModulesTableSeeder extends Seeder
+class ModulegroupsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,14 +11,13 @@ class ModulesTableSeeder extends Seeder
      */
     public function run()
     {
-
-        $names = ['modules', 'modulegroups', 'tenants', 'users', 'groups'];
+        $names = ['settings'];
 
         foreach ($names as $name) {
             /** @var \App\Basemodule $Model */
             //$Model = model($name);
-            if (\App\Module::where('name', $name)->doesntExist()) {
-                \App\Module::create([
+            if (\App\Modulegroup::where('name', $name)->doesntExist()) {
+                \App\Modulegroup::create([
                     'name' => $name,
                     'title' => ucfirst(str_singular($name)),
                     'description' => 'Manage ' . str_singular($name),

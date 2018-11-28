@@ -41,8 +41,6 @@
                     {{--@include('template.include.top-menu.message-menu')--}}
                     {{--@include('template.include.top-menu.task-menu')--}}
                     @if(user())
-                        <li><a href="{{route('home')}}">Manage Account</a></li>
-
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 {{--<img src="{{asset(user()->profilePic())}}"--}}

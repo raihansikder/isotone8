@@ -34,22 +34,21 @@ class ModulebaseController extends Controller
     {
         $this->module_name = $module_name;
 
-        // Default grid SQL select and column titles.
+        // Define grid SELECT statment and HTML column name.
         if (!isset($this->grid_columns)) {
             $this->grid_columns = [
                 //['table.id', 'id', 'ID'], // translates to => table.id as id and the last one ID is grid colum header
-                [$this->module_name . '.id', 'id', 'ID'],
-                [$this->module_name . '.name', 'name', 'Name'],
-                ['updater.name', 'user_name', 'Updater'],
-                [$this->module_name . '.updated_at', 'updated_at', 'Updated at'],
-                [$this->module_name . '.is_active', 'is_active', 'Active']
+                ["{$this->module_name}.id", "id", "ID"],
+                ["{$this->module_name}.name", "name", "Name"],
+                ["updater.name", "user_name", "Updater"],
+                ["{$this->module_name}.updated_at", "updated_at", "Updated at"],
+                ["{$this->module_name}.is_active", "is_active", "Active"]
             ];
         }
         # Inject tenant context in grid query
         if ($tenant_id = inTenantContext($module_name)) {
             Input::merge([tenantIdField() => $tenant_id]); // Set tenant_id in request header
         }
-
 
         // Share the variables across all views accessed by this controller
         View::share([
@@ -91,23 +90,23 @@ class ModulebaseController extends Controller
      */
     public function grid()
     {
-        // Prepare colum selection for grid.
+        // Construct SELECT statment
         $select_cols = [];
         foreach ($this->grid_columns as $col)
             $select_cols[] = $col[0] . ' as ' . $col[1];
 
-        # load default grid query
+        // Define Query for generating results for grid
         if (!isset($this->grid_query)) {
             $this->grid_query = DB::table($this->module_name)
                 ->leftJoin('users as updater', $this->module_name . '.updated_by', 'updater.id')
                 ->select($select_cols);
         }
-        # Inject tenant context in grid query
+        // Inject tenant context in grid query
         if ($tenant_id = inTenantContext($this->module_name)) {
             $this->grid_query = injectTenantIdInModelQuery($this->module_name, $this->grid_query);
         }
 
-        // Grid query builder
+        // Exclude deleted
         $this->grid_query = $this->grid_query->whereNull($this->module_name . '.deleted_at'); // Skip deleted rows
 
         // Make datatable
@@ -302,18 +301,14 @@ class ModulebaseController extends Controller
      * Update handler for spyr element.
      *
      * @param $id
+     * @var \App\Basemodule $Model
+     * @var \App\Basemodule $element
      * @return $this|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function update($id)
     {
-
-        /** @var \App\Basemodule $Model */
-        /** @var \App\Basemodule $element */
         // init local variables
-        //$module_name = $this->module_name;
         $Model = model($this->module_name);
-        // $element_name = str_singular($module_name);
-        // $ret = ret(); // load default return values
         # --------------------------------------------------------
         # Process update
         # --------------------------------------------------------
@@ -340,7 +335,6 @@ class ModulebaseController extends Controller
         # --------------------------------------------------------
         # Process return/redirect
         # --------------------------------------------------------
-
         if (Request::get('ret') == 'json') {
             return Response::json(fillRet($ret));
         } else {
@@ -348,7 +342,6 @@ class ModulebaseController extends Controller
                 // Obtain redirection path based on url param redirect_fail
                 // Or, default redirect to back if no param is set.
                 $redirect = Request::has('redirect_fail') ? Redirect::to(Request::get('redirect_fail')) : Redirect::back();
-
                 // Include Inputs and Validation errors in redirection.
                 $redirect = $redirect->withInput();
                 if (isset($validator)) $redirect = $redirect->withErrors($validator);

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\IsoModule;
 use App\Observers\ModuleObserver;
 
 /**
@@ -28,14 +29,14 @@ use App\Observers\ModuleObserver;
  */
 class Module extends Basemodule
 {
+    use IsoModule;
+
     /**
-     * Custom validation messages.
+     * Mass assignment fields (White-listed fields)
      *
      * @var array
      */
-    public static $custom_validation_messages = [
-        //'name.required' => 'Custom message.',
-    ];
+    protected $fillable = ['name', 'title', 'description', 'parent_id', 'modulegroup_id', 'level', 'order', 'color_css', 'icon_css', 'default_route', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
 
     /**
      * Disallow from mass assignment. (Black-listed fields)
@@ -44,18 +45,20 @@ class Module extends Basemodule
      */
     // protected $guarded = [];
 
+    /** @var array statuses */
+    public static $statuses = [
+        'Requested',
+        'Move in complete',
+        'Declined',
+        'Approved'
+    ];
+
     /**
      * Date fields
      *
      * @var array
      */
     // protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-    /**
-     * Mass assignment fields (White-listed fields)
-     *
-     * @var array
-     */
-    protected $fillable = ['name', 'title', 'description', 'parent_id', 'modulegroup_id', 'level', 'order', 'color_css', 'icon_css', 'default_route', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
 
     /**
      * Validation rules. For regular expression validation use array instead of pipe
@@ -76,6 +79,16 @@ class Module extends Basemodule
         ];
         return array_merge($rules, $merge);
     }
+
+    /**
+     * Custom validation messages.
+     *
+     * @var array
+     */
+    public static $custom_validation_messages = [
+        //'name.required' => 'Custom message.',
+    ];
+
     /**
      * Automatic eager load relation by default (can be expensive)
      *
@@ -141,6 +154,9 @@ class Module extends Basemodule
                 $element->modulegroup_id = (!$element->modulegroup_id) ? 0 : $element->modulegroup_id;
                 $element->level = (!$element->level) ? 0 : $element->level;
                 $element->order = (!$element->order) ? 0 : $element->order;
+                $element->default_route = (!$element->default_route) ? $element->name . '.index' : $element->default_route;
+                $element->color_css = (!$element->color_css) ? 'aqua' : $element->color_css;
+                $element->icon_css = (!$element->icon_css) ? 'fa fa-plus' : $element->icon_css;
             }
 
             return $valid;

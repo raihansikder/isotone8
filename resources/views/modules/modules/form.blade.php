@@ -13,9 +13,6 @@
  */
 ?>
 
-<input type="hidden" name="ret" value="json"/>
-<input type="hidden" name="ret2" value="json"/>
-
 {{-- Form fields are placed here. These will be added inside the spyrframe default form container in
  app/views/spyr/modules/base/form.blade.php --}}
 @include('form.input-text',['var'=>['name'=>'name','label'=>'Name (table name)', 'container_class'=>'col-sm-3']])
@@ -31,6 +28,8 @@
 @include('form.textarea',['var'=>['name'=>'description','params'=>['class'=>''],'label'=>'Description', 'container_class'=>'col-sm-6']])
 <div class="clearfix"></div>
 @include('form.is_active')
+
+{{--{{ $$element->creator->email }}--}}
 {{-- Form ends --}}
 
 {{-- JS starts: javascript codes go here.--}}
@@ -95,7 +94,7 @@
          * Assigns validation rules during saving (both creating and updating)
          */
         function addValidationRulesForSaving() {
-            $('input[name=name]').addClass('validate[required]');
+            //$('input[name=name]').addClass('validate[required]');
         }
     </script>
 @endsection

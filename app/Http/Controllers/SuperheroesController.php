@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
-class GroupsController extends ModulebaseController
+use App\Module;
+use DB;
+use Redirect;
+use Request;
+use Response;
+use Validator;
+use View;
+
+class SuperheroesController extends ModulebaseController
 {
 
     /*
-      * constructor
-      */
+     * constructor
+     */
     public function __construct()
     {
         $this->module_name = controllerModule(get_class());

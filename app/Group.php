@@ -2,34 +2,18 @@
 
 namespace App;
 
-use App\Observers\UserObserver;
-use App\Traits\IsoModule;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Request;
+use App\Traits\IsoModule;
+use App\Observers\GroupObserver;
 
 /**
- * App\User
+ * Class Group
  *
+ * @package App
  * @property int $id
  * @property string|null $uuid
  * @property int|null $tenant_id
  * @property string|null $name
- * @property string $email
- * @property string $password
- * @property string|null $remember_token
- * @property bool $email_confirmed
- * @property string|null $email_confirmed_at
- * @property string|null $email_confirmation_code
- * @property string|null $access_token
- * @property string|null $access_token_generated_at
- * @property string|null $api_token
- * @property string|null $api_token_generated_at
- * @property bool $tenant_editable
- * @property string|null $permissions
- * @property string|null $  groups
- * @property string|null $group_ids_csv
- * @property string|null $group_titles_csv
  * @property bool $is_active
  * @property int|null $created_by
  * @property int|null $updated_by
@@ -37,60 +21,36 @@ use Request;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property int|null $deleted_by
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[]
- *                $notifications
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAccessToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAccessTokenGeneratedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereApiToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereApiTokenGeneratedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailConfirmationCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailConfirmed($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailConfirmedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereGroupIdsCsv($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereGroupTitlesCsv($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereGroups($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePermissions($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereTenantEditable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereTenantId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUuid($value)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Group onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\App\Group withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Group withoutTrashed()
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class Group extends Basemodule
 {
-    use Notifiable;
     use IsoModule;
-
-    // use Rememberable;
-
     /**
-     * The attributes that are mass assignable.
+     * Mass assignment fields (White-listed fields)
      *
      * @var array
      */
-    protected $fillable = ['uuid', 'name', 'password', 'group_ids_csv', 'email', 'tenant_id', 'email_confirmed',
-        'tenant_editable', 'created_by', 'updated_by', 'deleted_by'];
+    protected $fillable = ['uuid', 'name', 'title', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * Disallow from mass assignment. (Black-listed fields)
      *
      * @var array
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    // protected $guarded = [];
+
+    /**
+     * Date fields
+     *
+     * @var array
+     */
+    // protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * Validation rules. For regular expression validation use array instead of pipe
@@ -102,40 +62,25 @@ class User extends Authenticatable
      */
     public static function rules($element, $merge = [])
     {
-
         $rules = [
-            'name' => ['required', 'between:3,255', 'unique:users,name' . (isset($element->id) ? ",$element->id" : ''), 'Regex:/^[a-z0-9\-]+$/'],
-            'email' => 'required|email|unique:users,email' . (isset($element->id) ? ",$element->id" : ''),
+            'name' => 'required|between:1,255|unique:groups,name,' . (isset($element->id) ? "$element->id" : 'null') . ',id,deleted_at,NULL',
+            'is_active' => 'required|in:1,0',
+            // 'tenant_id'  => 'required|tenants,id,is_active,1',
+            // 'created_by' => 'exists:users,id,is_active,1', // Optimistic validation for created_by,updated_by
+            // 'updated_by' => 'exists:users,id,is_active,1',
+
         ];
-
-        // While creation/registration of user password and password_confirm both should be available
-        // Also if one password is given the other one should be given as well
-        // While creation/registration of user password and password_confirm both should be available
-        if (!isset($element->id) || (Request::has('password') && strlen(Request::get('password')))) {
-            $rules = array_merge($rules, [
-                'password' => 'required|between:8,32',
-                'password_confirm' => 'required|between:8,32|same:password',
-            ]);
-        }
-
         return array_merge($rules, $merge);
     }
 
-    public static $custom_validation_messages = [
-        //'name.required' => 'Custom message.',
-    ];
-
     /**
-     * Allowed permissions values.
-     *
-     * Possible options:
-     *   -1 => Deny (adds to array, but denies regardless of user's group).
-     *    0 => Remove.
-     *    1 => Add.
+     * Custom validation messages.
      *
      * @var array
      */
-    protected $allowedPermissionsValues = array(-1, 0, 1);
+    public static $custom_validation_messages = [
+        //'name.required' => 'Custom message.',
+    ];
 
     /**
      * Automatic eager load relation by default (can be expensive)
@@ -144,141 +89,110 @@ class User extends Authenticatable
      */
     // protected $with = ['relation1', 'relation2'];
 
+    /**
+     * Allowed permissions values.
+     *
+     * Possible options:
+     *    0 => Remove.
+     *    1 => Add.
+     *
+     * @var array
+     */
+    protected $allowedPermissionsValues = array(0, 1);
+
     ############################################################################################
     # Model events
     ############################################################################################
+
     public static function boot()
     {
-        /**
-         * parent::boot() was previously used. However this invocation stops from the other classes
-         * of other spyr modules(Models) to override the boot() method. Need to check more.
-         * make the parent (Eloquent) boot method run.
-         */
         parent::boot();
-        User::observe(UserObserver::class);
+        Group::observe(GroupObserver::class);
 
         /************************************************************/
         // Following code block executes - when an element is in process
         // of creation for the first time but the creation has not
         // completed yet.
         /************************************************************/
-        // static::creating(function (User $element) { });
+        // static::creating(function (Group $element) { });
 
         /************************************************************/
         // Following code block executes - after an element is created
         // for the first time.
         /************************************************************/
-        // static::created(function (User $element) {});
+        // static::created(function (Group $element) { });
 
         /************************************************************/
         // Following code block executes - when an already existing
         // element is in process of being updated but the update is
         // not yet complete.
         /************************************************************/
-        // static::updating(function (User $element) {});
+        // static::updating(function (Group $element) {});
 
         /************************************************************/
         // Following code block executes - after an element
         // is successfully updated
         /************************************************************/
-        //static::updated(function (User $element) {});
+        //static::updated(function (Group $element) {});
 
         /************************************************************/
         // Execute codes during saving (both creating and updating)
         /************************************************************/
-        static::saving(function (User $element) {
-
+        static::saving(function (Group $element) {
             $valid = true;
-
-            // Generate new api token
-            if (Request::get('api_token_generate') == 'yes') {
-                $element->api_token = hash('sha256', randomString(10), false);
-            }
-
-            // Create new hashed password
-            if (Request::has('password') && strlen(Request::get('password'))) {
-                $element->password = \Hash::make(Request::get('password'));
-            }
-
-            // Set group selection limit
-            $max_groups = 5;
-            if (inputIsArray('group_ids') && count(Request::get('group_ids')) > $max_groups) {
-                $valid = setError("You can assign only {$max_groups} group");
-            }
-
-            // Make invalid if superuser is assigned to any specific tenant.
-            $tenant_idf = tenantIdField();
-            $superuser_group_id = Group::where('name', 'superuser')->remember(cacheTime('long'))->first()->id;
-            if ($valid && inputIsArray('group_ids') && in_array($superuser_group_id, Request::get('group_ids', [])) && $element->$tenant_idf > 0) {
-                $valid = setError("Superuser can not belong to any tenant/customer");
-            }
-
-            // Fill group_ids_csv based on group selection
-            $element->group_ids_csv = null;
-            $element->group_titles_csv = null;
-            if ($valid && Request::has('group_ids')) {
-                //$element->group_ids_csv = commaWrap(implode(',', Request::get('group_ids', []))); // Comma wrap is not necessary for single group assignment.
-                $element->group_ids_csv = implode(',', Request::get('group_ids', []));
-                $group_titles = [];
-                foreach (Request::get('group_ids', []) as $group_id) {
-                    if ($group = Group::remember(cacheTime('long'))->find($group_id)) {
-                        array_push($group_titles, $group->title);
-                    }
+            /************************************************************/
+            // Your validation goes here
+            // if($valid) $valid = $element->isSomethingDoable(true)
+            /************************************************************/
+            $permissions = [];
+            // revoke existing group permissions
+            $existing_permissions = $element->getPermissions();
+            if (count($existing_permissions)) {
+                foreach ($existing_permissions as $k => $v) {
+                    $permissions[$k] = 0;
                 }
-                //$element->group_titles_csv = commaWrap(implode(',', $group_titles)); // Comma wrap is not necessary for single group assignment.
-                $element->group_titles_csv = implode(',', $group_titles);
             }
 
-            // fill common fields, null-fill, trim blanks from Request
-            if ($valid) {
-                $element->email_confirmed = (!$element->email_confirmed) ? false : true;
-                $element->is_active = ($element->email_confirmed == 1) ? 1 : 0;
+            // include new group permissions from form input
+            if (Request::has('permission') && is_array(Request::get('permission'))) {
+                foreach (Request::get('permission') as $k) {
+                    $permissions[$k] = 1;
+                }
             }
 
-            // if ($valid && $element->group_ids_csv != 2) {
-            //     $element->tenant_id = null;
-            // }
-
+            $element->permissions = $permissions;
             return $valid;
         });
 
         /************************************************************/
         // Execute codes after model is successfully saved
         /************************************************************/
-        static::saved(function (User $element) {
-            $element->updateGroups($element->group_ids_csv);
-
-            // Create a Userdetails if does not exists
-            if (!count($element->userdetail)) {
-                //Userdetail::create(['user_id' => $element->id, 'name' => $element->name]);
-            }
-
-        });
+        // static::saved(function (Group $element) {});
 
         /************************************************************/
         // Following code block executes - when some element is in
         // the process of being deleted. This is good place to
         // put validations for eligibility of deletion.
         /************************************************************/
-        // static::deleting(function (User $element) {});
+        // static::deleting(function (Group $element) {});
 
         /************************************************************/
         // Following code block executes - after an element is
         // successfully deleted.
         /************************************************************/
-        // static::deleted(function (User $element) {});
+        // static::deleted(function (Group $element) {});
 
         /************************************************************/
         // Following code block executes - when an already deleted element
         // is in the process of being restored.
         /************************************************************/
-        // static::restoring(function (User $element) {});
+        // static::restoring(function (Group $element) {});
 
         /************************************************************/
         // Following code block executes - after an element is
         // successfully restored.
         /************************************************************/
-        //static::restored(function (User $element) {});
+        //static::restored(function (Group $element) {});
     }
 
     ############################################################################################
@@ -319,109 +233,133 @@ class User extends Authenticatable
      */
     // public static function someOtherAction($id) { }
 
+    ############################################################################################
+    # Generic helper functions
+    ############################################################################################
+
+    ############################################################################################
+    # Projects/Solution specific herlper functions
+    ############################################################################################
     /**
-     * Updates groups based on csv values
+     * Returns permissions for the group.
      *
-     * @param null $group_ids_csv
+     * @return array
      */
-    public function updateGroups($group_ids_csv = null)
+    public function getPermissions()
     {
-        // Detach all previous groups
-        $this->groups()->detach();
+        return $this->permissions;
+    }
 
-        // load group ids from function parameter or existing table field value if
-        // no param value is provided
-        if (!$group_ids_csv) $group_ids_csv = $this->group_ids_csv;
+    /**
+     * See if a group has access to the passed permission(s).
+     *
+     * If multiple permissions are passed, the group must
+     * have access to all permissions passed through, unless the
+     * "all" flag is set to false.
+     *
+     * @param  string|array $permissions
+     * @param  bool $all
+     * @return bool
+     */
+    public function hasAccess($permissions, $all = true)
+    {
+        $groupPermissions = $this->getPermissions();
 
-        if (strlen(trim($group_ids_csv))) {
-            $group_ids = explode(',', trim($group_ids_csv, ", "));
-            if (is_array($group_ids) && count($group_ids)) {
-                $this->groups()->attach($group_ids);
+        foreach ((array)$permissions as $permission) {
+            // We will set a flag now for whether this permission was
+            // matched at all.
+            $matched = true;
+
+            // Now, let's check if the permission ends in a wildcard "*" symbol.
+            // If it does, we'll check through all the merged permissions to see
+            // if a permission exists which matches the wildcard.
+            if ((strlen($permission) > 1) and ends_with($permission, '*')) {
+                $matched = false;
+
+                foreach ($groupPermissions as $groupPermission => $value) {
+                    // Strip the '*' off the end of the permission.
+                    $checkPermission = substr($permission, 0, -1);
+
+                    // We will make sure that the merged permission does not
+                    // exactly match our permission, but starts with it.
+                    if ($checkPermission != $groupPermission and starts_with($groupPermission, $checkPermission) and $value == 1) {
+                        $matched = true;
+                        break;
+                    }
+                }
+            }
+
+            // Now, let's check if the permission starts in a wildcard "*" symbol.
+            // If it does, we'll check through all the merged permissions to see
+            // if a permission exists which matches the wildcard.
+            else if ((strlen($permission) > 1) and starts_with($permission, '*')) {
+                $matched = false;
+
+                foreach ($groupPermissions as $groupPermission => $value) {
+                    // Strip the '*' off the start of the permission.
+                    $checkPermission = substr($permission, 1);
+
+                    // We will make sure that the merged permission does not
+                    // exactly match our permission, but ends with it.
+                    if ($checkPermission != $groupPermission and ends_with($groupPermission, $checkPermission) and $value == 1) {
+                        $matched = true;
+                        break;
+                    }
+                }
+            } else {
+                $matched = false;
+
+                foreach ($groupPermissions as $groupPermission => $value) {
+                    // This time check if the groupPermission ends in wildcard "*" symbol.
+                    if ((strlen($groupPermission) > 1) and ends_with($groupPermission, '*')) {
+                        $matched = false;
+
+                        // Strip the '*' off the end of the permission.
+                        $checkGroupPermission = substr($groupPermission, 0, -1);
+
+                        // We will make sure that the merged permission does not
+                        // exactly match our permission, but starts wtih it.
+                        if ($checkGroupPermission != $permission and starts_with($permission, $checkGroupPermission) and $value == 1) {
+                            $matched = true;
+                            break;
+                        }
+                    }
+
+                    // Otherwise, we'll fallback to standard permissions checking where
+                    // we match that permissions explicitly exist.
+                    else if ($permission == $groupPermission and $groupPermissions[$permission] == 1) {
+                        $matched = true;
+                        break;
+                    }
+                }
+            }
+
+            // Now, we will check if we have to match all
+            // permissions or any permission and return
+            // accordingly.
+            if ($all === true and $matched === false) {
+                return false;
+            } else if ($all === false and $matched === true) {
+                return true;
             }
         }
+
+        return $all;
+
     }
 
     /**
-     * Returns an array of groups which the given
-     * user belongs to.
+     * Returns if the user has access to any of the
+     * given permissions.
      *
-     * @return array
-     */
-    public function getGroups()
-    {
-        if (!$this->userGroups) {
-            //$this->userGroups = $this->groups()->get();
-            // Following line has some devastating effect on user save! So, no cache for now. The is deleted from cache time config array.
-            $this->userGroups = $this->groups()->remember(cacheTime('user_groups'))->get();
-        }
-        return $this->userGroups;
-    }
-
-    /**
-     * Checks if a user has tenant context
-     *
-     * @return bool
-     * @internal param $module_name
-     */
-    public function hasTenantContext()
-    {
-        $tenant_field = tenantIdField();
-        if ($this->$tenant_field) {
-            return user()->$tenant_field;
-        }
-        return false;
-    }
-
-    /**
-     * returns group ids as array
-     *
-     * @return array
-     */
-    public function groupIds()
-    {
-        return explode(',', trim($this->group_ids_csv, ", "));
-    }
-
-    /**
-     * Checks if user belongs to a certain groupId
-     *
-     * @param $group_id
+     * @param  array $permissions
      * @return bool
      */
-    public function inGroupId($group_id)
+    public function hasAnyAccess(array $permissions)
     {
-        if ($this->inGroupCached(Group::remember(cacheTime('short'))->find($group_id))) {
-            return true;
-        }
-        return false;
+        return $this->hasAccess($permissions, false);
     }
 
-    /**
-     * Returns an array of groups which the given
-     * user belongs to.
-     *
-     * @return array
-     */
-    public function getGroupsCached()
-    {
-        if (!$this->userGroups) {
-            //$this->userGroups = $this->groups()->get();
-            $this->userGroups = $this->groups()->remember(cacheTime('short'))->get();
-        }
-        return $this->userGroups;
-    }
-
-    /**
-     * Checks if the user is a super user - has
-     * access to everything regardless of permissions.
-     *
-     * @return bool
-     */
-    public function isSuperUser()
-    {
-        return true;
-        //return $this->hasPermission('superuser');
-    }
 
     ############################################################################################
     # Permission functions
@@ -556,7 +494,7 @@ class User extends Authenticatable
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function groups() { return $this->belongsToMany(Group::class, 'user_group'); }
+    public function users() { return $this->belongsToMany(User::class, 'user_group'); }
 
     // Write new relationships below this line
 
@@ -571,7 +509,60 @@ class User extends Authenticatable
     // Example
     // public function getFirstNameAttribute($value) { return ucfirst($value); }
     // public function setFirstNameAttribute($value) { $this->attributes['first_name'] = strtolower($value); }
-    ############################################################################################
 
     // Write accessors and mutators here.
+
+    /**
+     * Accessor for giving permissions.
+     *
+     * @param  mixed $permissions
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getPermissionsAttribute($permissions)
+    {
+        if (!$permissions) {
+            return array();
+        }
+
+        if (is_array($permissions)) {
+            return $permissions;
+        }
+
+        if (!$_permissions = json_decode($permissions, true)) {
+            throw new \InvalidArgumentException("Cannot JSON decode permissions [$permissions].");
+        }
+
+        return $_permissions;
+    }
+
+    /**
+     * Mutator for taking permissions.
+     *
+     * @param  array $permissions
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function setPermissionsAttribute(array $permissions)
+    {
+        // Merge permissions
+        $permissions = array_merge($this->getPermissions(), $permissions);
+
+        // Loop through and adjust permissions as needed
+        foreach ($permissions as $permission => &$value) {
+            // Lets make sure their is a valid permission value
+            if (!in_array($value = (int)$value, $this->allowedPermissionsValues)) {
+                throw new \InvalidArgumentException("Invalid value [$value] for permission [$permission] given.");
+            }
+
+            // If the value is 0, delete it
+            if ($value === 0) {
+                unset($permissions[$permission]);
+            }
+        }
+
+        $this->attributes['permissions'] = (!empty($permissions)) ? json_encode($permissions) : '';
+    }
+    ############################################################################################
+
 }

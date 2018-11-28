@@ -30,6 +30,7 @@ function userTenantId($user_id = null)
 
 /**
  * Alias of the function userTenantId
+ *
  * @param null $user_id
  * @return bool|mixed
  */
@@ -128,7 +129,7 @@ function tenantInput()
 
 /**
  * @param      $module_name
- * @param Eloquent $q
+ * @param \Illuminate\Database\Query\Builder $q
  * @param null $user_id
  * @return mixed
  */

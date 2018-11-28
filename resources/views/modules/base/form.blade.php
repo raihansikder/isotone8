@@ -13,12 +13,15 @@
 
 @section('title')
     {{str_singular($mod->title)}}
-    <a class="btn btn-xs" href="{{route("$module_name.create")}}" data-toggle="tooltip"
-       title="Create a new {{lcfirst(str_singular($mod->title))}}"><i class="fa fa-plus"></i></a>
+    @if(hasModulePermission($module_name,"create"))
+        <a class="btn btn-xs" href="{{route("$module_name.create")}}" data-toggle="tooltip"
+           title="Create a new {{lcfirst(str_singular($mod->title))}}"><i class="fa fa-plus"></i></a>
+    @endif
 
-
-    <a class="btn btn-xs" href="{{route("$module_name.index")}}" data-toggle="tooltip"
-       title="View list of {{lcfirst(str_plural($mod->title))}}"><i class="fa fa-list"></i></a>
+    @if(hasModulePermission($module_name,"view-list"))
+        <a class="btn btn-xs" href="{{route("$module_name.index")}}" data-toggle="tooltip"
+           title="View list of {{lcfirst(str_plural($mod->title))}}"><i class="fa fa-list"></i></a>
+    @endif
 @endsection
 
 @section('content')

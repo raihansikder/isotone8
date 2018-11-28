@@ -18,7 +18,7 @@
                 @endif
 
                 {{-- Shows validation errors when passed with withError($validator) --}}
-                {{ implode('<br/>', $errors->all()) }}
+                {!! implode('<br/>', $errors->all()) !!}
 
                 {{-- Shows validation from session --}}
                 @if (Session::has('validation_errors'))

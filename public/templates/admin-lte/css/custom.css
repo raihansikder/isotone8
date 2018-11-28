@@ -306,3 +306,9 @@ div.form-group span.readonly {
     border-left: 0;
     border-right: 0;
 }
+
+/* Make module CTA block semi-transparent*/
+.cta-block {
+    -webkit-mask-image: -webkit-gradient(linear, left 20%,
+    left top, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
+}

@@ -57,7 +57,8 @@ class Modulegroup extends Basemodule
      *
      * @var array
      */
-    protected $fillable = ['name', 'title', 'desc', 'parent_id', 'modulegroup_id', 'level', 'order', 'color_css', 'icon_css', 'route', 'has_uploads', 'has_messages', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
+    protected $fillable = ['name', 'title', 'description', 'parent_id', 'level', 'order',
+        'color_css', 'icon_css', 'default_route', 'is_active', 'created_by', 'updated_by', 'deleted_by'];
 
     /**
      * Validation rules. For regular expression validation use array instead of pipe
@@ -136,10 +137,15 @@ class Modulegroup extends Basemodule
             // Your validation goes here
             // if($valid) $valid = $element->isSomethingDoable(true)
             /************************************************************/
-            // zero fill some fields by default if no integer value is given.
-            if (!isset($element->parent_id)) $element->parent_id = 0;
-            if (!isset($element->level)) $element->level = 0;
-            if (!isset($element->order)) $element->order = 0;
+            if ($valid) {
+                // Fill default values
+                $element->parent_id = (!$element->parent_id) ? 0 : $element->parent_id;
+                $element->level = (!$element->level) ? 0 : $element->level;
+                $element->order = (!$element->order) ? 0 : $element->order;
+                $element->default_route = (!$element->default_route) ? $element->name . '.index' : $element->default_route;
+                $element->color_css = (!$element->color_css) ? 'aqua' : $element->color_css;
+                $element->icon_css = (!$element->icon_css) ? 'fa fa-plus' : $element->icon_css;
+            }
             return $valid;
         });
 
