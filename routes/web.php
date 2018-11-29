@@ -70,7 +70,7 @@ Route::middleware(['auth'])->group(function () use ($modules, $modulegroups) {
 });
 
 Route::get('test', function () {
-    echo dbTableExists('modules');
+   myprint_r(arrayFromCsv(cleanCsv(",a,a,a,")));
     return 'test';
 });
 

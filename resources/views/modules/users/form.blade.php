@@ -72,7 +72,13 @@
         </div>
     </div>
 
-    {{ myprint_r($user->getMergedPermissions()) }}
+    <div class="col-md-6 no-padding">
+        <h5>Permissions</h5>
+        Show a list of permission the user has.
+        {{ myprint_r($user->getMergedPermissions()) }}
+    </div>
+
+
 
 @endif
 

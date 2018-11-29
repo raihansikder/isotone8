@@ -385,8 +385,7 @@ class User extends Authenticatable
      */
     public function isSuperUser()
     {
-        return true;
-        // return $this->hasPermission('superuser');
+        return $this->hasPermission('superuser');
     }
 
     /**
