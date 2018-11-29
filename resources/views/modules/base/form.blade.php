@@ -6,7 +6,7 @@
  * @var $module_name           string 'superheroes'
  * @var $mod                   Module
  * @var $element               string 'superhero'
- * @var $spyr_element_editable boolean
+ * @var $element_editable boolean
  * @var $uuid                  string '1709c091-8114-4ba4-8fd8-91f0ba0b63e8'
  */
 ?>
@@ -43,7 +43,7 @@
         <div class="clearfix"></div>
         <div id="{{$module_name}}CtaBlock" class="btn-group pull-left cta-block no-margin col-md-12">
             <a id="{{$module_name}}CancelBtn" class="btn btn-default" href="{{ URL::previous() }}">Cancel</a>
-            @if(((isset($$element) && $spyr_element_editable)) || (!isset($$element) && hasModulePermission($module_name,'create')))
+            @if(((isset($$element) && $element_editable)) || (!isset($$element) && hasModulePermission($module_name,'create')))
                 <input name="redirect_success" type="hidden"
                        value="{{ Request::has('redirect_success')?Request::get('redirect_success'): route($module_name.".index") }}"/>
                 <input name="redirect_fail" type="hidden"

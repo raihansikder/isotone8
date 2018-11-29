@@ -19,7 +19,7 @@
  * @var $mod                   Module
  * @var $superhero             Superheroe Object that is being edited
  * @var $element               string 'superhero'
- * @var $spyr_element_editable boolean
+ * @var $element_editable boolean
  * @var $uuid                  string '1709c091-8114-4ba4-8fd8-91f0ba0b63e8'
  */
 ?>

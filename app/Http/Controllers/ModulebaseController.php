@@ -16,6 +16,7 @@ use View;
 class ModulebaseController extends Controller
 {
     protected $module_name;         // Stores module name with lowercase and plural i.e. 'superheros'.
+    protected $module;         // Stores module name with lowercase and plural i.e. 'superheros'.
     protected $grid_query;          // Stores default DB query to create the grid. Used in grid() function.
     protected $grid_columns;        // Columns to show, this array is set form modules individual controller.
     protected $report_data_source = null;  // loads the model name
@@ -33,6 +34,7 @@ class ModulebaseController extends Controller
     public function __construct($module_name)
     {
         $this->module_name = $module_name;
+        $this->module = Module::whereName($this->module_name)->remember(cacheTime('long'))->first();
 
         // Define grid SELECT statment and HTML column name.
         if (!isset($this->grid_columns)) {
@@ -53,7 +55,7 @@ class ModulebaseController extends Controller
         // Share the variables across all views accessed by this controller
         View::share([
             'module_name' => $this->module_name,
-            'mod' => Module::whereName($this->module_name)->remember(cacheTime('long'))->first()
+            'mod' => $this->module
         ]);
     }
 
@@ -130,7 +132,7 @@ class ModulebaseController extends Controller
     {
         if (hasModulePermission($this->module_name, 'create')) { // check for create permission
             $uuid = (Request::old('uuid')) ? Request::old('uuid') : uuid(); // Set uuid for the new element to be created
-            return View::make('modules.base.form')->with('uuid', $uuid)->with('spyr_element_editable', true);
+            return View::make('modules.base.form')->with('uuid', $uuid)->with('element_editable', true);
         } else {
             return View::make('template.blank')
                 ->with('title', 'Permission denied!')
@@ -166,12 +168,12 @@ class ModulebaseController extends Controller
             // $validator = $element->validateModel();
 
             if ($validator->fails()) {
-                $ret = ret('fail', "Validation error(s) on creating $Model.", ['validation_errors' => json_decode($validator->messages(), true)]);
+                $ret = ret('fail', "Validation error(s) on creating {$this->module->title}.", ['validation_errors' => json_decode($validator->messages(), true)]);
             } else {
                 if ($element->isCreatable()) {
                     if ($element->save()) {
                         //$ret = ret('success', "$Model " . $element->id . " has been created", ['data' => $Model::find($element->id)]);
-                        $ret = ret('success', "$Model has been added", ['data' => $Model::find($element->id)]);
+                        $ret = ret('success', "{$this->module->title} has been added", ['data' => $Model::find($element->id)]);
                         //Upload::linkTemporaryUploads($element->id, $element->uuid);
                     } else {
                         $ret = ret('fail', "$Model create failed.");
@@ -241,10 +243,10 @@ class ModulebaseController extends Controller
                 //$ret = ret('success', "$Model " . $element->id . " found", ['data' => $element]);
                 $ret = ret('success', "", ['data' => $element]);
             } else { // not viewable
-                $ret = ret('fail', "$Model is not viewable.");
+                $ret = ret('fail', "{$this->module->title} is not viewable.");
             }
         } else { // The element was not found or has been deleted.
-            $ret = ret('fail', "$Model could not be found. The element is either unavailable or deleted.");
+            $ret = ret('fail', "{$this->module->title} could not be found. The element is either unavailable or deleted.");
         }
         # --------------------------------------------------------
         # Process return/redirect
@@ -282,7 +284,7 @@ class ModulebaseController extends Controller
                 return View::make('modules.base.form')
                     ->with('element', $element_name)//loads the singular module name in variable called $element = 'user'
                     ->with($element_name, $element)//loads the object into a variable with module name $user = (user object)
-                    ->with('spyr_element_editable', $element->isEditable());
+                    ->with('element_editable', $element->isEditable());
             } else { // Not viewable by the user. Set error message and return value.
                 //return showPermissionErrorPage("The element is not view-able by current user.");
                 return View::make('template.blank')
@@ -317,12 +319,12 @@ class ModulebaseController extends Controller
                 $element->fill(Request::all());
                 $validator = $element->validateModel();
                 if ($validator->fails()) {
-                    $ret = ret('fail', "Validation error(s) on updating $Model.", ['validation_errors' => json_decode($validator->messages(), true)]);
+                    $ret = ret('fail', "Validation error(s) on updating {$this->module->title}.", ['validation_errors' => json_decode($validator->messages(), true)]);
                 } else {
                     if ($element->fill(Request::all())->save()) { // Attempt to update/save.
-                        $ret = ret('success', "$Model has been updated", ['data' => $element]);
+                        $ret = ret('success', "{$this->module->title} has been updated", ['data' => $element]);
                     } else { // attempt to update/save failed. Set error message and return values.
-                        $ret = ret('fail', "$Model update failed.");
+                        $ret = ret('fail', "{$this->module->title} update failed.");
                     }
                 }
 
@@ -375,15 +377,15 @@ class ModulebaseController extends Controller
         if ($element = $Model::find($id)) { // check if the element exists
             if ($element->isDeletable()) { // check if the element is editable
                 if ($element->delete()) { // attempt delete and set success message return values
-                    $ret = ret('success', "$Model has been deleted");
+                    $ret = ret('success', "{$this->module->title} has been deleted");
                 } else { // handle delete failure and set error message and return values
-                    $ret = ret('fail', "$Model delete failed.");
+                    $ret = ret('fail', "{$this->module->title} delete failed.");
                 }
             } else { // element is not editable(which also means not deletable)
-                $ret = ret('fail', "$Model could not be deleted.");
+                $ret = ret('fail', "{$this->module->title} could not be deleted.");
             }
         } else { // the element was not fonud. Set error message and return value
-            $ret = ret('fail', "$Model could not be found. The element is either unavailable or deleted.");
+            $ret = ret('fail', "{$this->module->title} could not be found. The element is either unavailable or deleted.");
         }
         # --------------------------------------------------------
         # Process return/redirect

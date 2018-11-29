@@ -14,8 +14,8 @@ $var['value'] = isset($var['value']) ? $var['value'] : '';        // value: Set 
 // $var['label'] = isset($var['label']) ? $var['label'] : '';        // label: Label of the form field
 // $var['label_class'] = isset($var['label_class']) ? $var['label_class'] : ''; //label_class: class of the label
 $var['old_input'] = oldInputValue($var['name'], $var['value']);   // old_input: stores the existing value by computing using oldInputValue() function is the $var['value'] is not given.
-// if (!isset($var['editable'])) { // Check if the form input/select is editable based on the value of $spyr_element_editable. The variable is set in the controller ModulebaseController and passed to the form view(form.blade.php) while rendering.
-//     $var['editable'] = (isset($spyr_element_editable) && $spyr_element_editable == false) ? false : true;
+// if (!isset($var['editable'])) { // Check if the form input/select is editable based on the value of $element_editable. The variable is set in the controller ModulebaseController and passed to the form view(form.blade.php) while rendering.
+//     $var['editable'] = (isset($element_editable) && $element_editable == false) ? false : true;
 // }
 
 /** Custom parameters */

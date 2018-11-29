@@ -116,24 +116,24 @@ class UsersController extends ModulebaseController
 
                 //$validator = $element->validateModel();
                 if ($validator->fails()) {
-                    $ret = ret('fail', "Validation error(s) on updating $Model.", ['validation_errors' => json_decode($validator->messages(), true)]);
+                    $ret = ret('fail', "Validation error(s) on updating {$this->module->title}.", ['validation_errors' => json_decode($validator->messages(), true)]);
                 } else {
 
                     $element->fill(Request::except(['password']));
                     if ($password) $element->password = $password;
 
                     if ($element->save()) { // Attempt to update/save.
-                        $ret = ret('success', "$Model has been updated", ['data' => $element]);
+                        $ret = ret('success', "{$this->module->title} has been updated", ['data' => $element]);
                     } else { // attempt to update/save failed. Set error message and return values.
-                        $ret = ret('fail', "$Model update failed.");
+                        $ret = ret('fail', "{$this->module->title} update failed.");
                     }
                 }
 
             } else { // Element is not editable. Set message and return values.
-                $ret = ret('fail', "$Model is not editable by user.");
+                $ret = ret('fail', "{$this->module->title} is not editable by user.");
             }
         } else { // element does not exist(or possibly deleted). Set error message and return values
-            $ret = ret('fail', "$Model could not be found. The element is either unavailable or deleted.");
+            $ret = ret('fail', "{$this->module->title} could not be found. The element is either unavailable or deleted.");
         }
         # --------------------------------------------------------
         # Process return/redirect

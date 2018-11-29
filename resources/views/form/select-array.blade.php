@@ -15,7 +15,7 @@ $var['label'] = (isset($var['label'])) ? $var['label'] : '';
 $var['label_class'] = (isset($var['label_class'])) ? $var['label_class'] : '';
 $var['old_input'] = oldInputValue($var['name'], $var['value']);
 if (!isset($var['editable'])) {
-    $var['editable'] = (isset($spyr_element_editable) && $spyr_element_editable == false) ? false : true;
+    $var['editable'] = (isset($element_editable) && $element_editable == false) ? false : true;
 }
 
 /** Custom parameters */
