@@ -249,23 +249,6 @@ class Module extends Basemodule
     }
 
     /**
-     * Checks if a module is a module with tenant context
-     *
-     * @param $module_name
-     * @return bool|mixed
-     */
-    public static function hasTenantContext($module_name)
-    {
-        $tenant_idf = tenantIdField();
-        $fields = columns($module_name);
-
-        if (in_array($tenant_idf, $fields)) { // tenant id field found
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Function returns an array of predecessor module objects of a specific module.
      * This function is helpful to generate breadcrumb or menu.
      *
@@ -273,7 +256,6 @@ class Module extends Basemodule
      */
     public function moduletree()
     {
-
         $stack = [$this];
         for ($i = $this->parent_id; ;) {
             if (!$i) break;
