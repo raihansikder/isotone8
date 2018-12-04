@@ -75,11 +75,15 @@
     <div class="col-md-6 no-padding">
         <h5>Permissions</h5>
         Show a list of permission the user has.
-        {{ myprint_r($user->getMergedPermissions()) }}
+        <?php
+        $permissions = $user->getMergedPermissions();
+        ?>
+        @foreach($permissions as $k=>$v)
+            @if($v==1)
+                <code>{{$k}}</code>
+            @endif
+        @endforeach
     </div>
-
-
-
 @endif
 
 {{-- JS starts: javascript codes go here.--}}
@@ -132,7 +136,7 @@
         // frontend and Ajax hybrid validation
         /*******************************************************************/
         addValidationRulesForSaving(); // Assign validation classes/rules
-        enableValidation('{{$module_name}}'); // Instantiate validation function
+        // enableValidation('{{$module_name}}'); // Instantiate validation function
 
         /*******************************************************************/
         // List of functions

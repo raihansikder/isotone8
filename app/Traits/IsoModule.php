@@ -10,7 +10,7 @@ trait IsoModule
 {
     use SoftDeletes;
     use Rememberable;
-
+    use IsoTenant;
 
     public static function rules($element, $merge = [])
     {
