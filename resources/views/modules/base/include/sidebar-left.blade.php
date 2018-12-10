@@ -1,20 +1,12 @@
 <ul class="sidebar-menu">
     @if(user())
         @if(!user()->isSuperUser())
-            <li><a href="{{route('users.edit',user()->id)}}"><i class="fa fa-user"></i> <span>Profile</span></a></li>
-            <li><a href="{{route('userdetails.edit',user()->userdetail->id)}}"><i class="fa fa-edit"></i> <span>User details</span></a>
-            </li>
+            {{--<li><a href="{{route('users.edit',user()->id)}}"><i class="fa fa-user"></i> <span>Profile</span></a></li>--}}
+            {{--<li><a href="{{route('userdetails.edit',user()->userdetail->id)}}"><i class="fa fa-edit"></i> <span>User details</span></a>--}}
+            {{--</li>--}}
 
 
-            @if(user()->isSeller())
-                <li><a href="{{route('products.index')}}"><i class="fa fa-plus"></i> <span>Products</span></a></li>
-                <li><a href="#"><i class="fa fa-plus"></i> <span>Orders</span></a></li>
-            @elseif(user()->isBuyer())
-                <li><a href="{{route('shop.cart')}}"><i class="fa fa-shopping-cart"></i>
-                        <span>Cart ({{count(Shop::cartitems())}})</span></a>
-                </li>
-                <li><a href="{{route('shoporders.index')}}"><i class="fa fa-plus"></i> <span>Orders</span></a></li>
-            @endif
+
         @else
             {{--<li class="header">MENU</li>--}}
             <?php

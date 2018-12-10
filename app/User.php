@@ -164,26 +164,29 @@ class User extends Authenticatable
         // of creation for the first time but the creation has not
         // completed yet.
         /************************************************************/
-        // static::creating(function (User $element) { });
+        static::creating(function (User $element) {
+            // Check if hte email domain is banned.
+            return false;
+        });
 
         /************************************************************/
         // Following code block executes - after an element is created
         // for the first time.
         /************************************************************/
-        // static::created(function (User $element) {});
+        static::created(function (User $element) {});
 
         /************************************************************/
         // Following code block executes - when an already existing
         // element is in process of being updated but the update is
         // not yet complete.
         /************************************************************/
-        // static::updating(function (User $element) {});
+        static::updating(function (User $element) {});
 
         /************************************************************/
         // Following code block executes - after an element
         // is successfully updated
         /************************************************************/
-        //static::updated(function (User $element) {});
+        static::updated(function (User $element) {});
 
         /************************************************************/
         // Execute codes during saving (both creating and updating)
